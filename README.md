@@ -58,6 +58,8 @@ git checkout -b feature-name
 
 This will switch you to your new branch, so you can now get started on it. 
 
+N.B. In the GitHub Desktop client, go to Branch > New Branch and create a new branch
+
 #### Make a commit
 
 Commits make up the record of the changes made to a project. If necessary, you can therefore roll back to any previous commit at any point. 
@@ -74,6 +76,8 @@ Then you can make your commit and attach an informative note, like so:
 git commit -m "useful note about the commit"
 ```
 
+N.B In the lower-left corner of the GitHub Desktop client (where it says “Summary” and “Description”), type a commit message, and then click Commit to development branch.
+
 #### Merge into develop
 
 When you're ready you can merge your new feature into the `develop` branch. To do this, firstly switch to the `develop` branch with the command below:
@@ -87,6 +91,8 @@ Then, use the command below to merge your branch (where `feature-name` is the na
 ```bash
 git merge feature-name
 ```
+
+N.B. In the GitHub Desktop client, switch from the feature to the development branch. Go to Branch > Merge into Current Branch
 
 #### Push changes 
 
@@ -102,6 +108,8 @@ Then push this branch to the repository with the `push` command:
 git push
 ```
 
+N.B In Git Desktop, click Push origin to push the changes to origin.
+
 #### Pulling changes
 
 When you'd like to update your local version with code from the online repository, you can use the `pull` command.
@@ -111,6 +119,8 @@ First, switch to the branch that you'd like to update with the `checkout` comman
 ```bash
 git pull
 ```
+
+N.B. In the GitHub Desktop client, while you have the feature branch selected, go to Branch > Create Pull Request.
 
 #### Delete a branch
 
