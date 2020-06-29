@@ -65,10 +65,10 @@ ui <- dashboardPage(
 server <- function(input, output) {
     #slow but wont be here in the final app - we can have a function to update the data and run the function here
     #need to change the path here
-    UK_latlon <- readRDS(here("/Parks_and_pandemic/data/UK_dat_ggplot.RDS"))
+    UK_latlon <- readRDS(here("/data/UK_dat_ggplot.RDS"))
   
     
-    UK_Mobility <- readRDS(here("/Parks_and_pandemic/data/UK_Mobility.RDS"))
+    UK_Mobility <- readRDS(here("/data/UK_Mobility.RDS"))
     
    
     UKdata<-reactive({
