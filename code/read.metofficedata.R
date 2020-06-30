@@ -1,3 +1,4 @@
+#Code for a function that downloads all the metoffice data sets and merge them together into one big data set.
 
 read.metofficedata<-function(){
   #Defines the url link that the data can be extracted from.
