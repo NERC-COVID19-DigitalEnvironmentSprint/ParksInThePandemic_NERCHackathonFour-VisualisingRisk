@@ -1,4 +1,4 @@
-#Code for a function that downloads the recent Google Mobility Report
+#Code for a function that downloads the recent Google Mobility Report.
 
 read.mobilityreports<-function(){
   #Defines the url where the mobility is taken from.
