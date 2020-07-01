@@ -15,5 +15,5 @@ read.metofficedata<-function(){
   #Re-adds the beginning of the webpage url to allow for downloading directly from the webpage.
   csv.url2<-paste("https://metdatasa.blob.core.windows.net/covid19-response/",csv.url,sep = "")
   #Compiles all the datasets together and prints this dataframe to your environment. 
-  Metoffice_data<<-ldply(csv.url2, read.csv)
+  Metoffice_data<-ldply(csv.url2, read.csv)
 }

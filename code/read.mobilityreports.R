@@ -22,7 +22,7 @@ read.mobilityreports<-function(){
                           ifelse(UK$sub_region_1%in%c("Aberdeen City","Aberdeenshire","Angus Council","Argyll and Bute Council","Clackmannanshire","Dumfries and Galloway","Dundee City Council","East Ayrshire Council","East Dunbartonshire Council","East Lothian Council","East Renfrewshire Council","Edinburgh","Falkirk","Fife","Glasgow City","Highland Council","Inverclyde","Midlothian","Moray","Na h-Eileanan an Iar","North Ayrshire Council","North Lanarkshire","Orkney","Perth and Kinross","Renfrewshire","Scottish Borders","Shetland Islands","South Ayrshire Council","South Lanarkshire","Stirling","West Dunbartonshire Council","West Lothian"),"Scotland",
                             ifelse(UK$sub_region_1%in%c("Antrim and Newtownabbey","Ards and North Down","Armagh City, Banbridge and Craigavon","Belfast","Causeway Coast and Glens","Derry and Strabane","Fermanagh and Omagh","Lisburn and Castlereagh","Mid and East Antrim","Mid Ulster","Newry","Mourne and Down"),"Northern Ireland", NA))))
   #Add the new vector into the data-frame after the county_region column. 
-  UK_1<-UK %>% add_column(sub_country = Sub_country, .after = which(colnames(UK)=="country_region"))
+  UK %>% add_column(sub_country = Sub_country, .after = which(colnames(UK)=="country_region"))
     }
-
+UK<-read.mobilityreports()
 
