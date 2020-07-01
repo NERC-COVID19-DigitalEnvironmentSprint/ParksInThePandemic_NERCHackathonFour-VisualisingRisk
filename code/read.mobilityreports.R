@@ -24,5 +24,4 @@ read.mobilityreports<-function(){
   #Add the new vector into the data-frame after the county_region column. 
   UK %>% add_column(sub_country = Sub_country, .after = which(colnames(UK)=="country_region"))
     }
-UK<-read.mobilityreports()
 
