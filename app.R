@@ -16,6 +16,9 @@ library(htmltools)
 #Build the shiny App
 #source(here("/Parks_and_pandemic/get_spatial_data.R"))
 
+bedford<-readOGR(dsn=paste0(here(),"/data/spatial"), layer="TL_GreenspaceSite")
+shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
+
 ui <- dashboardPage(
   
   dashboardHeader(
@@ -31,34 +34,19 @@ ui <- dashboardPage(
   
   dashboardBody(tags$head(tags$style(HTML('.box {margin: 0px;}'))),
     
-    tabsetPanel(
-      
-      id = "tabs",
-      
-      tabPanel(
-        
-        title = "Maps",
-        
-        value = "page1",
-        
-        fluidRow(
-          column(10, tabsetPanel(type = "tabs",
-                                        tabPanel(" ",
-                                                 column(width = 4,plotOutput("map1")),
-                                                 column(width = 4, plotOutput("map2")),
-                                                 column(width = 4,plotOutput("map3"))
-                                        ))))),
-        tabPanel(
-          title="Model",
-          value="page2",
-          fluidRow(
-            box(dateRangeInput("daterange1", "Date range:",start = "2020-01-01",end   = "2020-08-31")),
-            box(plotOutput("plot1"))
+   fluidRow(
+     leafletOutput("map1")
+   ),
+  fluidRow(
+    box(dateRangeInput("daterange1", "Date range:",start = "2020-01-01",end   = "2020-08-31")),
+    box(plotOutput("plot1"))
           )        
           )
         )
-      )
-  )
+ 
+    
+
+  
 
   
 
@@ -84,18 +72,24 @@ server <- function(input, output) {
          #   addPolygons()
     #})
     
-    output$map1<-renderPlot({
-      map <- ggplot() + geom_polygon(data = UK_latlon, aes(x = long, y = lat, group = group), colour = "black", fill = "lightblue")+theme_void()
+    output$map1<-renderLeaflet({
+      map <- leaflet()  %>% addTiles() %>% 
+        setView(lng = -0.46, lat=52.13,zoom=12) %>% 
+        addPolygons(data=shapeData,weight=5,col = 'green')
       map
     })
-    output$map2<-renderPlot({
-      map <- ggplot() + geom_polygon(data = UK_latlon, aes(x = long, y = lat, group = group), colour = "black", fill = "red")+theme_void()
-      map
-    })
-    output$map3<-renderPlot({
-      map <- ggplot() + geom_polygon(data = UK_latlon, aes(x = long, y = lat, group = group), colour = "black", fill = "green")+theme_void()
-      map
-    })
+    # output$map2<-renderLeaflet({
+    #   map <- leaflet()  %>% addTiles() %>% 
+    #     setView(lng = -0.46, lat=52.13,zoom=12) %>% 
+    #     addPolygons(data=shapeData,weight=5,col = 'red')
+    #   map
+    # })
+    # output$map3<-renderLeaflet({
+    #   map <- leaflet()  %>% addTiles() %>% 
+    #     setView(lng = -0.46, lat=52.13,zoom=12) %>% 
+    #     addPolygons(data=shapeData,weight=5,col = 'blue')
+    #   map
+    # })
     output$plot1<-renderPlot({
       UKdata() %>%
         ggplot(aes(date, parks_percent_change_from_baseline))+
