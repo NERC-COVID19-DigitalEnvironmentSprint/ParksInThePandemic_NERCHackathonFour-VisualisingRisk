@@ -1,6 +1,6 @@
 #A function that downloads the google mobility data, subsets for just the UK data set and creates a column that assigns each subregion with their UK country.
 
-read.mobilityreports<-function(){
+read.googlemobility<-function(){
   #Define the url link where the google mobility data can be extracted from. 
   base.url<-"https://www.google.com/covid19/mobility/"
   #Extract the information from this link and maintain all the hyperlinks within it.
