@@ -1,4 +1,6 @@
 match.met2google<-function(){
+source('read.metofficecovid.R')
+source('read.googlemobility.R')
 #load Met Office data for May
 metoffice<-read.metofficedata()
 #add empty country column to the met office data frame
@@ -18,7 +20,7 @@ metoffice$country[(metoffice$name%in%readRDS('input_data/metoffice_nirelanddistr
 metoffice_england<-subset(metoffice,country=='England')
 
 #read in google data
-google<-read.mobilityreports()
+google<-read.googlemobility()
 #subset out only England data from the Googl dataframe
 google_england<-subset(google,sub_country=='England')
 
@@ -47,5 +49,4 @@ merged<-merge(google_england, metoffice_england, all.x=T)
 #make a new met office england dataframe with the date-matched, meteorological data (columns 1:52) only
 metoffice_england<-merged[,1:52]
 }
-
 
