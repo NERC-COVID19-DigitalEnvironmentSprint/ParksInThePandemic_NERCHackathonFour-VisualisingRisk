@@ -1,23 +1,20 @@
 ##Code for a function that reads in the MENE data, assigns google districts and aggregates the weighted and unweighted accounts according to the google districts.##
 
-#setwd("~/GitHub/parksinthepandemic/code")
-#source(file = "read.naturalenglandmene.R")
-
-
 match.mene2google<-function(){
   require(tidyr)
   require(tibble)
+  source(file = "read.naturalenglandmene.R")
   #Creates a character vector of the English districts according to the Google mobility data.
   England_districts<-c("Bath and North East Somerset","Bedford","Blackburn with Darwen","Blackpool","Borough of Halton","Bracknell Forest","Brighton and Hove","Bristol City","Buckinghamshire","Cambridgeshire","Central Bedfordshire","Cheshire East","Cheshire West and Chester","Cornwall","County Durham","Cumbria","Darlington","Derby","Derbyshire","Devon","Dorset","East Riding of Yorkshire","East Sussex","Essex","Gloucestershire","Greater London","Greater Manchester","Hampshire","Hartlepool","Herefordshire","Hertfordshire","Isle of Wight","Kent","Kingston upon Hull","Lancashire","Leicester","Leicestershire","Lincolnshire","Luton","Medway","Merseyside","Middlesbrough","Milton Keynes","Norfolk","North East Lincolnshire","North Lincolnshire","North Somerset","North Yorkshire","Northamptonshire","Northumberland","Nottingham","Nottinghamshire","Oxfordshire","Peterborough","Plymouth","Portsmouth","Reading","Redcar and Cleveland","Rutland","Shropshire","Slough","Somerset","South Gloucestershire","South Yorkshire","Southampton","Southend-on-Sea","Staffordshire","Stockton-on-Tees","Stoke-on-Trent","Suffolk","Surrey","Swindon","Thurrock","Torbay","Tyne and Wear","Warrington","Warwickshire","West Berkshire","West Midlands","West Sussex","West Yorkshire","Wiltshire","Windsor and Maidenhead","Wokingham","Worcestershire","York")
   #Reads in the menedata set.
-  MENE_data<-read.menedata()
+  MENE_data<-read.naturalenglandmene()
   #Extracts the MENE districts (151 of them) and ensure this is a character vector for manipulation.
   MENE_districts<-as.character(MENE_data$DESTINATION_UPPERTIER_LOCALAUTHORITY)
   #Creates a converted table to include the newly formed MENE_districts,their average annual unweighted and weighted count.
   MENE_conversion<-as.data.frame(t(rbind(MENE_districts,MENE_data$average_annual_unweighted_count, MENE_data$average_annual_weighted_count)))
   #Changes the column names to a more suitable name for analysis.
   colnames(MENE_conversion)<-c("MENE_localauthority","average_annual_unweighted_counts","average_annual_weighted_count")
-  #Creates a vector accoding to the MENE_districts and converts initially all the districts that are named slightly differently, then converts all districts that are a subset of a bigger districts according to google mobility data, then sets the rest of the districts to the same value as MENE_districts that were unchanged.
+  #Creates a vector according to the MENE_districts and converts initially all the districts that are named slightly differently, then converts all districts that are a subset of a bigger districts according to google mobility data, then sets the rest of the districts to the same value as MENE_districts that were unchanged.
   Google_localauthority<-ifelse(MENE_conversion$MENE_localauthority%in%"Bristol, City of","Bristol City",
                               ifelse(MENE_conversion$MENE_localauthority%in%"Halton","Borough of Halton",
                                      ifelse(MENE_conversion$MENE_localauthority%in%"Herefordshire, County of","Herefordshire",
