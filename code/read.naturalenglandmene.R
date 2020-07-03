@@ -1,9 +1,7 @@
 ##### FUNCTION TO DOWNLOAD MENE DATA AND CREATE A TIBBLE OF UPPER TIER LA's WITH AVERAGE ANNUAL VISIT COUNTS TO THEM #####
 
 read.naturalenglandmene <- function(){
-  
-  source('requiredpackages.R')
-  
+
   require(tidyverse)
   require(haven)
   

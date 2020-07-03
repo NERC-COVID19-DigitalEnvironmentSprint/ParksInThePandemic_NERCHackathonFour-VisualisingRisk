@@ -2,11 +2,44 @@
 
 match.mene2google<-function(){
   
+  # Load packages ----------------------------------------------------------
+  #install.packages('plotrix')
+  library(plotrix)
+  #install.packages('tibble')
+  library(tibble)
+  #install.packages('ggplot2')
+  library(ggplot2)
+  #install.packages('gridExtra')
+  library(gridExtra)
+  #install.packages('grid)
+  library(grid)
+  #install.packages('ggplot2)
+  library(ggplot2)
+  #install.packages('lattice')
+  library(lattice)
+  #install.packages("tidyr")
+  library(tidyr)
+  #install.packages('reshape2')
+  library(reshape2)
+  #install.packages('dplyr')
+  library(dplyr)
+  #install.packages('XML')
+  library(XML) # HTML processing
+  #install.packages('RCurl')
+  library(RCurl)
+  #install.packages('rvest')
+  library(rvest)
+  #install.packages('stringr')
+  library(stringr)
+  #install.packages('plotrix)
+  library(plotrix)
   
   source('requiredpackages.R')
   require(tidyr)
   require(tibble)
   source(file = "read.naturalenglandmene.R")
+  
+  
   #Creates a character vector of the English districts according to the Google mobility data.
   England_districts<-c("Bath and North East Somerset","Bedford","Blackburn with Darwen","Blackpool","Borough of Halton","Bracknell Forest","Brighton and Hove","Bristol City","Buckinghamshire","Cambridgeshire","Central Bedfordshire","Cheshire East","Cheshire West and Chester","Cornwall","County Durham","Cumbria","Darlington","Derby","Derbyshire","Devon","Dorset","East Riding of Yorkshire","East Sussex","Essex","Gloucestershire","Greater London","Greater Manchester","Hampshire","Hartlepool","Herefordshire","Hertfordshire","Isle of Wight","Kent","Kingston upon Hull","Lancashire","Leicester","Leicestershire","Lincolnshire","Luton","Medway","Merseyside","Middlesbrough","Milton Keynes","Norfolk","North East Lincolnshire","North Lincolnshire","North Somerset","North Yorkshire","Northamptonshire","Northumberland","Nottingham","Nottinghamshire","Oxfordshire","Peterborough","Plymouth","Portsmouth","Reading","Redcar and Cleveland","Rutland","Shropshire","Slough","Somerset","South Gloucestershire","South Yorkshire","Southampton","Southend-on-Sea","Staffordshire","Stockton-on-Tees","Stoke-on-Trent","Suffolk","Surrey","Swindon","Thurrock","Torbay","Tyne and Wear","Warrington","Warwickshire","West Berkshire","West Midlands","West Sussex","West Yorkshire","Wiltshire","Windsor and Maidenhead","Wokingham","Worcestershire","York")
   #Reads in the menedata set.

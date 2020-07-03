@@ -37,7 +37,40 @@
 
 plot.googlemobility<-function(Data,location,country){
   
-  source('requiredpackages.R')
+  # Load packages ----------------------------------------------------------
+  #install.packages('plotrix')
+  library(plotrix)
+  #install.packages('tibble')
+  library(tibble)
+  #install.packages('ggplot2')
+  library(ggplot2)
+  #install.packages('gridExtra')
+  library(gridExtra)
+  #install.packages('grid)
+  library(grid)
+  #install.packages('ggplot2)
+  library(ggplot2)
+  #install.packages('lattice')
+  library(lattice)
+  #install.packages("tidyr")
+  library(tidyr)
+  #install.packages('reshape2')
+  library(reshape2)
+  #install.packages('dplyr')
+  library(dplyr)
+  #install.packages('plyr')
+  library(plyr)
+  #install.packages('XML')
+  library(XML) # HTML processing
+  #install.packages('RCurl')
+  library(RCurl)
+  #install.packages('rvest')
+  library(rvest)
+  #install.packages('stringr')
+  library(stringr)
+  #install.packages('plotrix)
+  library(plotrix)  
+  
   
   #Creates a character vector that resembles the column name within the google mobility data.
   Loc<-paste(location,"_percent_change_from_baseline",sep = "")
