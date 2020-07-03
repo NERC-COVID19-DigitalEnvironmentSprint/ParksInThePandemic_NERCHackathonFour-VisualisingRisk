@@ -1,12 +1,44 @@
-match.met2google<-function(){
+match.metoffice2google<-function(){
   
+  # Load packages ----------------------------------------------------------
+  #install.packages('plotrix')
+  library(plotrix)
+  #install.packages('tibble')
+  library(tibble)
+  #install.packages('ggplot2')
+  library(ggplot2)
+  #install.packages('gridExtra')
+  library(gridExtra)
+  #install.packages('grid)
+  library(grid)
+  #install.packages('ggplot2)
+  library(ggplot2)
+  #install.packages('lattice')
+  library(lattice)
+  #install.packages("tidyr")
+  library(tidyr)
+  #install.packages('reshape2')
+  library(reshape2)
+  #install.packages('dplyr')
+  library(dplyr)
+  #install.packages('plyr')
+  library(plyr)
+  #install.packages('XML')
+  library(XML) # HTML processing
+  #install.packages('RCurl')
+  library(RCurl)
+  #install.packages('rvest')
+  library(rvest)
+  #install.packages('stringr')
+  library(stringr)
+  #install.packages('plotrix)
+  library(plotrix)  
   
-source('requiredpackages.R')
 source('read.metofficecovid.R')
 source('read.googlemobility.R')
   
 #load Met Office data for May
-metoffice<-read.metofficedata()
+metoffice<-read.metofficecovid()
 #add empty country column to the met office data frame
 metoffice<-metoffice %>% add_column(country='', .after=which(colnames(metoffice)=="name"))
 
@@ -45,12 +77,7 @@ metoffice_england<-aggregate(metoffice_england[,7:ncol(metoffice_england)],
 
 #rename the first two columns
 colnames(metoffice_england)[1:2]<-c('date','sub_region_1')
+metoffice_england
 
-# Match google and met office data ----------------------------------------
-
-#merge the met office data with the google data so that it only contains data from dates and districts that match with the google data
-merged<-merge(google_england, metoffice_england, all.x=T)
-#make a new met office england dataframe with the date-matched, meteorological data (columns 1:52) only
-metoffice_england<-merged[,1:52]
 }
 

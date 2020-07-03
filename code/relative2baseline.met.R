@@ -1,13 +1,44 @@
 relative2baseline.met<-function(){
-
-source('match.metoffice2google.R')
-source('requiredpackages.R')
   
+  # Load packages ----------------------------------------------------------
+  #install.packages('plotrix')
+  library(plotrix)
+  #install.packages('tibble')
+  library(tibble)
+  #install.packages('ggplot2')
+  library(ggplot2)
+  #install.packages('gridExtra')
+  library(gridExtra)
+  #install.packages('grid)
+  library(grid)
+  #install.packages('ggplot2)
+  library(ggplot2)
+  #install.packages('lattice')
+  library(lattice)
+  #install.packages("tidyr")
+  library(tidyr)
+  #install.packages('reshape2')
+  library(reshape2)
+  #install.packages('dplyr')
+  library(dplyr)
+  #install.packages('XML')
+  library(XML) # HTML processing
+  #install.packages('RCurl')
+  library(RCurl)
+  #install.packages('rvest')
+  library(rvest)
+  #install.packages('stringr')
+  library(stringr)
+  #install.packages('plotrix)
+  library(plotrix)  
+  
+source('match.metoffice2google.R')
+
 # read in met office england dataset and add column for weekdays -------------------------------------------------------------------
 
 metoffice_england<-match.metoffice2google()
 #create vector of days of the week and add to dataframe
-metoffice_england<-metoffice_england %>% add_column(weekdays = weekdays(as.Date(metoffice_england$date)), 
+metoffice_england<-metoffice_england %>% tibble::add_column(weekdays = weekdays(as.Date(metoffice_england$date)), 
                                  .before = 1)
 
 # make relative to baseline -----------------------------------------------
@@ -21,6 +52,9 @@ metoffice_england_nonbaselineperiod<-metoffice_england[as.Date(metoffice_england
 baselinerange<-seq(as.Date('2020-01-03'),as.Date('2020-02-06'),1)
 #get met office england data for the baseline period
 metoffice_england_baselineperiod<-metoffice_england[as.Date(metoffice_england$date)%in%baselinerange,]
+
+unique(as.Date(metoffice_england$date))
+unique(as.Date(baselinerange))
 
 #create a dataframe of the median values of each meteorological measurement for each district, from the baseline period (as google did for mobility)
 baselineweather<-aggregate(metoffice_england_baselineperiod,
