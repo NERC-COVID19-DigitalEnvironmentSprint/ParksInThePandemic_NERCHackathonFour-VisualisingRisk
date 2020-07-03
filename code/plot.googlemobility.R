@@ -18,7 +18,24 @@
 #Scotland
 #Wales
 
-plot.mobilitydata<-function(Data,location,country){
+#EXAMPLE WORKFLOW FROM THE PARKSINTHEPANDEMIC DIRECTORY
+
+##get the report##
+
+#to download and use the latest dataset
+#source('code/read.googlemobility.R')
+#google<-read.googlemobility()
+#OR...
+#to use previously downloaded dataset
+google<-read.csv('data/google/GoogleMobilityReport.csv')
+
+
+##plot the report##
+#source('code/plot.googlemobility.R')
+#plot.googlemobility(google, 'parks','England')
+
+
+plot.googlemobility<-function(Data,location,country){
   #Creates a character vector that resembles the column name within the google mobility data.
   Loc<-paste(location,"_percent_change_from_baseline",sep = "")
   #Works out the mean value for each date and country.
@@ -62,5 +79,5 @@ plot.mobilitydata<-function(Data,location,country){
     xlab("Date") +
     #y-label using the previous clean code done outside the plot.
     ylab(country_ylab) 
-  
+    England_graph
 }
