@@ -35,7 +35,7 @@
 #plot.googlemobility(google, 'parks','England')
 
 
-plot.googlemobility<-function(Data,location,country){
+plot.googlemobility<-function(Data,location="parks",country){
   
   # Load packages ----------------------------------------------------------
   #install.packages('plotrix')
