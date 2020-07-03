@@ -34,7 +34,7 @@ match.mene2google<-function(){
   #install.packages('plotrix)
   library(plotrix)
   
-  source('requiredpackages.R')
+  
   require(tidyr)
   require(tibble)
   source(file = "read.naturalenglandmene.R")
