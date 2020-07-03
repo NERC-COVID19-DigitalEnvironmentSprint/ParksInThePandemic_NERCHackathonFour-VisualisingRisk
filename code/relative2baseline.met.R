@@ -81,13 +81,10 @@ metoffice_england_rel2baseline<-metoffice_england_nonbaselineperiod
 
 #loop through weekdays
 for (w in wdays){
-  print(w)
   #loop through districts
   for(d in districts){
-    print(d)
     #loop through columns
     for (c in 4:ncol(metoffice_england_rel2baseline)){
-      print(c)
     
     #for weekday w and district w, get non-baseline median values of meteorological measurement c for
     nonbaseline<-metoffice_england_nonbaselineperiod[metoffice_england_nonbaselineperiod$weekdays==w & metoffice_england_nonbaselineperiod$sub_region_1==d,c]
@@ -105,5 +102,10 @@ for (w in wdays){
     }
   }
 }
-metoffice_england_rel2baseline
+
+#Reads in google mobility data
+google_mobility<-read.googlemobility()
+google_mobility_england<-subset(google_mobility,sub_country=='England')
+merge(google_mobility_england,metoffice_england_rel2baseline)
+
 }
