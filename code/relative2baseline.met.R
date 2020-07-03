@@ -102,44 +102,10 @@ for (w in wdays){
     }
   }
 }
-#Reads in google mobility data
-google_mobility<-read.googlemobility()
-#Extracts the google mobility dates
-google_date<-google_mobility$date[!duplicated(google_mobility$date)]
-#Extracts the metoffice dates
-metoffice_date<-as.Date(metoffice_england_rel2baseline$date[!duplicated(metoffice_england_rel2baseline$date)])
-#Works out the missing dates from between google mobility and metoffice and prints them with a logical value aside them
-missing_date<-paste(google_date,(as.character(google_date%in%metoffice_date)),sep = "")
-#Extracts all the dates that contain FALSE (as in they do not appear in the metoffice data set)
-missing_date<-as.character(missing_date[grep("FALSE",missing_date)])
-#This removes the FALSE string from the vector and sets them as a date value. 
-missing_date<-gsub("FALSE","",missing_date)
-#Creates a vector that repeats the number of districts corresponding to the length of missing dates.
-v<-vector()
-for(i in districts){
-  district<-rep(c(i),time = length(missing_date))
-  v<-c(v,district)
-}
-#Creates a vector that contains the missing dates, repeated 86 times for each district.
-date<-as.Date(rep(c(missing_date),time = length(districts)))
-#Creates a vector that contains the weekdays corresponding to each missing_date
-weekday<-weekdays(date)
-#Creates a matrix that makes up the missing values corresponding to the metoffice_data length. (So if another descriptor is added this will take that into consideration.)
-Na_matrix<-matrix(data = NA, nrow = length(districts)*length(missing_date), ncol = (ncol(metoffice_england_rel2baseline)-3))
-#Creates a data frame corresponding to the length of the metoffice data and changes their column names.
-missing_metoffice<-data.frame(weekday,date,v,Na_matrix)
-colnames(missing_metoffice)<-c(colnames(metoffice_england_rel2baseline))
-#Binds the missing dataset with the met office data set.
-metoffice_england_rel2baseline[,2]<-as.Date(metoffice_england_rel2baseline$date)
-metoffice_england_rel2baseline<-rbind(metoffice_england_rel2baseline,missing_metoffice)
-}
 
-
-#to be deleted - checks that same number of nrows in 
 #Reads in google mobility data
 google_mobility<-read.googlemobility()
 google_mobility_england<-subset(google_mobility,sub_country=='England')
-x<-relative2baseline.met()
+merge(google_mobility_england,metoffice_england_rel2baseline)
 
-nrow(google_mobility_england)
-nrow(x)
+}
