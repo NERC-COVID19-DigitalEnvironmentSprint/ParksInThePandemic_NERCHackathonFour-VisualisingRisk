@@ -81,13 +81,10 @@ metoffice_england_rel2baseline<-metoffice_england_nonbaselineperiod
 
 #loop through weekdays
 for (w in wdays){
-  print(w)
   #loop through districts
   for(d in districts){
-    print(d)
     #loop through columns
     for (c in 4:ncol(metoffice_england_rel2baseline)){
-      print(c)
     
     #for weekday w and district w, get non-baseline median values of meteorological measurement c for
     nonbaseline<-metoffice_england_nonbaselineperiod[metoffice_england_nonbaselineperiod$weekdays==w & metoffice_england_nonbaselineperiod$sub_region_1==d,c]
@@ -124,11 +121,11 @@ for(i in districts){
   v<-c(v,district)
 }
 #Creates a vector that contains the missing dates, repeated 86 times for each district.
-date<-as.Date(rep(c(missing_date),time = 86))
+date<-as.Date(rep(c(missing_date),time = length(districts)))
 #Creates a vector that contains the weekdays corresponding to each missing_date
 weekday<-weekdays(date)
 #Creates a matrix that makes up the missing values corresponding to the metoffice_data length. (So if another descriptor is added this will take that into consideration.)
-Na_matrix<-matrix(data = NA, nrow = 86*length(missing_date), ncol = (ncol(metoffice_england_rel2baseline)-3))
+Na_matrix<-matrix(data = NA, nrow = length(districts)*length(missing_date), ncol = (ncol(metoffice_england_rel2baseline)-3))
 #Creates a data frame corresponding to the length of the metoffice data and changes their column names.
 missing_metoffice<-data.frame(weekday,date,v,Na_matrix)
 colnames(missing_metoffice)<-c(colnames(metoffice_england_rel2baseline))
@@ -136,3 +133,13 @@ colnames(missing_metoffice)<-c(colnames(metoffice_england_rel2baseline))
 metoffice_england_rel2baseline[,2]<-as.Date(metoffice_england_rel2baseline$date)
 metoffice_england_rel2baseline<-rbind(metoffice_england_rel2baseline,missing_metoffice)
 }
+
+
+#to be deleted - checks that same number of nrows in 
+#Reads in google mobility data
+google_mobility<-read.googlemobility()
+google_mobility_england<-subset(google_mobility,sub_country=='England')
+x<-relative2baseline.met()
+
+nrow(google_mobility_england)
+nrow(x)
