@@ -1,6 +1,10 @@
 match.met2google<-function(){
+  
+  
+source('requiredpackages.R')
 source('read.metofficecovid.R')
 source('read.googlemobility.R')
+  
 #load Met Office data for May
 metoffice<-read.metofficedata()
 #add empty country column to the met office data frame
