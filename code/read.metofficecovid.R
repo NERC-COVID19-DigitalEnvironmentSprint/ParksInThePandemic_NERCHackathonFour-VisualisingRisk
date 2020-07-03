@@ -1,6 +1,9 @@
 #Code for a function that downloads all the metoffice data sets and merge them together into one big data set.
 
 read.metofficedata<-function(){
+  
+  source('requiredpackages.R')
+  
   #Defines the url link that the data can be extracted from.
   metoffice.link<-"https://metdatasa.blob.core.windows.net/covid19-response/index.html"
   #Extracts all the information from the webpage and maintains the information from the other htmls.

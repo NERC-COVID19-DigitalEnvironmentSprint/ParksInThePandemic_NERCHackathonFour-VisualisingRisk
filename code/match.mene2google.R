@@ -1,6 +1,9 @@
 ##Code for a function that reads in the MENE data, assigns google districts and aggregates the weighted and unweighted accounts according to the google districts.##
 
 match.mene2google<-function(){
+  
+  
+  source('requiredpackages.R')
   require(tidyr)
   require(tibble)
   source(file = "read.naturalenglandmene.R")
