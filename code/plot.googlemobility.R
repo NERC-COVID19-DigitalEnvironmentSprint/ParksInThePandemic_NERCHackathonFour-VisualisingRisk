@@ -93,7 +93,7 @@ plot.googlemobility<-function(Data,location="parks",country){
   #Takes out the set of values corresponding to the appropriate countries SE defined by the function
   country_se_v<-UK_all[,paste(country,"_se",sep = "")]
   #Cleans the location title to ensure that _ do not exist in the y axis and recreates the y-axis.
-  country_ylab<-paste("Visit changes for",gsub("_"," ",location),"(%) relative to per-weekday winter baselines (Google Community Mobility data)")
+  country_ylab<-paste("Visit changes for",gsub("_"," ",location),"(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")
   #START OF THE PLOTTING FUNCTION 
   England_graph<-ggplot(data=UK_all,aes(x=as.Date(Date),y=country_mean_v)) +
     #Plots the bar graphs, with a black outing and dark orange fill. 
