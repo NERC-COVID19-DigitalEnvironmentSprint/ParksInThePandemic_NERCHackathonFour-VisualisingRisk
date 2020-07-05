@@ -48,7 +48,7 @@ plot.googlemobilitydistricts<-function(Data,location="parks",district="Bedford")
   #Changes the column names for making it easier to put into a plotting function.
   colnames(district_df)<-c("Date","District","Mobility")
   #Cleans the location title to ensure that _ do not exist in the y axis and recreates the y-axis.
-  country_ylab<-paste("Visit changes for",gsub("_"," ",location),"(%) relative to per-weekday winter baselines (Google Community Mobility data)")
+  country_ylab<-paste("Visit changes for",gsub("_"," ",location),"(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")
   #START OF THE PLOTTING FUNCTION 
   District_graph<-ggplot(data=district_df,aes(x=as.Date(Date),y=Mobility)) +
     #Plots the bar graphs, with a black outing and dark orange fill. 
