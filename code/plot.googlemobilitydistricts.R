@@ -70,3 +70,4 @@ plot.googlemobilitydistricts<-function(Data,location="parks",district="Bedford")
     ggtitle(district)
   District_graph
 }
+

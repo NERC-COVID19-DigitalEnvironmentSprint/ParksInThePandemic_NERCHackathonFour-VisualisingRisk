@@ -1,10 +1,7 @@
-## app.R ##
-#need to make it a package 
+# Be sure to set the root directory as the working directory
 
-#libraries
-#-----------
-
-library(here)
+# Libraries
+# ---------
 library(rgdal)
 library(leaflet)
 library(tidyverse)
@@ -16,35 +13,53 @@ library(dashboardthemes)
 library(htmlwidgets)
 library(htmltools)
 
-# Data
-#--------------------
+# Import our functions
+# --------------------
+#source("/Parks_and_pandemic/get_spatial_data.R")
+source("code/plot.googlemobilitydistricts.R")
+source("code/read.googlemobility.R")
 
-#source(here("/Parks_and_pandemic/get_spatial_data.R"))
-source(here("code/plot.googlemobilitydistricts.R"))
-bedford<-readOGR(dsn=paste0(here(),"/data/spatial"), layer="TL_GreenspaceSite")
+# Import data
+# -----------
+# Read google mobility data if possible, otherwised download it
+#if (file.exists("data/google/mobility_UK.csv")) {
+#  google <- read.csv("data/google/mobility_UK.csv")
+#} else {
+#  google <- read.googlemobility()
+#  # google <- read.googlemobility("data/google/mobility_UK.csv")
+#}
+# Question: Would it be possible to save the downloaded google mobility data to a given file path, like:
+# read.googlemobility(path.to.destination)
+# To save dowloading it on each run
+
+bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
 shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
 
-# Function definitions
-# --------------------
-
-# INSERT FUNCTION TO GET MAP DATA
-
-# UI
-# ------------------
+# Widgets
+# -------
+text.box <- box(
+  title="How busy is my local park likely to be?", 
+  footer=paste(rep("blah", 20), collapse=" "), 
+  height=300,
+  width=12
+)
+date.box <- box(
+  dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2020-08-31")
+)
+graph <- plotOutput("plot1")
+map <- leafletOutput("map1")
 
 ui <- dashboardPage(
-        dashboardHeader(
-          title = "Parks in the Pandemic Dashboard",
-          titleWidth = 400),
-        dashboardSidebar(out=h3("Insert Text")),
-        dashboardBody(tags$head(tags$style(HTML('.box {margin: 0px;}'))),
-          fluidRow(
-            leafletOutput("map1")),
-          fluidRow(
-            box(dateRangeInput("daterange1", "Date range:",start = "2020-01-01",end   = "2020-08-31")),
-            box(plotOutput("plot1")))        
-          )
-        )
+  dashboardHeader(title="Parks in the Pandemic Dashboard", titleWidth=400),
+  dashboardSidebar(out=h3("DASHBOARD")),
+  dashboardBody(
+    tags$head(tags$style(HTML('.box {margin: 0px;}'))),
+    fluidRow(
+      column(6, text.box, fluidRow(graph)),
+      column(6, map)
+    )
+  )
+)
  
     
 # server
@@ -56,8 +71,8 @@ server <- function(input, output) {
   
     #slow but wont be here in the final app - we can have a function to update the data and run the function here
     #need to change the path here
-    UK_latlon <- readRDS(here("/data/UK_dat_ggplot.RDS"))
-    UK_Mobility <- readRDS(here("/data/UK_Mobility.RDS"))
+    UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
+    UK_Mobility <- readRDS("data/UK_Mobility.RDS")
     UKdata<-reactive({
       UK_Mobility %>% 
         filter(between(date,min(as.Date(input$daterange1)), max(as.Date(input$daterange1))))}
