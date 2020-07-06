@@ -42,7 +42,7 @@ shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
 # Widgets
 # -------
 
-text.box <- box(title = "How busy is my local park likely to be?", footer = "Insert Text", width = 12)
+text.box <- box(title = "How busy is my local park likely to be?", footer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit malesuada dolor, ac auctor mi venenatis nec. Suspendisse ipsum augue, luctus venenatis sagittis sit amet, posuere non velit. Praesent aliquam finibus consectetur. Phasellus laoreet nisi tincidunt lorem fringilla tincidunt. Fusce quis pulvinar ipsum, a blandit nisl. Sed quis est rhoncus, porta nunc a, cursus tellus. Morbi euismod erat felis. Sed varius quam vel eros congue, vel convallis justo ullamcorper. Maecenas posuere, justo sed dapibus posuere, leo ex dapibus est, id viverra neque odio in lorem. Proin lobortis ante est, sed aliquet orci varius sed.", width = 12)
 
 date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2020-08-31")
 
@@ -55,9 +55,23 @@ map <- leafletOutput("map1", height = 600)
 
 header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
 
+
 sidebar <- dashboardSidebar(date.box, width = 250)
 
 body <- dashboardBody(
+  tags$head(tags$style(HTML('
+                                
+                                /* main sidebar */
+                                .skin-blue .main-sidebar {
+                                background-color: #FFFFFF;
+                                }
+
+                                /* body */
+                                .content-wrapper, .right-side {
+                                background-color:	#FFFFFF ;
+                                }
+
+                                '))),
   fluidRow(
     column(
       6,
