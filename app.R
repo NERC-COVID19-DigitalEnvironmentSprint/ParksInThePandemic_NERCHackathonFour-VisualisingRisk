@@ -30,17 +30,14 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 }
 
 #import mobility data
-mobilitydata <- read.csv("data/temporal/google_and_metoffice.csv")
+#mobilitydata <- read.csv("data/temporal/google_and_metoffice.csv")
 
 # make the map
 bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
 shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
-UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
-UK_Mobility <- readRDS("data/UK_Mobility.RDS")
-UKdata<-reactive({
-  UK_Mobility %>% 
-    filter(between(date,min(as.Date(input$daterange1)), max(as.Date(input$daterange1))))}
-)
+#UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
+#UK_Mobility <- readRDS("data/UK_Mobility.RDS")
+
 
 # Widgets
 # -------
@@ -75,6 +72,10 @@ body <- dashboardBody(
 # ------
 
 server <- function(input, output) {
+  google_react<-reactive({
+    google %>% 
+      dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1))))}
+  )
   #map
     output$map1<-renderLeaflet({
       map <- leaflet()  %>% addTiles() %>% 
@@ -83,7 +84,7 @@ server <- function(input, output) {
       map
       })
   #plot
-    output$plot1<-renderPlot({print(plot.googlemobilitydistricts(google, "parks", "Bedford"))})
+    output$plot1<-renderPlot({print(plot.googlemobilitydistricts(google_react(), "parks", "Bedford"))})
 }
   
 # Run
