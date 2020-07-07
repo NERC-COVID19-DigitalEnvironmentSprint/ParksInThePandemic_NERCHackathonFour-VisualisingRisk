@@ -13,8 +13,10 @@ library(dashboardthemes)
 library(htmlwidgets)
 library(htmltools)
 library(remotes)
-library(osfr)
-
+#library(osfr)
+library(here)
+library(conflicted)
+conflict_prefer("box", "shinydashboard")
 # Import functions from repo
 # --------------------------
 
@@ -41,9 +43,10 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
 #import google boundaries shapefile from Open Science Framework
-pp_project <- osf_retrieve_node("c7kg4")
-shapeData<-osf_retrieve_file("https://osf.io/hzkm7/") %>%
-  osf_download()
+#pp_project <- osf_retrieve_node("c7kg4")
+#shapeData<-osf_retrieve_file("https://osf.io/hzkm7/") %>%
+ # osf_download()
+shapeData<-readRDS(paste0(here::here(), "/data/spatial/gbs.rds"))# conflict with plyr
 
 # Widgets
 # -------
@@ -99,7 +102,7 @@ server <- function(input, output) {
   #map
     output$map1<-renderLeaflet({
       map <- leaflet()  %>% addTiles() %>% 
-        setView(lng = -0.46, lat=52.13,zoom=12) %>% 
+        setView(lng = -0.46, lat=52.13,zoom=5) %>% 
         addPolygons(data=shapeData,weight=5,col = 'green')
       map
       })
