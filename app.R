@@ -12,6 +12,8 @@ library(leaflet.extras)
 library(dashboardthemes)
 library(htmlwidgets)
 library(htmltools)
+library(remotes)
+library(osfr)
 
 # Import functions from repo
 # --------------------------
@@ -33,11 +35,15 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 #mobilitydata <- read.csv("data/temporal/google_and_metoffice.csv")
 
 # make the map
-bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
-shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
+#bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
+#shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
 #UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
+#import google boundaries shapefile from Open Science Framework
+pp_project <- osf_retrieve_node("c7kg4")
+shapeData<-osf_retrieve_file("https://osf.io/hzkm7/") %>%
+  osf_download()
 
 # Widgets
 # -------
