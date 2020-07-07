@@ -106,6 +106,6 @@ for (w in wdays){
 #Reads in google mobility data
 google_mobility<-read.googlemobility()
 google_mobility_england<-subset(google_mobility,sub_country=='England')
-merge(google_mobility_england,metoffice_england_rel2baseline)
+merge(google_mobility_england,metoffice_england_rel2baseline, all = T)
 
 }
