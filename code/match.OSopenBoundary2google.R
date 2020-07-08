@@ -1,7 +1,7 @@
 library(sf)
 library(stringr)
 
-# read in OSopen boundary-line (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) Open Government Licence Contains OS data © Crown copyright and database right 2020
+# read in OSopen boundary-line (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) Open Government Licence Contains OS data Â© Crown copyright and database right 2020
 ENG_district <- st_read("../GB/district_borough_unitary_region.shp")
 ENG_county <- st_read("../GB/county_region.shp")
 ENG_cer_county <- st_read("../Supplementary_Ceremonial/Boundary-line-ceremonial-counties_region.shp")
@@ -49,3 +49,10 @@ outlines <- merge(outlines,England_districts, by.x = "NAMEclean", by.y = "CleanN
 # identify any missing mobility regions 
 setdiff(England_districts$Mobility_name ,outlines$Mobility_name)
 plot(st_geometry(outlines),col="green")
+
+# simplify and plot
+outlines_simp <- st_simplify(outlines, dTolerance=50)
+plot(st_geometry(outlines_simp),col="blue")
+
+# write out shapefile
+#st_write(outlines_simp, "outlines_simp.shp")
