@@ -1,11 +1,12 @@
 library(sf)
 library(stringr)
 
-# read in OSopen boundary-line (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) Open Government Licence Contains OS data © Crown copyright and database right 2020
-ENG_district <- st_read("../GB/district_borough_unitary_region.shp")
-ENG_county <- st_read("../GB/county_region.shp")
-ENG_cer_county <- st_read("../Supplementary_Ceremonial/Boundary-line-ceremonial-counties_region.shp")
+# read in OSopen boundary-line (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) Open Government Licence Contains OS data Â© Crown copyright and database right 2020
+#ENG_district <- st_read("GB/district_borough_unitary_region.shp")
+#ENG_county <- st_read("GB/county_region.shp")
+#ENG_cer_county <- st_read("Supplementary_Ceremonial/Boundary-line-ceremonial-counties_region.shp")
 
+source('read.googlemobility.R')
 #read in google data
 mobility<-read.googlemobility()
 #subset out only England data from the Google dataframe
@@ -49,3 +50,15 @@ outlines <- merge(outlines,England_districts, by.x = "NAMEclean", by.y = "CleanN
 # identify any missing mobility regions 
 setdiff(England_districts$Mobility_name ,outlines$Mobility_name)
 plot(st_geometry(outlines),col="green")
+
+# simplify and plot
+outlines_simp <- st_simplify(outlines, dTolerance=50)
+plot(st_geometry(outlines_simp),col="blue")
+
+# write out shapefile in OGSGB36
+st_write(outlines_simp, "googleboundaries_OGSGB36.shp")
+
+# write out shapefile in WGS84
+outlines_simp <- spTransform(outlines_simp, CRS("+init=epsg:4326"))
+writeOGR(outlines_simp, "googleboundaries_WGS84.shp", layer='googleboundaries_OGSGB36', driver="ESRI Shapefile")
+
