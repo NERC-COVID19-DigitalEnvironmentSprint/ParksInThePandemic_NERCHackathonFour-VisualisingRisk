@@ -13,7 +13,7 @@ library(dashboardthemes)
 library(htmlwidgets)
 library(htmltools)
 library(remotes)
-#library(osfr)
+library(osfr)
 library(here)
 library(conflicted)
 conflict_prefer("box", "shinydashboard")
@@ -42,11 +42,10 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 #UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
-#import google boundaries shapefile from Open Science Framework
-#pp_project <- osf_retrieve_node("c7kg4")
-#shapeData<-osf_retrieve_file("https://osf.io/hzkm7/") %>%
- # osf_download()
-shapeData<-readRDS(paste0(here::here(), "/data/spatial/gbs.rds"))# conflict with plyr
+#import google boundaries shapefile from Open Science Framework data repository
+pp_project <- osf_retrieve_node("c7kg4")
+osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
+shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
 
 # Widgets
 # -------
