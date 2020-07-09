@@ -53,12 +53,12 @@ forecast<-forecast%>%
   )
 
 forecast_2<-aggregate(forecast, list(forecast$date), FUN = mean, na.rm = T )[,-1]
-forecast_2<-cbind.data.frame("date" = forecast_2$date,
+forecast_2<-cbind.data.frame("weekdays" = weekdays(forecast_2$date),
+                  "date" = forecast_2$date,
                   "sub_region_1" ="Bedford",           
                   "temp_max" = forecast_2$temp_max,
                   "temp_mean" = forecast_2$temp, 
                   "temp_min" =  forecast_2$temp_min,
                   "rain_mean" = forecast_2$rain_3h) 
                   
-forecast_2<-add_column(forecast_2,"weekdays" = weekdays(forecast_2$date), .before = "date")
 }
