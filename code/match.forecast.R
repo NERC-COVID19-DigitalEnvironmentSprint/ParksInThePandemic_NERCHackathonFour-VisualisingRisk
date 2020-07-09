@@ -33,9 +33,12 @@ library(stringr)
 library(owmr)
 
 # Inserting in the open weather data --------------------------------------
-
+#Retrieves the APIkey from the parksinthepandemic folder.
+APIkey<-readRDS(file = "~/GitHub/parksinthepandemic/APIkey.RDS")
+  
 #Set's the system to my own API key.
-Sys.setenv(OWM_API_KEY = "31af4c38fca8bb4ec366db9695bebdc0")
+Sys.setenv(OWM_API_KEY = APIkey)
+
 #This gets forecasted weather for the specified "district"
   forecast <-get_forecast("Bedford", units = "metric")%>%
     owmr_as_tibble()
