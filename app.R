@@ -56,7 +56,9 @@ date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end=
 
 graph <- plotOutput("plot1")
 
-map <- leafletOutput("map1", height = 600)
+map <- plotOutput("map1", height=700, width=400)
+
+#map <- leafletOutput("map1", height = 600)
 
 # UI.R code
 # ---------
@@ -98,13 +100,20 @@ server <- function(input, output) {
     google %>% 
       dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1))))}
   )
+  
+  output$map1<-renderPlot({
+    
+    par(mar=c(3, 0, 3, 0))
+    map <- plot(shapeData, xlim=c(-5.5,1.5), ylim=c(50,56))
+    
+    })
   #map
-    output$map1<-renderLeaflet({
-      map <- leaflet()  %>% addTiles() %>% 
-        setView(lng = -0.46, lat=52.13,zoom=5) %>% 
-        addPolygons(data=shapeData,weight=5,col = 'green')
-      map
-      })
+    #output$map1<-renderLeaflet({
+     # map <- leaflet()  %>% addTiles() %>% 
+      #  setView(lng = -0.46, lat=52.13,zoom=5) %>% 
+       # addPolygons(data=shapeData,weight=5,col = 'green')
+      #map
+      #})
   #plot
     output$plot1<-renderPlot({print(plot.googlemobilitydistricts(google_react(), "parks", "Bedford"))})
 }
