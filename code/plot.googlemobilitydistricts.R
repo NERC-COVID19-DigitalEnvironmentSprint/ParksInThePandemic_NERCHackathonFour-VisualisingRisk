@@ -1,7 +1,7 @@
 
 #DEFAULT SETTINGs TO PARKS and BEDFORD (Data stil needs to be unputted)
 
-plot.googlemobilitydistricts<-function(Data,location="parks",district="Bedford"){
+plot.googlemobilitydistricts<-function(Data,type="parks",district="Bedford"){
   
   # Load packages ----------------------------------------------------------
   #install.packages('plotrix')
@@ -38,7 +38,7 @@ plot.googlemobilitydistricts<-function(Data,location="parks",district="Bedford")
   library(plotrix)  
   
   #Creates a character vector that resembles the column name within the google mobility data.
-  Loc<-paste(location,"_percent_change_from_baseline",sep = "")
+  Loc<-paste(type,"_percent_change_from_baseline",sep = "")
   #Creates a smaller data set that only corresponds to the values needed.
   district_data<-subset(Data,select = c("date","sub_region_1",Loc))
   #Makes many data frames for each district.
@@ -47,8 +47,8 @@ plot.googlemobilitydistricts<-function(Data,location="parks",district="Bedford")
   district_df<-as.data.frame(district_all[district])
   #Changes the column names for making it easier to put into a plotting function.
   colnames(district_df)<-c("Date","District","Mobility")
-  #Cleans the location title to ensure that _ do not exist in the y axis and recreates the y-axis.
-  country_ylab<-paste("Visit changes for",gsub("_"," ",location),"(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")
+  #Cleans the type title to ensure that _ do not exist in the y axis and recreates the y-axis.
+  country_ylab<-paste("Visit changes for",gsub("_"," ",type),"(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")
   #START OF THE PLOTTING FUNCTION 
   District_graph<-ggplot(data=district_df,aes(x=as.Date(Date),y=Mobility)) +
     #Plots the bar graphs, with a black outing and dark orange fill. 

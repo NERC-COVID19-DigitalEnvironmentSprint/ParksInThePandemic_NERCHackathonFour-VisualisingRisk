@@ -1,4 +1,7 @@
-match.metoffice<-function(){
+match.metoffice<-function(metoffice_df,google_df)
+#where metoffice is the output of read.metofficecovid() i.e. a csv of met office data for UK
+#where google is the output of read.googlemobility() i.e a csv of google mobility data for UK
+    {
   
   # Load packages ----------------------------------------------------------
   #install.packages('plotrix')
@@ -32,13 +35,10 @@ match.metoffice<-function(){
   #install.packages('stringr')
   library(stringr)
   #install.packages('plotrix)
-  library(plotrix)  
-  
-source('read.metofficecovid.R')
-source('read.googlemobility.R')
+  library(plotrix)
   
 #load Met Office data for May
-metoffice<-read.metofficecovid()
+metoffice<-read.csv(metoffice_df)
 #add empty country column to the met office data frame
 metoffice<-metoffice %>% add_column(country='', .after=which(colnames(metoffice)=="name"))
 
@@ -56,9 +56,7 @@ metoffice$country[(metoffice$name%in%readRDS('input_data/metoffice_nirelanddistr
 metoffice_england<-subset(metoffice,country=='England')
 
 #read in google data
-google<-read.googlemobility()
-#subset out only England data from the Googl dataframe
-google_england<-subset(google,sub_country=='England')
+google<-read.csv(google_df)
 
 # Match the Met Office COVID Reporting regions to Google regions (this is easy for England because all google districts are coarser resolution) ---------------------------------------------------------------
 
@@ -148,3 +146,6 @@ colnames(metoffice_england)<-c('weekdays',
 metoffice_england
 }
 
+#example implementation
+#metoffice_england<-match.metoffice('met.csv', 'goog_england.csv')
+#write.csv(metoffice_england, 'metoffice_england.csv')
