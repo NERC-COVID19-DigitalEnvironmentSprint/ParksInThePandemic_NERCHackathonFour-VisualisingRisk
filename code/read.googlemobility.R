@@ -59,5 +59,10 @@ read.googlemobility<-function(){
                             ifelse(UK$sub_region_1%in%c("Antrim and Newtownabbey","Ards and North Down","Armagh City, Banbridge and Craigavon","Belfast","Causeway Coast and Glens","Derry and Strabane","Fermanagh and Omagh","Lisburn and Castlereagh","Mid and East Antrim","Mid Ulster","Newry","Mourne and Down"),"Northern Ireland", NA))))
   #Add the new vector into the data-frame after the county_region column. 
   UK %>% add_column(sub_country = Sub_country, .after = which(colnames(UK)=="country_region"))
-    }
+}
 
+#example implementation
+#goog<-read.googlemobility()
+#write.csv(goog,'goog.csv', row.names=F)
+#google_england<-subset(goog,sub_country=='England')
+#write.csv(google_england, 'google_england.csv', row.names = F)
