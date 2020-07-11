@@ -53,3 +53,7 @@ read.metofficecovid<-function(){
   #Compiles all the datasets together and prints this dataframe to your environment. 
   ldply(csv.url2, read.csv)
 }
+
+#example implementation
+#met<-read.metofficecovid()
+#write.csv(met, 'met.csv', row.names = F)

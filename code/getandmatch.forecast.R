@@ -1,4 +1,4 @@
-match.forecast<-function(){
+getandmatch.forecast<-function(location, apikey){
   
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
@@ -33,14 +33,14 @@ library(stringr)
 library(owmr)
 
 # Inserting in the open weather data --------------------------------------
-#Retrieves the APIkey from the parksinthepandemic folder.
-APIkey<-readRDS(file = "~/GitHub/parksinthepandemic/APIkey.RDS")
+#Retrieves the APIkey from the offline Github folder containing your cloned repos
+APIkey<-readRDS(apikey)
   
 #Set's the system to my own API key.
 Sys.setenv(OWM_API_KEY = APIkey)
 
 #This gets forecasted weather for the specified "district"
-  forecast <-get_forecast("Bedford", units = "metric")%>%
+  forecast <-get_forecast(location, units = "metric")%>%
     owmr_as_tibble()
 
 #This extracts the date and time column into two seperate strings.
@@ -58,7 +58,7 @@ forecast<-forecast%>%
 forecast_2<-aggregate(forecast, list(forecast$date), FUN = mean, na.rm = T )[,-1]
 forecast_2<-cbind.data.frame("weekdays" = weekdays(forecast_2$date),
                   "date" = forecast_2$date,
-                  "sub_region_1" ="Bedford",           
+                  "sub_region_1" =location,           
                   "temp_max" = forecast_2$temp_max,
                   "temp_mean" = forecast_2$temp, 
                   "temp_min" =  forecast_2$temp_min,

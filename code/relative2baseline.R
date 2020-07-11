@@ -1,5 +1,6 @@
 #Argument data, defines the dataset you want to convert to percentage baseline change.
-
+#example implementation: relative2baseline('metoffice_england.csv')
+#where 'metoffice_england.csv' is the output of the match.metoffice function (met office data matched to Google and with columns renamed in line with OpenWeather forecast format)
 relative2baseline<-function(data){
 
 # Load packages ----------------------------------------------------------
@@ -30,10 +31,12 @@ library(stringr)
 #install.packages('plotrix)
 library(plotrix)  
 
-source('match.metoffice.R')
+#Read the met office england database (specified by user as csv file) -------------------------------------------------------------------
+  
+metoffice_england<-read.csv(data)
+metoffice_england[,"date"]<-as.Date(metoffice_england[,"date"])
 
-# Reads in the met-office england dataset and finds relative baseline values. -------------------------------------------------------------------
-metoffice_england<-match.metoffice()
+# Finds relative baseline values -------------------------------------------------------------------
 
 #Makes a vector of dates within Google's Baseline period
 baselinerange<-seq(as.Date('2020-01-03'),as.Date('2020-02-06'),1)
@@ -41,20 +44,15 @@ baselinerange<-seq(as.Date('2020-01-03'),as.Date('2020-02-06'),1)
 #Gets met office england data for the baseline period
 metoffice_england_baselineperiod<-metoffice_england[as.Date(metoffice_england$date)%in%baselinerange,]
 
-unique(as.Date(baselinerange))
-
 #create a dataframe of the median values of each meteorological measurement for each district, from the baseline period (as google did for mobility)
 baselineweather<-aggregate(metoffice_england_baselineperiod,
                            list(metoffice_england_baselineperiod$weekdays,
                                 metoffice_england_baselineperiod$sub_region_1),
                            median)[,-c(1:2)]
 
-# Prepares the specified data set -----------------------------------------
+# Find the non-baseline values  -----------------------------------------
 
-data[,"date"]<-as.Date(data[,"date"])
-
-nonbaselineperiod<-subset(data,data$date >= "2020-02-15")
-
+nonbaselineperiod<-subset(metoffice_england,metoffice_england$date >= "2020-02-15")
 
 # For loop PREPARATION ----------------------------------------------------
 #make vector of weekdays
