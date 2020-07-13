@@ -24,12 +24,18 @@ conflict_prefer("box", "shinydashboard")
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 
+# Variables
+# ---------
+
+titleWidth <- 250
+mobility.data.file <- "data/temporal/google_and_metoffice_england.csv"
+
 # Load data
 # ---------
 
 # Google mobility data
-if (file.exists("data/temporal/google_and_metoffice_england.csv")) {
-  google <- read.csv("data/temporal/google_and_metoffice_england.csv")
+if (file.exists(mobility.data.file)) {
+  google <- read.csv(mobility.data.file)
 } else {
   google <- read.googlemobility()
 }
@@ -51,13 +57,7 @@ if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   pp_project <- osf_retrieve_node("c7kg4")
   osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-  
 }
-
-# Variables
-# ---------
-
-titleWidth <- 250
 
 # Widgets
 # -------
