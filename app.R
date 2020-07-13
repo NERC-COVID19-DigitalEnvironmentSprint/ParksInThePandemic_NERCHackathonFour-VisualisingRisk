@@ -27,8 +27,8 @@ source("code/read.googlemobility.R")
 # -------------------------------
 
 # Read google mobility data if possible, otherwised download it
-if (file.exists("data/temporal/google_and_metoffice.csv")) {
-  google <- read.csv("data/temporal/google_and_metoffice.csv")
+if (file.exists("data/temporal/google_and_metoffice_england.csv")) {
+  google <- read.csv("data/temporal/google_and_metoffice_england.csv")
 } else {
   google <- read.googlemobility()
 }
