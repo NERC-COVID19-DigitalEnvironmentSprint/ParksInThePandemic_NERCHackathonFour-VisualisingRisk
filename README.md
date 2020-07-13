@@ -2,6 +2,18 @@
 
 Repository for project looking at park use changes during the COVID-19 pandemic.
 
+Google data used is from Google's Community Mobility Reports - Google LLC "Google COVID-19 Community Mobility Reports".
+https://www.google.com/covid19/mobility/"".
+
+Historical weather data is supplied by the Met Office (c) Crown Copyright, 2020. This data is released under the open government license version 3.0. Users are required to acknowledge the Met Office as the source of these data by including the following attribution statement in any resulting products, publications or applications: Contains Met Office data licensed under the Open Government Licence v3.0<sup>TM</sup>. For licence details details see: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+
+Greenspace data:
+Contains OS data © Crown copyright and database right 2020
+Contains Royal Mail data © Royal Mail copyright and Database right 2020
+Contains National Statistics data © Crown copyright and database right 2020
+
+Shapefiles and associated files of the boundaries of Google's Community Mobility Reports UK districts are located at Open Science Framework (https://osf.io/c7kg4/). These files (named googleboundaries__XXXX) contain OS data © Crown copyright and database right 2020, derived from derived from OSopen boundary-line (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline). The boundaries are based on Google data from Google's Community Mobility Reports - Google LLC "Google COVID-19 Community Mobility Reports". https://www.google.com/covid19/mobility/".
+
 # Setup
 
 First of all, clone this repository to your computer with the command below (make sure you've installed git):
