@@ -33,7 +33,7 @@ write.csv(mene,'mene.csv', row.names=F)
 # MATCH DATASETS ----------------------------------------------------------
 
 #match met office with google data and rename columns to fit OpenWeather forecast format
-metoffice_england<-match.metoffice('met.csv', 'google_england.csv')
+metoffice_england<-match.metoffice(metoffice_df = 'met.csv', google_df = 'google_england.csv')
 write.csv(metoffice_england, 'metoffice_england.csv', row.names=F)
 
 #get forecast for a location and match with metoffice format

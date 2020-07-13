@@ -14,8 +14,6 @@ Contains National Statistics data © Crown copyright and database right 2020
 
 Shapefiles and associated files of the boundaries of Google's Community Mobility Reports UK districts are located at Open Science Framework (https://osf.io/c7kg4/). These files (named googleboundaries__XXXX) contain OS data © Crown copyright and database right 2020, derived from derived from OSopen boundary-line (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline). The boundaries are based on Google data from Google's Community Mobility Reports - Google LLC "Google COVID-19 Community Mobility Reports". https://www.google.com/covid19/mobility/".
 
-
-
 # Setup
 
 First of all, clone this repository to your computer with the command below (make sure you've installed git):
