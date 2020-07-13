@@ -17,20 +17,12 @@ library(osfr)
 library(here)
 library(conflicted)
 conflict_prefer("box", "shinydashboard")
-<<<<<<< HEAD
-
 
 # Import functions
 # ----------------
-=======
-# Import functions from repo
-# --------------------------
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
-
-<<<<<<< HEAD
 
 # Load data
 # ---------
@@ -38,38 +30,20 @@ source("code/read.googlemobility.R")
 # Google mobility data
 if (file.exists("data/temporal/google_and_metoffice_england.csv")) {
   google <- read.csv("data/temporal/google_and_metoffice_england.csv")
-=======
-# Import data from repo OR online
-# -------------------------------
-
-# Read google mobility data if possible, otherwised download it
-if (file.exists("data/temporal/google_and_metoffice.csv")) {
-  google <- read.csv("data/temporal/google_and_metoffice.csv")
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 } else {
   google <- read.googlemobility()
 }
 
-<<<<<<< HEAD
-# AB: What are the following 7 lines for? do we still need them?
-
-#import mobility data
-#mobilitydata <- read.csv("data/temporal/google_and_metoffice.csv")
-=======
 #import mobility data
 #mobilitydata <- read.csv("data/temporal/google_and_metoffice.csv")
 
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 # make the map
 #bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
 #shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
 #UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
-<<<<<<< HEAD
 # Shape data
-=======
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
 } else {
@@ -80,18 +54,14 @@ if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   
 }
 
-<<<<<<< HEAD
 # Variables
 # ---------
 
 titleWidth <- 250
-=======
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 
 # Widgets
 # -------
 
-<<<<<<< HEAD
 text.box <- box(
   title="How busy are my local parks likely to be?", 
   footer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit malesuada dolor, ac auctor mi venenatis nec. Suspendisse ipsum augue, luctus venenatis sagittis sit amet, posuere non velit. Praesent aliquam finibus consectetur. Phasellus laoreet nisi tincidunt lorem fringilla tincidunt. Fusce quis pulvinar ipsum, a blandit nisl. Sed quis est rhoncus, porta nunc a, cursus tellus. Morbi euismod erat felis. Sed varius quam vel eros congue, vel convallis justo ullamcorper. Maecenas posuere, justo sed dapibus posuere, leo ex dapibus est, id viverra neque odio in lorem. Proin lobortis ante est, sed aliquet orci varius sed.", 
@@ -116,44 +86,6 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
-=======
-# this layout is very tidy 
-text.box <- box(title = "How busy are my local parks likely to be?", footer = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit malesuada dolor, ac auctor mi venenatis nec. Suspendisse ipsum augue, luctus venenatis sagittis sit amet, posuere non velit. Praesent aliquam finibus consectetur. Phasellus laoreet nisi tincidunt lorem fringilla tincidunt. Fusce quis pulvinar ipsum, a blandit nisl. Sed quis est rhoncus, porta nunc a, cursus tellus. Morbi euismod erat felis. Sed varius quam vel eros congue, vel convallis justo ullamcorper. Maecenas posuere, justo sed dapibus posuere, leo ex dapibus est, id viverra neque odio in lorem. Proin lobortis ante est, sed aliquet orci varius sed.", width = 12)
-
-date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2021-01-01")
-
-place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME)
-                       , selected = "Bedford (B)", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
-
-graph <- plotOutput("plot1")
-
-map <- plotOutput("map1", height=700, width=400)
-
-#map <- leafletOutput("map1", height = 600)
-
-# UI.R code
-# ---------
-
-header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
-
-
-sidebar <- dashboardSidebar(date.box,place.box, width = 250)
-
-body <- dashboardBody(
-  tags$head(tags$style(HTML('
-                                
-                                /* main sidebar */
-                                .skin-blue .main-sidebar {
-                                background-color: #FFFFFF;
-                                }
-
-                                /* body */
-                                .content-wrapper, .right-side {
-                                background-color:	#FFFFFF ;
-                                }
-
-                                '))),
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
   fluidRow(
     column(
       6,
@@ -164,11 +96,7 @@ body <- dashboardBody(
   )
 )
 
-<<<<<<< HEAD
 # Server
-=======
-# server
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 # ------
 
 server <- function(input, output) {
@@ -179,18 +107,13 @@ server <- function(input, output) {
       group_by(sub_region_1) %>% 
       dplyr::summarise(mn=mean(parks_percent_change_from_baseline, na.rm=TRUE)) %>% 
       dplyr::mutate(NAME=sub_region_1)
-<<<<<<< HEAD
   })
-  
-=======
-    })
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
+
   google_react2<-reactive({
     google %>% 
       dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) 
   })
   
-<<<<<<< HEAD
   shapeData2 <- reactive({
     shapeData2 <- shapeData[shapeData$NAME==input$place,]  
   })
@@ -210,36 +133,6 @@ server <- function(input, output) {
   })
   
   output$plot1 <- renderPlot({print(plot.googlemobilitydistricts(google_react2(), "parks", "Bedford"))})
-=======
-   shapeData2<-reactive({
-     shapeData2 <- shapeData[shapeData$NAME==input$place,]  
-     })
-     
-  
-  google_shp_merge<-reactive({merge(shapeData, google_react())})
- 
-   output$map1<-renderPlot({
-      par(mar=c(3, 0, 3, 0))
-        mycolours <- RColorBrewer::brewer.pal(8, "Blues")
-        mybreaks <- c(-60,-40,-20,0, 20,40,60)
-        mycolours <- RColorBrewer::brewer.pal(8, "Blues")
-        mybreaks <- c(-60,-40,-20,0, 20,40,60)
-        #cut(google_shp_merge$mn, mybreaks)
-        mycolourscheme <- mycolours[findInterval(google_shp_merge()$mn, vec = mybreaks)]
-        plot(google_shp_merge(), xlim=c(-5.5,1.5), ylim=c(50,56), col = mycolourscheme)
-        plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,56), add=TRUE, density=2,lwd=4)
-    
-    })
-  #map
-    #output$map1<-renderLeaflet({
-     # map <- leaflet()  %>% addTiles() %>% 
-      #  setView(lng = -0.46, lat=52.13,zoom=5) %>% 
-       # addPolygons(data=shapeData,weight=5,col = 'green')
-      #map
-      #})
-  #plot
-    output$plot1<-renderPlot({print(plot.googlemobilitydistricts(google_react2(), "parks", "Bedford"))})
->>>>>>> 4bfbb7b3ca1c23adea4b2d80b3e01c2a4e93bd29
 }
   
 # Run
