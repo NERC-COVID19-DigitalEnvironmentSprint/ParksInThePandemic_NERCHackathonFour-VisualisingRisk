@@ -17,25 +17,18 @@ library(osfr)
 library(here)
 library(conflicted)
 conflict_prefer("box", "shinydashboard")
-
-# Import functions
-# ----------------
+# Import functions from repo
+# --------------------------
 
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 
-# Variables
-# ---------
+# Import data from repo OR online
+# -------------------------------
 
-titleWidth <- 250
-mobility.data.file <- "data/temporal/google_and_metoffice_england.csv"
-
-# Load data
-# ---------
-
-# Google mobility data
-if (file.exists(mobility.data.file)) {
-  google <- read.csv(mobility.data.file)
+# Read google mobility data if possible, otherwised download it
+if (file.exists("data/temporal/google_and_metoffice.csv")) {
+  google <- read.csv("data/temporal/google_and_metoffice.csv")
 } else {
   google <- read.googlemobility()
 }
@@ -49,22 +42,20 @@ if (file.exists(mobility.data.file)) {
 #UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
-# Shape data
 if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
   shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
   shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
   shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
-    } else {
+} else {
   #import google boundaries shapefile from Open Science Framework data repository
   pp_project <- osf_retrieve_node("c7kg4")
   osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-
   shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
   shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
   shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
-  }
+}
 
 
 # Widgets
@@ -79,22 +70,18 @@ place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
 graph <- plotOutput("plot1")
+
 map <- plotOutput("map1", height=700, width=400)
 
-# Input widgets
-date.input <- sidebarMenu(dateRangeInput("daterange", "Date range", start="2020-01-01", end="2021-01-01"))
-place.input <- selectInput("place", "Choose a region", choices=unique(shapeData$NAME), selected="Bedford (B)")
+#map <- leafletOutput("map1", height = 600)
 
-# UI code
-# -------
+# UI.R code
+# ---------
 
-header <- dashboardHeader(title="Parks in the Pandemic", titleWidth=titleWidth)
+header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
 
-sidebar <- dashboardSidebar(
-  date.input,
-  place.input,
-  width=titleWidth
-)
+
+sidebar <- dashboardSidebar(date.box,place.box, width = 250)
 
 body <- dashboardBody(
   
@@ -113,7 +100,6 @@ body <- dashboardBody(
                                 }
 
                                 '))),
-
   fluidRow(
     column(
       6,
@@ -124,7 +110,7 @@ body <- dashboardBody(
   )
 )
 
-# Server
+# server
 # ------
 
 server <- function(input, output) {
@@ -136,7 +122,6 @@ server <- function(input, output) {
       dplyr::summarise(mn=mean(parks_percent_change_from_baseline, na.rm=TRUE)) %>% 
       dplyr::mutate(NAME=sub_region_1)
   })
-
   google_react2<-reactive({
     
     
@@ -146,55 +131,57 @@ server <- function(input, output) {
       dplyr::filter(sub_region_1==input$place)
   })
   
-  shapeData2 <- reactive({
+  shapeData2<-reactive({
     shapeData2 <- shapeData[shapeData$NAME==input$place,]  
   })
-     
-  google_shp_merge <- reactive({merge(shapeData, google_react())})
- 
-   output$map1<-renderPlot({
-      par(mar=c(3, 0, 3, 0))
-        mycolours <- RColorBrewer::brewer.pal(8, "Blues")
-        mybreaks <- c(-60,-40,-20,0, 20,40,60)
-        mycolours <- RColorBrewer::brewer.pal(8, "Blues")
-        mybreaks <- c(-60,-40,-20,0, 20,40,60)
-        #cut(google_shp_merge$mn, mybreaks)
-        mycolourscheme <- mycolours[findInterval(google_shp_merge()$mn, vec = mybreaks)]
-        plot(google_shp_merge(), xlim=c(-5.5,1.5), ylim=c(50,56), col = mycolourscheme)
-        plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,56), add=TRUE, density=2,lwd=4)
-    
-    })
-  #map
-    #output$map1<-renderLeaflet({
-     # map <- leaflet()  %>% addTiles() %>% 
-      #  setView(lng = -0.46, lat=52.13,zoom=5) %>% 
-       # addPolygons(data=shapeData,weight=5,col = 'green')
-      #map
-      #})
-  #plot
-    output$plot1<-renderPlot({
-      print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
-      # ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
-      #   geom_col(position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='#D55E00') +
-      # #Limits the size of the graph.
-      # coord_cartesian(ylim=c(-100,160)) +
-      # #plots a horizontal line where no percentage change occurs.
-      # geom_hline(yintercept=0) + 
-      # #Ensure the background is white, the border is black and removes grid lines.
-      # theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
-      #       panel.grid.major = element_blank(), 
-      #       panel.grid.minor = element_blank(),
-      #       strip.text = element_blank())+
-      # #x-label
-      # xlab("Date") +
-      # #y-label using the previous clean code done outside the plot.
-      # ylab("Visit changes for parks(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")+
-      # #Add a title for the district data this graph represents.
-      # ggtitle(print(input$place))
-    #})
-      
-      }
   
+  
+  google_shp_merge<-reactive({merge(shapeData, google_react())})
+  
+  output$map1<-renderPlot({
+    par(mar=c(3, 0, 3, 0))
+    mycolours <- RColorBrewer::brewer.pal(8, "Blues")
+    mybreaks <- c(-60,-40,-20,0, 20,40,60)
+    mycolours <- RColorBrewer::brewer.pal(8, "Blues")
+    mybreaks <- c(-60,-40,-20,0, 20,40,60)
+    #cut(google_shp_merge$mn, mybreaks)
+    mycolourscheme <- mycolours[findInterval(google_shp_merge()$mn, vec = mybreaks)]
+    plot(google_shp_merge(), xlim=c(-5.5,1.5), ylim=c(50,56), col = mycolourscheme)
+    plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,56), add=TRUE, density=2,lwd=4)
+    
+  })
+  #map
+  #output$map1<-renderLeaflet({
+  # map <- leaflet()  %>% addTiles() %>% 
+  #  setView(lng = -0.46, lat=52.13,zoom=5) %>% 
+  # addPolygons(data=shapeData,weight=5,col = 'green')
+  #map
+  #})
+  #plot
+  output$plot1<-renderPlot({
+    print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
+  # ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
+  #   geom_col(position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='#D55E00') +
+  # #Limits the size of the graph.
+  # coord_cartesian(ylim=c(-100,160)) +
+  # #plots a horizontal line where no percentage change occurs.
+  # geom_hline(yintercept=0) + 
+  # #Ensure the background is white, the border is black and removes grid lines.
+  # theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
+  #       panel.grid.major = element_blank(), 
+  #       panel.grid.minor = element_blank(),
+  #       strip.text = element_blank())+
+  # #x-label
+  # xlab("Date") +
+  # #y-label using the previous clean code done outside the plot.
+  # ylab("Visit changes for parks(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")+
+  # #Add a title for the district data this graph represents.
+  # ggtitle(print(input$place))
+  #})
+  
+  
+}
+
 # Run
 # ---
 
@@ -202,4 +189,3 @@ shinyApp(
   ui = dashboardPage(header, sidebar, body),
   server = server
 )
-  
