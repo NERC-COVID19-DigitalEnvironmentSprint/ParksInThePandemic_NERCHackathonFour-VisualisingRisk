@@ -45,12 +45,16 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
   shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
+  shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
+  shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
     } else {
   #import google boundaries shapefile from Open Science Framework data repository
   pp_project <- osf_retrieve_node("c7kg4")
   osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
   shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
+  shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
+  shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
   }
 
 
