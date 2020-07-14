@@ -71,7 +71,7 @@ place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME
 
 graph <- plotOutput("plot1")
 
-map <- plotOutput("map1", height=700, width=400)
+map <- plotOutput("map1", height=700*1.5, width=400*1.5)
 
 #map <- leafletOutput("map1", height = 600)
 
@@ -140,14 +140,13 @@ server <- function(input, output) {
   
   output$map1<-renderPlot({
     par(mar=c(3, 0, 3, 0))
-    mycolours <- RColorBrewer::brewer.pal(8, "Blues")
-    mybreaks <- c(-60,-40,-20,0, 20,40,60)
-    mycolours <- RColorBrewer::brewer.pal(8, "Blues")
+    myscale<-grDevices::colorRampPalette(colors = c("darkgrey", "white", "darkgreen"))
+    mycolours<-myscale(8)
     mybreaks <- c(-60,-40,-20,0, 20,40,60)
     #cut(google_shp_merge$mn, mybreaks)
     mycolourscheme <- mycolours[findInterval(google_shp_merge()$mn, vec = mybreaks)]
-    plot(google_shp_merge(), xlim=c(-5.5,1.5), ylim=c(50,56), col = mycolourscheme)
-    plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,56), add=TRUE, density=2,lwd=4)
+    plot(google_shp_merge(), xlim=c(-5.5,1.5), ylim=c(50,54.1), col = mycolourscheme)
+    plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,54.1), add=TRUE, lwd=2, border='purple')
     
   })
   #map
