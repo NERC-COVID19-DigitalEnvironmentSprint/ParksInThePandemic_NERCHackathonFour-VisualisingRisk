@@ -154,25 +154,26 @@ server <- function(input, output) {
       #map
       #})
   #plot
-    output$plot1<-renderPlot({#print(plot.googlemobilitydistricts(google_react2(), "parks", "Bedford"))})
-      ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
-        geom_col(position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='#D55E00') +
-      #Limits the size of the graph.
-      coord_cartesian(ylim=c(-100,160)) +
-      #plots a horizontal line where no percentage change occurs.
-      geom_hline(yintercept=0) + 
-      #Ensure the background is white, the border is black and removes grid lines.
-      theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
-            panel.grid.major = element_blank(), 
-            panel.grid.minor = element_blank(),
-            strip.text = element_blank())+
-      #x-label
-      xlab("Date") +
-      #y-label using the previous clean code done outside the plot.
-      ylab("Visit changes for parks(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")+
-      #Add a title for the district data this graph represents.
-      ggtitle(print(input$place))
-    })
+    output$plot1<-renderPlot({
+      print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
+      # ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
+      #   geom_col(position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='#D55E00') +
+      # #Limits the size of the graph.
+      # coord_cartesian(ylim=c(-100,160)) +
+      # #plots a horizontal line where no percentage change occurs.
+      # geom_hline(yintercept=0) + 
+      # #Ensure the background is white, the border is black and removes grid lines.
+      # theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
+      #       panel.grid.major = element_blank(), 
+      #       panel.grid.minor = element_blank(),
+      #       strip.text = element_blank())+
+      # #x-label
+      # xlab("Date") +
+      # #y-label using the previous clean code done outside the plot.
+      # ylab("Visit changes for parks(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")+
+      # #Add a title for the district data this graph represents.
+      # ggtitle(print(input$place))
+    #})
 
       
       }
