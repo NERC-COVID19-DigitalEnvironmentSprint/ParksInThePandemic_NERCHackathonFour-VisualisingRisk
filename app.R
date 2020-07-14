@@ -80,12 +80,15 @@ header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
 sidebar <- dashboardSidebar(date.box,place.box, width = 250)
 
 body <- dashboardBody(
+  
+  
   tags$head(tags$style(HTML('
                                 
                                 /* main sidebar */
                                 .skin-blue .main-sidebar {
-                                background-color: #FFFFFF;
+                                background-color: #327da8;
                                 }
+                                
 
                                 /* body */
                                 .content-wrapper, .right-side {
