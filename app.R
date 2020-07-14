@@ -44,13 +44,14 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 
 if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-} else {
+  shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
+    } else {
   #import google boundaries shapefile from Open Science Framework data repository
   pp_project <- osf_retrieve_node("c7kg4")
   osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-  
-}
+  shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
+  }
 
 
 # Widgets
@@ -62,7 +63,7 @@ text.box <- box(title = "How busy are my local parks likely to be?", footer = "L
 date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2021-01-01")
 
 place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME)
-                       , selected = "Bedford (B)", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
+                       , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
 graph <- plotOutput("plot1")
 
@@ -115,6 +116,9 @@ server <- function(input, output) {
       dplyr::mutate(NAME=sub_region_1)
     })
   google_react2<-reactive({
+    
+    
+    
     google %>% 
       dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       dplyr::filter(sub_region_1==input$place)
@@ -149,7 +153,23 @@ server <- function(input, output) {
   #plot
     output$plot1<-renderPlot({#print(plot.googlemobilitydistricts(google_react2(), "parks", "Bedford"))})
       ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
-               geom_point() })
+        geom_col(position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='#D55E00') +
+      #Limits the size of the graph.
+      coord_cartesian(ylim=c(-100,160)) +
+      #plots a horizontal line where no percentage change occurs.
+      geom_hline(yintercept=0) + 
+      #Ensure the background is white, the border is black and removes grid lines.
+      theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
+            panel.grid.major = element_blank(), 
+            panel.grid.minor = element_blank(),
+            strip.text = element_blank())+
+      #x-label
+      xlab("Date") +
+      #y-label using the previous clean code done outside the plot.
+      ylab("Visit changes for parks(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")+
+      #Add a title for the district data this graph represents.
+      ggtitle(print(input$place))
+    })
 
       
       }
