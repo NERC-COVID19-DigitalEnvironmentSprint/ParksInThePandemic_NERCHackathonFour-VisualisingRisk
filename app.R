@@ -116,7 +116,8 @@ server <- function(input, output) {
     })
   google_react2<-reactive({
     google %>% 
-      dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) 
+      dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
+      dplyr::filter(sub_region_1==input$place)
   })
   
    shapeData2<-reactive({
@@ -146,8 +147,12 @@ server <- function(input, output) {
       #map
       #})
   #plot
-    output$plot1<-renderPlot({print(plot.googlemobilitydistricts(google_react2(), "parks", "Bedford"))})
-}
+    output$plot1<-renderPlot({#print(plot.googlemobilitydistricts(google_react2(), "parks", "Bedford"))})
+      ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
+               geom_point() })
+
+      
+      }
   
 # Run
 # ---
