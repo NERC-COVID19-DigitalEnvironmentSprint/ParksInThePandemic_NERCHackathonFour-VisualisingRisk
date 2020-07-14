@@ -17,18 +17,25 @@ library(osfr)
 library(here)
 library(conflicted)
 conflict_prefer("box", "shinydashboard")
-# Import functions from repo
-# --------------------------
+
+# Import functions
+# ----------------
 
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 
-# Import data from repo OR online
-# -------------------------------
+# Variables
+# ---------
 
-# Read google mobility data if possible, otherwised download it
-if (file.exists("data/temporal/google_and_metoffice.csv")) {
-  google <- read.csv("data/temporal/google_and_metoffice.csv")
+titleWidth <- 250
+mobility.data.file <- "data/temporal/google_and_metoffice_england.csv"
+
+# Load data
+# ---------
+
+# Google mobility data
+if (file.exists(mobility.data.file)) {
+  google <- read.csv(mobility.data.file)
 } else {
   google <- read.googlemobility()
 }
@@ -42,6 +49,7 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 #UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
+# Shape data
 if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
   shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
@@ -52,6 +60,7 @@ if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   pp_project <- osf_retrieve_node("c7kg4")
   osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
   shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
+
   shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
   shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
   shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
@@ -70,18 +79,22 @@ place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
 graph <- plotOutput("plot1")
-
 map <- plotOutput("map1", height=700, width=400)
 
-#map <- leafletOutput("map1", height = 600)
+# Input widgets
+date.input <- sidebarMenu(dateRangeInput("daterange", "Date range", start="2020-01-01", end="2021-01-01"))
+place.input <- selectInput("place", "Choose a region", choices=unique(shapeData$NAME), selected="Bedford (B)")
 
-# UI.R code
-# ---------
+# UI code
+# -------
 
-header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
+header <- dashboardHeader(title="Parks in the Pandemic", titleWidth=titleWidth)
 
-
-sidebar <- dashboardSidebar(date.box,place.box, width = 250)
+sidebar <- dashboardSidebar(
+  date.input,
+  place.input,
+  width=titleWidth
+)
 
 body <- dashboardBody(
   
@@ -100,6 +113,7 @@ body <- dashboardBody(
                                 }
 
                                 '))),
+
   fluidRow(
     column(
       6,
@@ -110,7 +124,7 @@ body <- dashboardBody(
   )
 )
 
-# server
+# Server
 # ------
 
 server <- function(input, output) {
@@ -121,7 +135,8 @@ server <- function(input, output) {
       group_by(sub_region_1) %>% 
       dplyr::summarise(mn=mean(parks_percent_change_from_baseline, na.rm=TRUE)) %>% 
       dplyr::mutate(NAME=sub_region_1)
-    })
+  })
+
   google_react2<-reactive({
     
     
@@ -131,12 +146,11 @@ server <- function(input, output) {
       dplyr::filter(sub_region_1==input$place)
   })
   
-   shapeData2<-reactive({
-     shapeData2 <- shapeData[shapeData$NAME==input$place,]  
-     })
+  shapeData2 <- reactive({
+    shapeData2 <- shapeData[shapeData$NAME==input$place,]  
+  })
      
-  
-  google_shp_merge<-reactive({merge(shapeData, google_react())})
+  google_shp_merge <- reactive({merge(shapeData, google_react())})
  
    output$map1<-renderPlot({
       par(mar=c(3, 0, 3, 0))
@@ -178,7 +192,6 @@ server <- function(input, output) {
       # #Add a title for the district data this graph represents.
       # ggtitle(print(input$place))
     #})
-
       
       }
   
