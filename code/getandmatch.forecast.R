@@ -1,10 +1,7 @@
-getandmatch.forecast<-function(location = "Bedford", apikey){
+getandmatch.forecast<-function(location = "Bedford", apikey="./../../APIkey.RDS"){
   
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
-  
-  location = "Bedford"
-  apikey = "~/GitHub/apikey.RDS"
 
 #install.packages('plotrix')
 library(plotrix)
@@ -62,7 +59,7 @@ forecast <-get_forecast(location[1], units = "metric")%>%
 
 if(length(location) >= 1){
          forecast<-forecast
-         for (i in 2:length(location)) {
+         for (i in 1:length(location)) {
             forecast_1<-get_forecast(location[i], units = "metric")%>%
                         owmr_as_tibble()%>%
                         add_column(sub_region_1= location[i], .after = "dt_txt")
@@ -98,7 +95,7 @@ forecast_2<-cbind.data.frame("weekdays" = weekdays(forecast_temp_mean$Group.1),
                   "date" = forecast_temp_mean$Group.1,
                   "sub_region_1" =end_location,           
                   "temp_max" = forecast_temp_max$x,
-                  "temp_mean" = forecast_temp_mean$x, 
+                  "temp_mean" = forecast_temp_mean$x,
                   "temp_min" =  forecast_temp_min$x,
                   "rain_mean" = forecast_rain_mean$x) 
                   
