@@ -2,6 +2,9 @@ getandmatch.forecast<-function(location = "Bedford", apikey){
   
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
+  
+  location = "Bedford"
+  apikey = "~/GitHub/apikey.RDS"
 
 #install.packages('plotrix')
 library(plotrix)
@@ -54,17 +57,17 @@ location_1<-ifelse(location == "Greater Manchester", location <- c("Bolton","Bur
 
 #Creating a function
 forecast <-get_forecast(location[1], units = "metric")%>%
-  owmr_as_tibble()
-
-forecast<-forecast%>%
+  owmr_as_tibble()%>%
   add_column(sub_region_1 = location[1],.after = "dt_txt")
 
-for (i in 2:length(location)) {
-  forecast_1<-get_forecast(location[i], units = "metric")%>%
-    owmr_as_tibble()%>%
-    add_column(sub_region_1= location[i], .after = "dt_txt")
-  forecast<-rbind(forecast,forecast_1)
-  
+if(length(location) >= 1){
+         forecast<-forecast
+         for (i in 2:length(location)) {
+            forecast_1<-get_forecast(location[i], units = "metric")%>%
+                        owmr_as_tibble()%>%
+                        add_column(sub_region_1= location[i], .after = "dt_txt")
+           forecast<-rbind(forecast,forecast_1)
+  }
 }
 
 #This extracts the date and time column into two separate strings.
