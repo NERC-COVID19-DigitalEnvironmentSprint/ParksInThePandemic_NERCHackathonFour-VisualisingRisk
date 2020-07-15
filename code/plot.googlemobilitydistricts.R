@@ -1,6 +1,6 @@
 #DEFAULT SETTINGs TO PARKS and BEDFORD (Data stil needs to be unputted)
 
-plot.googlemobilitydistricts<-function(Data,type="parks",district="Bedford"){
+plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
   
   # Load packages ----------------------------------------------------------
   #install.packages('plotrix')
@@ -38,6 +38,8 @@ plot.googlemobilitydistricts<-function(Data,type="parks",district="Bedford"){
   
   #Creates a character vector that resembles the column name within the google mobility data.
   Loc<-paste(type,"_percent_change_from_baseline",sep = "")
+  #Data
+  Data<-read.csv(google)
   #Subsetting by colour
   Data<-add_column(Data,mean_colour =  
                      (ifelse(Data[,Loc] >= 0,"green","grey")))
@@ -54,8 +56,8 @@ plot.googlemobilitydistricts<-function(Data,type="parks",district="Bedford"){
   #START OF THE PLOTTING FUNCTION
   District_graph<-ggplot() +
     #Plots the bar graphs, with a black outing and dark orange fill. 
-    geom_col(Data_green, mapping = aes(x = date, y = parks_percent_change_from_baseline),position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='dark green') +
-    geom_col(Data_grey, mapping = aes (x = date, y = parks_percent_change_from_baseline), position = position_dodge(width = 0.2), size = 0.25, colour = 'black', fill = 'grey') +
+    geom_col(Data_green, mapping = aes(x = as.Date(date), y = parks_percent_change_from_baseline),position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='dark green') +
+    geom_col(Data_grey, mapping = aes (x = as.Date(date), y = parks_percent_change_from_baseline), position = position_dodge(width = 0.2), size = 0.25, colour = 'black', fill = 'grey') +
     #Limits the size of the graph.
     coord_cartesian(ylim=c(-100,160)) +
     #plots a horizontal line where no percentage change occurs.
@@ -76,3 +78,4 @@ plot.googlemobilitydistricts<-function(Data,type="parks",district="Bedford"){
   District_graph
 }
 
+plot.googlemobilitydistricts('input_data/testdata/google_england.csv')
