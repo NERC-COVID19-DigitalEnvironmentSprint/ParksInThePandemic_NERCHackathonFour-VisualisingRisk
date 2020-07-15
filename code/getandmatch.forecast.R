@@ -104,6 +104,10 @@ forecast_2<-cbind.data.frame("weekdays" = weekdays(forecast_temp_mean$Group.1),
                   "temp_max" = forecast_temp_max$x,
                   "temp_mean" = forecast_temp_mean$x,
                   "temp_min" =  forecast_temp_min$x,
-                  "rain_mean" = forecast_rain_mean$x) 
+                  "rain_mean" = forecast_rain_mean$x)
+
+#change NaNs to NAs in dataframe
+forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA
                   
 }
+
