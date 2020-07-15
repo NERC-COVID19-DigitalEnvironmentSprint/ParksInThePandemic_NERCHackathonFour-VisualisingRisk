@@ -1,6 +1,8 @@
-#DEFAULT SETTINGs TO PARKS and BEDFORD (Data stil needs to be unputted)
-
 plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
+  
+  #google = read.csv("~/GitHub/parksinthepandemic/code/input_data/testdata/google_england.csv")
+  #type = "parks"
+  #district = "Bedford"
   
   # Load packages ----------------------------------------------------------
   #install.packages('plotrix')
@@ -39,7 +41,7 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
   #Creates a character vector that resembles the column name within the google mobility data.
   Loc<-paste(type,"_percent_change_from_baseline",sep = "")
   #Data
-  Data<-read.csv(google)
+  Data<-google
   #Subsetting by colour
   Data<-add_column(Data,mean_colour =  
                      (ifelse(Data[,Loc] >= 0,"green","grey")))
@@ -77,6 +79,5 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
     ggtitle(district)
   District_graph
 }
-
 #example implementation
 #plot.googlemobilitydistricts('input_data/testdata/google_england.csv')
