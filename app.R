@@ -3,12 +3,13 @@
 # Libraries
 # ---------
 library(rgdal)
-library(leaflet)
+#library(leaflet)
 library(tidyverse)
 library(shinydashboard)
 library(shinythemes)
 library(shiny)
-library(leaflet.extras)
+#library(shinyWidgets)
+#library(leaflet.extras)
 library(dashboardthemes)
 library(htmlwidgets)
 library(htmltools)
@@ -85,14 +86,19 @@ sidebar <- dashboardSidebar(date.box,place.box, width = 250)
 
 body <- dashboardBody(
   
-  
   tags$head(tags$style(HTML('
-                                
                                 /* main sidebar */
                                 .skin-blue .main-sidebar {
-                                background-color: #327da8;
+                                background-color: #308759;
                                 }
-                                
+                                /* logo */
+                                .skin-blue .main-header .logo {
+                                background-color: #308759;
+                                }
+                                /* navbar (rest of the header) */
+                                .skin-blue .main-header .navbar {
+                                background-color: #308759;
+                                }        
 
                                 /* body */
                                 .content-wrapper, .right-side {
