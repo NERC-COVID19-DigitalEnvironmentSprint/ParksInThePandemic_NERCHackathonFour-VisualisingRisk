@@ -78,4 +78,5 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
   District_graph
 }
 
-plot.googlemobilitydistricts('input_data/testdata/google_england.csv')
+#example implementation
+#plot.googlemobilitydistricts('input_data/testdata/google_england.csv')
