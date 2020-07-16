@@ -3,32 +3,10 @@ getandmatch.forecast<-function(location = "Bedford", apikey="./../../APIkey.RDS"
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
 
-#install.packages('plotrix')
-library(plotrix)
 #install.packages('tibble')
 library(tibble)
-#install.packages('ggplot2')
-library(ggplot2)
-#install.packages('gridExtra')
-library(gridExtra)
-#install.packages('grid)
-library(grid)
-#install.packages('lattice')
-library(lattice)
-#install.packages("tidyr")
-library(tidyr)
-#install.packages('reshape2')
-library(reshape2)
 #install.packages('dplyr')
 library(dplyr)
-#install.packages('XML')
-library(XML) # HTML processing
-#install.packages('RCurl')
-library(RCurl)
-#install.packages('rvest')
-library(rvest)
-#install.packages('stringr')
-library(stringr)
 #install.packages("owmr")
 library(owmr)
 
@@ -53,18 +31,18 @@ location_1<-ifelse(location == "Greater Manchester", location <- c("Bolton","Bur
                    location)))))))
 
 #Get's the forecast and creates a tibble for the first location in the location vector.
-forecast <-get_forecast(location[1], units = "metric")%>%
+forecast <-owmr::get_forecast(location[1], units = "metric")%>%
   owmr_as_tibble()%>%
 #Then adds a column for it's designated sub_region_1.
-  add_column(sub_region_1 = location[1],.after = "dt_txt")
+  tibble::add_column(sub_region_1 = location[1],.after = "dt_txt")
 
 #If the location vector is above 1, it adds the additional location data into the forecasting data frame.
 if(length(location) > 1){
          forecast<-forecast
          for (i in 2:length(location)) {
-            forecast_1<-get_forecast(location[i], units = "metric")%>%
+            forecast_1<-owmr::get_forecast(location[i], units = "metric")%>%
                         owmr_as_tibble()%>%
-                        add_column(sub_region_1= location[i], .after = "dt_txt")
+                        tibble::add_column(sub_region_1= location[i], .after = "dt_txt")
            forecast<-rbind(forecast,forecast_1)
   }
 }
@@ -77,7 +55,7 @@ forecast<-as.data.frame(cbind("date" = (as.Date(date_time[,1])), "time" = date_t
 forecast<-subset(forecast, select = c("date","sub_region_1","temp","temp_min","temp_max","rain_3h"))
 #Converts the rain per 3 hours into rain per hour to be compatible with the metoffice.
 forecast<-forecast%>%
-  mutate(
+  dplyr::mutate(
     rain_3h = rain_3h/3
   )
 #If location is not equal to the end location (i.e. it's a vector) then it will aggregate all the values
@@ -108,6 +86,8 @@ forecast_2<-cbind.data.frame("weekdays" = weekdays(forecast_temp_mean$Group.1),
 
 #change NaNs to NAs in dataframe
 forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA
+
+forecast_2
                   
 }
 
