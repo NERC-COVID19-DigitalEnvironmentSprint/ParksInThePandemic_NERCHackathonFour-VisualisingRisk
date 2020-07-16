@@ -1,40 +1,8 @@
 ##Code for a function that reads in the MENE data, assigns google districts and aggregates the weighted and unweighted accounts according to the google districts.##
 
 match.mene2google<-function(mene_df,google_df){
-  
+ 
   # Load packages ----------------------------------------------------------
-  #install.packages('plotrix')
-  library(plotrix)
-  #install.packages('tibble')
-  library(tibble)
-  #install.packages('ggplot2')
-  library(ggplot2)
-  #install.packages('gridExtra')
-  library(gridExtra)
-  #install.packages('grid)
-  library(grid)
-  #install.packages('ggplot2)
-  library(ggplot2)
-  #install.packages('lattice')
-  library(lattice)
-  #install.packages("tidyr")
-  library(tidyr)
-  #install.packages('reshape2')
-  library(reshape2)
-  #install.packages('dplyr')
-  library(dplyr)
-  #install.packages('XML')
-  library(XML) # HTML processing
-  #install.packages('RCurl')
-  library(RCurl)
-  #install.packages('rvest')
-  library(rvest)
-  #install.packages('stringr')
-  library(stringr)
-  #install.packages('plotrix)
-  library(plotrix)
-  #install.packages('tidyr')
-  library(tidyr)
   #install.packages('tibble')
   library(tibble)
   
@@ -65,7 +33,7 @@ match.mene2google<-function(mene_df,google_df){
                                                                                                           ifelse(MENE_conversion$MENE_localauthority%in%c("Isles of Scilly"),"Cornwall",
                                               MENE_conversion$MENE_localauthority)))))))))))))
   #Adds the Google local authority column to the conversion data frame for analysis.
-  MENE_conversion<-MENE_conversion%>% add_column(Google_localauthority = Google_localauthority, .after = which(colnames(MENE_conversion)=="MENE_localauthority"))
+  MENE_conversion<-MENE_conversion%>% tibble::add_column(Google_localauthority = Google_localauthority, .after = which(colnames(MENE_conversion)=="MENE_localauthority"))
   #Removes the last row that contains NA values.
   MENE_conversion<-MENE_conversion[-152,]
   #Ensures that both the unweighted AND weighted counts are treated as numeric variables.
@@ -77,7 +45,7 @@ match.mene2google<-function(mene_df,google_df){
   #Changes the column names to something more readable/presentable.
   colnames(MENE_data_reformed)<-c("average_annual_unweighted_counts","average_annual_weighted_count")
   #Copies the Google_localauthorities from the rownames into a new devised column.
-  MENE_data_reformed<-rownames_to_column(MENE_data_reformed, var = "Google_localauthority" )
+  MENE_data_reformed<-tibble::rownames_to_column(MENE_data_reformed, var = "Google_localauthority" )
 }
 
 #example implementation

@@ -37,7 +37,7 @@ metoffice_england<-match.metoffice('input_data/testdata/met.csv', 'input_data/te
 write.csv(metoffice_england, 'input_data/testdata/metoffice_england.csv', row.names=F)
 
 #get forecast for a location and match with metoffice format
-forecast_bedford<-getandmatch.forecast('Bedford',apikey="./../../APIkey.RDS")
+forecast_bedford<-getandmatch.forecast('Bedford',apikey="~/GitHub/apikey.RDS")
 write.csv(forecast_bedford,'input_data/testdata/forecast_bedford.csv', row.names=F)
 
 #match natural england mene data to google districts
@@ -47,7 +47,7 @@ write.csv(mene_england,'input_data/testdata/mene_england.csv', row.names=F)
 # MAKE WEATHER DATA RELATIVE TO BASELINE AND MERGE WITH GOOGLE ----------------------------------
 
 metoffice_england_r2b<-relative2baseline('input_data/testdata/metoffice_england.csv')
-googleandmetoffice_england<-merge(metoffice_england_r2b,google_england, all=T)
+googleandmetoffice_england<-merge(google_england,metoffice_england_r2b, all=T)
 write.csv(googleandmetoffice_england, 'input_data/testdata/googleandmetoffice_england.csv')
 
 # TEST PLOT ---------------------------------------------------------------

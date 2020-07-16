@@ -3,33 +3,6 @@
 #where 'metoffice_england.csv' is the output of the match.metoffice function (met office data matched to Google and with columns renamed in line with OpenWeather forecast format)
 relative2baseline<-function(data){
   
-  # Load packages ----------------------------------------------------------
-  #install.packages('tibble')
-  library(tibble)
-  #install.packages('gridExtra')
-  library(gridExtra)
-  #install.packages('grid)
-  library(grid)
-  #install.packages('ggplot2)
-  library(ggplot2)
-  #install.packages('lattice')
-  library(lattice)
-  #install.packages("tidyr")
-  library(tidyr)
-  #install.packages('reshape2')
-  library(reshape2)
-  #install.packages('dplyr')
-  library(dplyr)
-  #install.packages('XML')
-  library(XML) # HTML processing
-  #install.packages('RCurl')
-  library(RCurl)
-  #install.packages('rvest')
-  library(rvest)
-  #install.packages('stringr')
-  library(stringr)
-  #install.packages('plotrix)
-  library(plotrix)  
   
   #Read in the database (specified by user as csv file) -------------------------------------------------------------------
   data<-read.csv(data)
@@ -43,7 +16,7 @@ relative2baseline<-function(data){
   
   # For loop PREPARATION ----------------------------------------------------
   #make a vector of weekdays
-  weekday<-c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+  wdays<-c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
   
   #make vector of districts
   districts<-readRDS("input_data/google_englanddistricts.RDS")
@@ -64,24 +37,25 @@ relative2baseline<-function(data){
   #7. Write to the relative change dataframe in the appropriate columns - Make the difference relative by dividing it by the baseline and multiplying by 100 to get in percent as for Google data
   
   
-  for(w in weekday){
-  #loop through districts
-  for(d in districts){
-    #loop through columns
-    for (c in baseline_name){
-      
-      #for weekday w and district w, get non-baseline median values of meteorological measurement c for
-      nonbaseline<-nonbaselineperiod[nonbaselineperiod$sub_region_1==d,c]
-      
-      #for weekday w and district w, get baseline median values of meteorological measurement c
-      baseline<-baselineweather[baselineweather$sub_region_1==d,c]
-      
-      #subtract the baseline values of meteorological measurement c for weekday w and district w
-      diff_from_baseline<-nonbaseline-baseline
-      
-      #object is the 'nonbaseline rows in the new df (rel2baseline)
-      #function is to divide the difference from baseline by the baseline to get relative difference the times by 100 to get in percent
-      rel2baseline[nonbaselineperiod$sub_region_1==d,c]<-diff_from_baseline/baseline*100
+  #loop through weekdays
+  for (w in wdays){
+    #loop through districts
+    for(d in districts){
+      #loop through columns
+      for (c in baseline_name){
+        
+        #for weekday w and district w, get non-baseline median values of meteorological measurement c for
+        nonbaseline<-nonbaselineperiod[nonbaselineperiod$weekdays==w & nonbaselineperiod$sub_region_1==d,c]
+        
+        #for weekday w and district w, get baseline median values of meteorological measurement c
+        baseline<-baselineweather[baselineweather$weekdays==w & baselineweather$sub_region_1==d,c]
+        
+        #subtract the baseline values of meteorological measurement c for weekday w and district w
+        diff_from_baseline<-nonbaseline-baseline
+        
+        #object is the 'nonbaseline rows in the new df (rel2baseline)
+        #function is to divide the difference from baseline by the baseline to get relative difference the times by 100 to get in percent
+        rel2baseline[nonbaselineperiod$weekdays==w & nonbaselineperiod$sub_region_1==d,c]<-diff_from_baseline/baseline*100
       
     }
   }
