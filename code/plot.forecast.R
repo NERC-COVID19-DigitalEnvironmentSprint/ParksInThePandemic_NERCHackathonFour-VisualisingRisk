@@ -1,5 +1,9 @@
 ##Plotting predicted mobility
 
+##ACKNOWLEDGMENT##
+#Forecasting data is extracted from the OpenWeather data sets using the owmr package.
+#For more information on the OpenWeather dataset, this can be accessed from https://openweathermap.org/forecast5 
+
 ##To check it works## - This has to be before the function.
   #district = "Bedford"
   #api = "~/GitHub/apikey.RDS"
