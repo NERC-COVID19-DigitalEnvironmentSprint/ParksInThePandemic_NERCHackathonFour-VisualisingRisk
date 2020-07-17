@@ -58,6 +58,8 @@ forecast<-forecast%>%
   dplyr::mutate(
     rain_3h = rain_3h/3
   )
+forecast$rain_3h[is.na(forecast$rain_3h)] <-0
+
 #If location is not equal to the end location (i.e. it's a vector) then it will aggregate all the values
 ifelse (location != end_location,
       forecast_2<-aggregate(forecast[,3:length(forecast)], list(forecast$date,forecast$sub_region_1), FUN = mean, na.rm = T ),
