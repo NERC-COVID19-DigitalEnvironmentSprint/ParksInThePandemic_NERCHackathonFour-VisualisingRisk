@@ -4,41 +4,23 @@
 #Forecasting data is extracted from the OpenWeather data sets using the owmr package.
 #For more information on the OpenWeather dataset, this can be accessed from https://openweathermap.org/forecast5 
 
-##To check it works## - This has to be before the function.
-  #district = "Bedford"
-  #api = "~/GitHub/apikey.RDS"
-
-    #Sources the code to retrieve the forecasting data.
-    ##source("~/GitHub/parksinthepandemic/code/getandmatch.forecast.R")  
-    #Sources the code to make the forecasting relative to baseline.
-    ##source("~/GitHub/parksinthepandemic/code/relative2baseline.R")
-    #Runs the getandmatch.forecast code to retrieve the forecasting data.
-    ##forecast<-getandmatch.forecast(location = district, apikey = api)
-    #Runs the code that converts the forcasting data to be relative to baseline.
-    ##forecast<-relative2baseline(data = forecast)
-
-##EXAMPLES of values to be inputted##
-#forecast = output of getandmatch.forecast and after converted to relative to baseline.
-#days = 2
-
-
 plot.forecast<-function(forecast, days = 2){
 
 # Loading packages --------------------------------------------------------
 #install.packages('data.table')
-require(data.table)
+library(data.table)
 #install.packagaes('randomForest')
-require(randomForest)
+library(randomForest)
 #install.packages('tibble')
-require(tibble)
+library(tibble)
 #install.packages('ggplot2')
-require(ggplot2)
+library(ggplot2)
 #install.packages('raster')
-require(raster)
+library(raster)
  
 #Read in google mobility data##
 #Reads in the google_metoffice data
-google_metoffice<-read.csv("~/GitHub/parksinthepandemic/code/input_data/testdata/googleandmetoffice_england.csv")
+google_metoffice<-read.csv("input_data/testdata/googleandmetoffice_england.csv")
 #Subsets out the google_metoffice data to only have the relevant factors.
 google_metoffice<-subset(google_metoffice, select = c("parks_percent_change_from_baseline",
                           "sub_region_1",
@@ -146,6 +128,22 @@ District_graph<-ggplot2::ggplot(data = Forecast_predict) +
   ggtitle("Predicted")
 District_graph
 }
+
+
+###Example implementation (unhash the single hashed lines)
+
+##Sources the code to retrieve the forecasting data.
+#source("getandmatch.forecast.R")  
+##Sources the code to make the forecasting relative to baseline.
+#source("relative2baseline.R")
+#Runs the getandmatch.forecast code to retrieve the forecasting data. default is bedford and apikey stored two directories back in Github folder
+#forecast<-getandmatch.forecast()
+#Runs the code that converts the forcasting data to be relative to baseline.
+#forecast<-relative2baseline(data = forecast)
+
+###EXAMPLES of values to be inputted##
+#forecast = output of getandmatch.forecast and after converted to relative to baseline.
+#days = 2
 
 ##To test to see if the plot works##
 #plot.forecast(forecast = forecast)
