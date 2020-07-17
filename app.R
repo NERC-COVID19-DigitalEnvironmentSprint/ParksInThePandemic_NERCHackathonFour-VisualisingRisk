@@ -23,7 +23,7 @@ conflict_prefer("box", "shinydashboard")
 
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
-
+source("code/getRnumbers.R")
 # Import data from repo OR online
 # -------------------------------
 
@@ -58,6 +58,7 @@ if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
   shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
 }
 
+Rnumbers<-getRnumbers()
 
 # Widgets
 # -------
@@ -73,6 +74,10 @@ place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME
 graph <- plotOutput("plot1")
 
 map <- plotOutput("map1", height=700*1.5, width=400*1.5)
+
+info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$Rnumbers.R_med[1]), subtitle = NULL,
+        icon = shiny::icon("bar-chart"), color = "aqua", width = 4,
+        href = TRUE, fill = FALSE)
 
 #map <- leafletOutput("map1", height = 600)
 
@@ -110,7 +115,8 @@ body <- dashboardBody(
     column(
       6,
       text.box,
-      box(width=12, graph)
+      box(width=12, graph),
+      info.box
     ),
     column(6, box(width=12, map))
   )
@@ -122,7 +128,7 @@ body <- dashboardBody(
 server <- function(input, output) {
   google_react<-reactive({
     google %>% 
-      dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
+      dplyr::filter(dplyr::between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       select(sub_region_1, date, parks_percent_change_from_baseline) %>% 
       group_by(sub_region_1) %>% 
       dplyr::summarise(mn=mean(parks_percent_change_from_baseline, na.rm=TRUE)) %>% 
@@ -133,7 +139,7 @@ server <- function(input, output) {
     
     
     google %>% 
-      dplyr::filter(between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
+      dplyr::filter(dplyr::between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       dplyr::filter(sub_region_1==input$place)
   })
   
