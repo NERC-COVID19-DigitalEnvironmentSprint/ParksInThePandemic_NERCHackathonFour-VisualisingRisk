@@ -1,6 +1,6 @@
 plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
   
-  #google = read.csv("~/GitHub/parksinthepandemic/code/input_data/testdata/google_england.csv")
+  #google = read.csv("input_data/testdata/google_england.csv")
   #type = "parks"
   #district = "Bedford"
   
@@ -9,7 +9,6 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
   library(tibble)
   #install.packages('ggplot2')
   library(ggplot2)
-    
   
   #Creates a character vector that resembles the column name within the google mobility data.
   Loc<-paste(type,"_percent_change_from_baseline",sep = "")
@@ -45,7 +44,7 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford"){
     geom_col(Data_green_all, mapping = aes(x = as.Date(date), y = parks_percent_change_from_baseline),position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='dark green') +
     geom_col(Data_grey_all, mapping = aes (x = as.Date(date), y = parks_percent_change_from_baseline), position = position_dodge(width = 0.2), size = 0.25, colour = 'black', fill = 'grey') +
     #Limits the size of the graph.
-    coord_cartesian(ylim=c(-100,160)) +
+    coord_cartesian(ylim=c(-100,400)) +
     #plots a horizontal line where no percentage change occurs.
     geom_hline(yintercept=0) + 
     #Ensure the background is white, the border is black and removes grid lines.
