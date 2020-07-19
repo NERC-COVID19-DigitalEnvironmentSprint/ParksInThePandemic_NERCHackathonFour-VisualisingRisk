@@ -1,4 +1,4 @@
-getandmatch.forecast<-function(location = "Bedford", apikey="./../../APIkey.RDS"){
+getandmatch.forecast<-function(location = "Bedford", apikey=readRDS("./../../APIkey.RDS")){
   
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
@@ -15,7 +15,7 @@ library(owmr)
 end_location<-location
 
 #Retrieves the APIkey from the offline Github folder containing your cloned repos
-APIkey<-readRDS(apikey)
+APIkey<-apikey
   
 #Set's the system to my own API key.
 Sys.setenv(OWM_API_KEY = APIkey)
@@ -78,13 +78,14 @@ forecast_temp_min<-aggregate(forecast_2$temp_min, list (forecast_2$date), FUN = 
 forecast_rain_mean<-aggregate(forecast_2$rain_3h, list (forecast_2$date), FUN = mean, na.rm = T)
 
 #This combines the above vectors created and adds weekdays for each value, date, and creates a column for sub_region_1 based from the first definition.
-forecast_2<-cbind.data.frame("weekdays" = weekdays(forecast_temp_mean$Group.1),
+forecast_2<-cbind.data.frame(
                   "date" = forecast_temp_mean$Group.1,
-                  "sub_region_1" =end_location,           
-                  "temp_max" = forecast_temp_max$x,
                   "temp_mean" = forecast_temp_mean$x,
+                  "temp_max" = forecast_temp_max$x,
                   "temp_min" =  forecast_temp_min$x,
                   "rain_mean" = forecast_rain_mean$x)
+
+rownames(forecast_2)<-weekdays(forecast_temp_mean$Group.1)  
 
 #change NaNs to NAs in dataframe
 forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA

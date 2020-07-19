@@ -1,7 +1,8 @@
-plot.googlemobilitydistricts<-function(google, district="Bedford", dayofweek=weekdays(Sys.Date())){
+plot.parkvisits<-function(google, district="Bedford", dayofweek=weekdays(Sys.Date())){
   
-  google = read.csv("input_data/testdata/google_england.csv")
-  district = 'Bedford'
+  #google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
+  #district = 'Bedford'
+  #dayofweek = 'Sunday'
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
@@ -9,61 +10,84 @@ plot.googlemobilitydistricts<-function(google, district="Bedford", dayofweek=wee
   #install.packages('ggplot2')
   library(ggplot2)
   
-  #Creates a character vector that resembles the column name within the google mobility data.
+  # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
   
-  #Data
-  Data<-google
-  Data[,"date"]<-as.Date(Data$date)
   
-  #Subsetting by colour
-  Data<-tibble::add_column(Data,mean_colour =  
-                     (ifelse(Data[,"parks_percent_change_from_baseline"] >= 0,"green","grey")))
+  #Subsets out the google_metoffice data to only have the relevant factors.
+  google_metoffice<-subset(google, select = c("parks_percent_change_from_baseline",
+                                              "sub_region_1",
+                                              "date",
+                                              "temp_mean",
+                                              "temp_max",
+                                              "temp_min",
+                                              "rain_mean"))
+  #Converting each rows class for analysis
+  google_metoffice$parks_percent_change_from_baseline<-as.numeric(google_metoffice$parks_percent_change_from_baseline)
+  google_metoffice$date<-as.Date(google_metoffice$date)
   
-  #Creates a smaller data set that only corresponds to the values needed.
-  district_data<-subset(Data,
-                        Data$sub_region_1 == district & Data$weekday== dayofweek,
-                        select = c("date","sub_region_1","parks_percent_change_from_baseline","mean_colour"))
+  #Ensures the dates are in order for analysis.
+  google_metoffice<-google_metoffice[order(as.Date(google_metoffice$date)),]
   
-  #Subset for positive values
-  Data_green<-subset(district_data, mean_colour == "green" )
-  #Subset for negative values
-  Data_grey<-subset(district_data, mean_colour == "grey")
+  #Ensures that infinite values are treated as 0.
+  google_metoffice$rain_mean[is.infinite(google_metoffice$rain_mean)]<-0
+  #Removes all NA data for analysis. 
+  google_metoffice_na<-na.omit(google_metoffice)
+  #Remove district column
+  google_metoffice_na<-google_metoffice_na[,-2]
   
-  Data_not_grey<-cbind.data.frame("date" = Data_green$date,"sub_region_1" = Data_green$sub_region_1,"parks_percent_change_from_baseline" = 0, "mean_colour" = Data_green$mean_colour)
+    # Using a model to predict values -----------------------------------------
+  #This extracts the sub_region to maintain the subregions
+  ##sub_region_1<-google_metoffice_na$sub_region_1
   
-  Data_not_green<-cbind.data.frame("date" = Data_grey$date,"sub_region_1" = Data_grey$sub_region_1,"parks_percent_change_from_baseline" = 0, "mean_colour" = Data_grey$mean_colour)
+  #This code generates the model used to produce the predictor values. 
+  RF_model<-randomForest::randomForest(google_metoffice_na[,-1],google_metoffice_na$parks_percent_change_from_baseline)
   
-  Data_green_all<-rbind(Data_green,Data_not_green)
+  # Reading in the forecasting data and getting predictions based on it -----------------------------------------
   
-  Data_grey_all<-rbind(Data_grey, Data_not_grey)
+  source('getandmatch.forecast.R')
+  forecast<-getandmatch.forecast(district)
   
+  prediction_row<-cbind(parks_percent_change_from_baseline = predict(RF_model,forecast[rownames(forecast)==dayofweek,]),
+                        sub_region_1 = district,
+                        forecast[rownames(forecast)==dayofweek,]
+                        )
+  
+  google_metoffice_current_district_and_weekday<-subset(google_metoffice,
+                                        google_metoffice$sub_region_1 == district
+                                        & weekdays(google_metoffice$date) == dayofweek)
+  
+  google_metoffice_current_district_and_weekday<-rbind(google_metoffice_current_district_and_weekday,prediction_row)
+  
+  
+#START OF THE PLOTTING FUNCTION
+
   #Cleans the type title to ensure that _ do not exist in the y axis and recreates the y-axis.
   country_ylab<-paste("Visit changes for parks (%) relative to per-weekday winter baselines \n(Google Community Mobility data)")
   
-
-#START OF THE PLOTTING FUNCTION
+  colours<-ifelse(google_metoffice_current_district_and_weekday$parks_percent_change_from_baseline>0,'darkgreen','grey')
+  colours[length(colours)]<-'white'
+  
   District_graph<-ggplot2::ggplot() +
-    #Plots the bar graphs, with a black outing and dark orange fill. 
-    geom_col(Data_green_all, mapping = aes(x = as.Date(date), y = parks_percent_change_from_baseline),position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='dark green') +
-    geom_col(Data_grey_all, mapping = aes (x = as.Date(date), y = parks_percent_change_from_baseline), position = position_dodge(width = 0.2), size = 0.25, colour = 'black', fill = 'grey') +
-    #Limits the size of the graph.
-    coord_cartesian(ylim=c(-100,400)) +
-    #plots a horizontal line where no percentage change occurs.
-    geom_hline(yintercept=0) + 
-    #Ensure the background is white, the border is black and removes grid lines.
-    theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
-          panel.grid.major = element_line(size = 0.5, linetype = 'solid',
-                                          colour = "grey"), 
-          panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
-                                          colour = "grey"),
-          strip.text = element_blank())+
-    #x-label
-    xlab("Date") +
-    #y-label using the previous clean code done outside the plot.
-    ylab(country_ylab)+
-    #Add a title for the district data this graph represents.
-    ggtitle(district)
-  District_graph
+  #Plots the bar graphs, with a black outing and dark orange fill. 
+  geom_col(google_metoffice_current_district_and_weekday, mapping = aes(x = as.Date(date), y = parks_percent_change_from_baseline),position = position_dodge(width=0.2), size=0.25,colour = 'black', fill =colours) +
+  #Limits the size of the graph.
+  coord_cartesian(ylim=c(-100,400)) +
+  #plots a horizontal line where no percentage change occurs.
+  geom_hline(yintercept=0) + 
+  #Ensure the background is white, the border is black and removes grid lines.
+  theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
+        panel.grid.major = element_line(size = 0.5, linetype = 'solid',
+                                        colour = "grey"), 
+        panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
+                                        colour = "grey"),
+        strip.text = element_blank())+
+  #x-label
+  xlab("Date") +
+  #y-label using the previous clean code done outside the plot.
+  ylab(country_ylab)+
+  #Add a title for the district data this graph represents.
+  ggtitle(district)
+District_graph
 
 }
 
