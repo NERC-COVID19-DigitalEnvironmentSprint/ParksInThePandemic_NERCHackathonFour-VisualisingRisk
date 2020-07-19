@@ -68,8 +68,15 @@ text.box <- box(title = "How busy are my local parks likely to be?", footer = "L
 
 date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2021-01-01")
 
+day.box<-selectInput("dayOfTheWeek", "Choose a day of the week", choices=c("Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"),
+                     selected="Monday", multiple = FALSE, selectize = TRUE, width=NULL, size=NULL)
+
 place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME)
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
+
+baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
+
+#baseline.box<-dateInput("basedate", "Date:", value = "2020-02-29")
 
 graph <- plotOutput("plot1")
 
@@ -87,7 +94,10 @@ info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$
 header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
 
 
-sidebar <- dashboardSidebar(date.box,place.box, width = 250)
+sidebar <- dashboardSidebar(date.box,place.box, day.box,baseline.check,
+                            conditionalPanel("input.custom_base=='Yes'", 
+                                             dateInput("basedate", "Date:", value = "2020-02-29")),
+                            width = 250)
 
 body <- dashboardBody(
   
