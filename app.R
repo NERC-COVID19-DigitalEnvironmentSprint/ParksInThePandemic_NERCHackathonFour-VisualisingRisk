@@ -33,7 +33,7 @@ source("code/getRnumbers.R")
 if (length(list.files("data")) == 0) {
   
   # Authenticate with read-only token
-  osf_auth("kEvueIO13WfWg4HpPcAXF9nx8eh7IfqoK2fcKGH5jErKfFurf0Y4efhk75frTvMwMJb3pz")
+  osf_auth("itbkmYA8QXs23lkMnhTpSx1zM2HhQwAqWBauITehL2Xq8Xllh7KS6eLKL8HCX1loMQII3S")
   
   # Get tibble of data on the OSF store
   data <- osf_ls_files(osf_retrieve_node("c7kg4"))
@@ -50,14 +50,11 @@ if (length(list.files("data")) == 0) {
 
 
 # Read google mobility data if possible, otherwised download it
-if (file.exists("data/temporal/google_and_metoffice.csv")) {
-  google <- read.csv("data/temporal/google_and_metoffice.csv")
+if (file.exists("data/temporal/googleandmetoffice_england")) {
+  google <- read.csv("data/temporal/googleandmetoffice_england.csv")
 } else {
   google <- read.googlemobility()
 }
-
-#import mobility data
-#mobilitydata <- read.csv("data/temporal/google_and_metoffice.csv")
 
 # make the map
 #bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
