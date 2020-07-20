@@ -3,21 +3,19 @@
 #where 'metoffice_england.csv' is the output of the match.metoffice function (met office data matched to Google and with columns renamed in line with OpenWeather forecast format)
 relative2baseline<-function(data){
   
-  data = forecast
-  
   #Find the non-baseline values  -----------------------------------------
   
   nonbaselineperiod<-subset(data,data$date >= "2020-02-15")
   
   #Read in the metoffice baseline value database.
-  baselineweather<-readRDS("~/GitHub/parksinthepandemic/code/input_data/metofficebaseline_weekday.RDS")
+  baselineweather<-readRDS("input_data/metofficebaseline_weekday.RDS")
   
   # For loop PREPARATION ----------------------------------------------------
   #make a vector of weekdays
   wdays<-c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
   
   #make vector of districts
-  districts<-readRDS("~/GitHub/parksinthepandemic/code/input_data/google_englanddistricts.RDS")
+  districts<-readRDS("input_data/google_englanddistricts.RDS")
   
   #make a vector of the column names
   baseline_name<-c("temp_max","temp_mean","temp_min","rain_mean")
