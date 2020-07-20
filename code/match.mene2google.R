@@ -1,49 +1,16 @@
 ##Code for a function that reads in the MENE data, assigns google districts and aggregates the weighted and unweighted accounts according to the google districts.##
 
-match.mene2google<-function(){
-  
+match.mene2google<-function(mene_df,google_df){
+ 
   # Load packages ----------------------------------------------------------
-  #install.packages('plotrix')
-  library(plotrix)
   #install.packages('tibble')
   library(tibble)
-  #install.packages('ggplot2')
-  library(ggplot2)
-  #install.packages('gridExtra')
-  library(gridExtra)
-  #install.packages('grid)
-  library(grid)
-  #install.packages('ggplot2)
-  library(ggplot2)
-  #install.packages('lattice')
-  library(lattice)
-  #install.packages("tidyr")
-  library(tidyr)
-  #install.packages('reshape2')
-  library(reshape2)
-  #install.packages('dplyr')
-  library(dplyr)
-  #install.packages('XML')
-  library(XML) # HTML processing
-  #install.packages('RCurl')
-  library(RCurl)
-  #install.packages('rvest')
-  library(rvest)
-  #install.packages('stringr')
-  library(stringr)
-  #install.packages('plotrix)
-  library(plotrix)
-  
-  source('requiredpackages.R')
-  require(tidyr)
-  require(tibble)
-  source(file = "read.naturalenglandmene.R")
   
   
   #Creates a character vector of the English districts according to the Google mobility data.
   England_districts<-c("Bath and North East Somerset","Bedford","Blackburn with Darwen","Blackpool","Borough of Halton","Bracknell Forest","Brighton and Hove","Bristol City","Buckinghamshire","Cambridgeshire","Central Bedfordshire","Cheshire East","Cheshire West and Chester","Cornwall","County Durham","Cumbria","Darlington","Derby","Derbyshire","Devon","Dorset","East Riding of Yorkshire","East Sussex","Essex","Gloucestershire","Greater London","Greater Manchester","Hampshire","Hartlepool","Herefordshire","Hertfordshire","Isle of Wight","Kent","Kingston upon Hull","Lancashire","Leicester","Leicestershire","Lincolnshire","Luton","Medway","Merseyside","Middlesbrough","Milton Keynes","Norfolk","North East Lincolnshire","North Lincolnshire","North Somerset","North Yorkshire","Northamptonshire","Northumberland","Nottingham","Nottinghamshire","Oxfordshire","Peterborough","Plymouth","Portsmouth","Reading","Redcar and Cleveland","Rutland","Shropshire","Slough","Somerset","South Gloucestershire","South Yorkshire","Southampton","Southend-on-Sea","Staffordshire","Stockton-on-Tees","Stoke-on-Trent","Suffolk","Surrey","Swindon","Thurrock","Torbay","Tyne and Wear","Warrington","Warwickshire","West Berkshire","West Midlands","West Sussex","West Yorkshire","Wiltshire","Windsor and Maidenhead","Wokingham","Worcestershire","York")
   #Reads in the menedata set.
-  MENE_data<-read.naturalenglandmene()
+  MENE_data<-read.csv(mene_df)
   #Extracts the MENE districts (151 of them) and ensure this is a character vector for manipulation.
   MENE_districts<-as.character(MENE_data$DESTINATION_UPPERTIER_LOCALAUTHORITY)
   #Creates a converted table to include the newly formed MENE_districts,their average annual unweighted and weighted count.
@@ -66,7 +33,7 @@ match.mene2google<-function(){
                                                                                                           ifelse(MENE_conversion$MENE_localauthority%in%c("Isles of Scilly"),"Cornwall",
                                               MENE_conversion$MENE_localauthority)))))))))))))
   #Adds the Google local authority column to the conversion data frame for analysis.
-  MENE_conversion<-MENE_conversion%>% add_column(Google_localauthority = Google_localauthority, .after = which(colnames(MENE_conversion)=="MENE_localauthority"))
+  MENE_conversion<-MENE_conversion%>% tibble::add_column(Google_localauthority = Google_localauthority, .after = which(colnames(MENE_conversion)=="MENE_localauthority"))
   #Removes the last row that contains NA values.
   MENE_conversion<-MENE_conversion[-152,]
   #Ensures that both the unweighted AND weighted counts are treated as numeric variables.
@@ -78,6 +45,9 @@ match.mene2google<-function(){
   #Changes the column names to something more readable/presentable.
   colnames(MENE_data_reformed)<-c("average_annual_unweighted_counts","average_annual_weighted_count")
   #Copies the Google_localauthorities from the rownames into a new devised column.
-  MENE_data_reformed<-rownames_to_column(MENE_data_reformed, var = "Google_localauthority" )
+  MENE_data_reformed<-tibble::rownames_to_column(MENE_data_reformed, var = "Google_localauthority" )
 }
 
+#example implementation
+#mene_england<-match.mene2google('mene_england.csv')
+#write.csv(mene_england,'mene_england.csv', row.names=F)

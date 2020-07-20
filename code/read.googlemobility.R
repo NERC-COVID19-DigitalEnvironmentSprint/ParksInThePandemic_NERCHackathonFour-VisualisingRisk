@@ -3,47 +3,20 @@
 read.googlemobility<-function(){
   
   # Load packages ----------------------------------------------------------
-  #install.packages('plotrix')
-  library(plotrix)
   #install.packages('tibble')
   library(tibble)
-  #install.packages('ggplot2')
-  library(ggplot2)
-  #install.packages('gridExtra')
-  library(gridExtra)
-  #install.packages('grid)
-  library(grid)
-  #install.packages('ggplot2)
-  library(ggplot2)
-  #install.packages('lattice')
-  library(lattice)
-  #install.packages("tidyr")
-  library(tidyr)
-  #install.packages('reshape2')
-  library(reshape2)
-  #install.packages('dplyr')
-  library(dplyr)
-  #install.packages('plyr')
-  library(plyr)
   #install.packages('XML')
   library(XML) # HTML processing
   #install.packages('RCurl')
   library(RCurl)
-  #install.packages('rvest')
-  library(rvest)
-  #install.packages('stringr')
-  library(stringr)
-  #install.packages('plotrix)
-  library(plotrix)  
-  
   
   #Define the url link where the google mobility data can be extracted from. 
   base.url<-"https://www.google.com/covid19/mobility/"
   #Extract the information from this link and maintain all the hyperlinks within it.
-  base.url2<-getURL(base.url)
-  parsed<-htmlParse(base.url2)
+  base.url2<-RCurl::getURL(base.url)
+  parsed<-XML::htmlParse(base.url2)
   #Extract all hyperlinks that are present on this webpage.
-  doc.links<-xpathSApply(parsed,path = "//a",xmlGetAttr,"href")
+  doc.links<-XML::xpathSApply(parsed,path = "//a",xmlGetAttr,"href")
   #Extract all files that are csv.
   csv.url<- as.character(doc.links[grep('csv', doc.links)])
   #Read in the Google mobility data (this is the only csv file on the webpage)
@@ -58,6 +31,14 @@ read.googlemobility<-function(){
                           ifelse(UK$sub_region_1%in%c("Aberdeen City","Aberdeenshire","Angus Council","Argyll and Bute Council","Clackmannanshire","Dumfries and Galloway","Dundee City Council","East Ayrshire Council","East Dunbartonshire Council","East Lothian Council","East Renfrewshire Council","Edinburgh","Falkirk","Fife","Glasgow City","Highland Council","Inverclyde","Midlothian","Moray","Na h-Eileanan an Iar","North Ayrshire Council","North Lanarkshire","Orkney","Perth and Kinross","Renfrewshire","Scottish Borders","Shetland Islands","South Ayrshire Council","South Lanarkshire","Stirling","West Dunbartonshire Council","West Lothian"),"Scotland",
                             ifelse(UK$sub_region_1%in%c("Antrim and Newtownabbey","Ards and North Down","Armagh City, Banbridge and Craigavon","Belfast","Causeway Coast and Glens","Derry and Strabane","Fermanagh and Omagh","Lisburn and Castlereagh","Mid and East Antrim","Mid Ulster","Newry","Mourne and Down"),"Northern Ireland", NA))))
   #Add the new vector into the data-frame after the county_region column. 
-  UK %>% add_column(sub_country = Sub_country, .after = which(colnames(UK)=="country_region"))
-    }
+  UK<- tibble::add_column(UK,sub_country = Sub_country, .after = "country_region")
+  #Add the new vector into the data-frame after the county_region column. 
+  UK<- tibble::add_column(UK,weekday = weekdays(UK$date), .after = "date")
+  
+  }
 
+#example implementation
+#goog<-read.googlemobility()
+#write.csv(goog,'goog.csv', row.names=F)
+#google_england<-subset(goog,sub_country=='England')
+#write.csv(google_england, "input_data/testdata/google_england.csv", row.names = F)
