@@ -26,7 +26,6 @@ source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 source("code/getRnumbers.R")
 
-
 # Download data from OSF
 # ----------------------
 
@@ -48,6 +47,7 @@ if (length(list.files("data")) == 0) {
 
 # Read data 
 # ----------
+
 
 # Read google mobility data if possible, otherwised download it
 if (file.exists("data/temporal/google_and_metoffice.csv")) {
