@@ -18,14 +18,36 @@ library(osfr)
 library(here)
 library(conflicted)
 conflict_prefer("box", "shinydashboard")
+
 # Import functions from repo
 # --------------------------
 
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 source("code/getRnumbers.R")
-# Import data from repo OR online
-# -------------------------------
+
+
+# Download data from OSF
+# ----------------------
+
+# If the data folder does not exist or is empty
+if (length(list.files("data")) == 0) {
+  
+  # Authenticate with read-only token
+  osf_auth("kEvueIO13WfWg4HpPcAXF9nx8eh7IfqoK2fcKGH5jErKfFurf0Y4efhk75frTvMwMJb3pz")
+  
+  # Get tibble of data on the OSF store
+  data <- osf_ls_files(osf_retrieve_node("c7kg4"))
+  
+  # Download to ./data
+  dir.create("./data")
+  osf_download(data, path="./data", verbose=TRUE, progress=TRUE, recurse=TRUE, conflicts="skip")
+}
+
+# NOTE: To re-download all the data from OSF, just delete your local "data" directory and re-run app.R
+
+# Read data 
+# ----------
 
 # Read google mobility data if possible, otherwised download it
 if (file.exists("data/temporal/google_and_metoffice.csv")) {
@@ -43,22 +65,12 @@ if (file.exists("data/temporal/google_and_metoffice.csv")) {
 #UK_latlon <- readRDS("data/UK_dat_ggplot.RDS")
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
-if (file.exists("data/spatial/googleboundaries_WGS84.shp")) {
-  shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-  shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
-  shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
-  shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
-} else {
-  #import google boundaries shapefile from Open Science Framework data repository
-  pp_project <- osf_retrieve_node("c7kg4")
-  osf_ls_files(pp_project, pattern='WGS84') %>% osf_download(path='data/spatial')
-  shapeData<-readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-  shapeData$NAME<-gsub( " *\\(.*?\\) *", "", shapeData$NAME)
-  shapeData$NAME<-gsub( "City of ", "", shapeData$NAME)
-  shapeData$NAME<-gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
-}
+shapeData <- readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
+shapeData$NAME <- gsub( " *\\(.*?\\) *", "", shapeData$NAME)
+shapeData$NAME <- gsub( "City of ", "", shapeData$NAME)
+shapeData$NAME <- gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
 
-Rnumbers<-getRnumbers()
+Rnumbers <- getRnumbers()
 
 # Widgets
 # -------
