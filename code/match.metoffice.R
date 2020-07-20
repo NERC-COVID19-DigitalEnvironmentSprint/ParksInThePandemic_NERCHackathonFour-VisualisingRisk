@@ -11,7 +11,7 @@ match.metoffice<-function(metoffice_df,google_df)
   
   
 #load Met Office data for May
-metoffice<-read.csv(metoffice_df)
+metoffice<-metoffice_df
 #add empty country column to the met office data frame
 metoffice<-metoffice %>% tibble::add_column(country='', .after=which(colnames(metoffice)=="name"))
 
@@ -29,7 +29,7 @@ metoffice$country[(metoffice$name%in%readRDS('input_data/metoffice_nirelanddistr
 metoffice_england<-subset(metoffice,country=='England')
 
 #read in google data
-google<-read.csv(google_df)
+google<-google_df
 
 # Match the Met Office COVID Reporting regions to Google regions (this is easy for England because all google districts are coarser resolution) ---------------------------------------------------------------
 
