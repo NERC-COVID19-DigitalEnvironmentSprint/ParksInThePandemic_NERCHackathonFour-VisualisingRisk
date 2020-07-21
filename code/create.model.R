@@ -1,8 +1,8 @@
 create.model<-function(){
   
-  google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
-  mene_england = read.csv("input_data/testdata/mene_england.csv")
-  garden_access = read.csv("input_data/testdata/garden_access.csv")
+  #google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
+  #mene_england = read.csv("input_data/testdata/mene_england.csv")
+  #garden_access = read.csv("input_data/testdata/garden_access.csv")
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
