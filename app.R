@@ -25,37 +25,31 @@ conflict_prefer("box", "shinydashboard")
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 source("code/getRnumbers.R")
+source("code/plot.parkvisits.R")
 
 # Download data from OSF
 # ----------------------
 
-# If the data folder does not exist or is empty
-if (length(list.files("data")) == 0) {
-  
-  # Authenticate with read-only token
-  osf_auth("itbkmYA8QXs23lkMnhTpSx1zM2HhQwAqWBauITehL2Xq8Xllh7KS6eLKL8HCX1loMQII3S")
+# Authenticate with read-only token
+  osfr::osf_auth("itbkmYA8QXs23lkMnhTpSx1zM2HhQwAqWBauITehL2Xq8Xllh7KS6eLKL8HCX1loMQII3S")
   
   # Get tibble of data on the OSF store
-  data <- osf_ls_files(osf_retrieve_node("c7kg4"))
+  data <- osfr::osf_ls_files(osf_retrieve_node("c7kg4"))
   
   # Download to ./data
   dir.create("./data")
   osf_download(data, path="./data", verbose=TRUE, progress=TRUE, recurse=TRUE, conflicts="skip")
-}
 
+    
 # NOTE: To re-download all the data from OSF, just delete your local "data" directory and re-run app.R
 
 # Read data 
 # ----------
 
-
-# Read google mobility data if possible, otherwised download it
-if (file.exists("data/temporal/googleandmetoffice_england")) {
-  google <- read.csv("data/temporal/googleandmetoffice_england.csv")
-} else {
-  google <- read.googlemobility()
-}
-
+googleandmetoffice_england<-read.csv('data/temporal/googleandmetoffice_england.csv')
+RF_model<-readRDS('data/model/RF_model.RDS')  
+forecast_england<-read.csv('data/model/forecasts_england.csv')
+  
 # make the map
 #bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
 #shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
@@ -146,7 +140,7 @@ body <- dashboardBody(
 
 server <- function(input, output) {
   google_react<-reactive({
-    google %>% 
+    googleandmetoffice_england %>% 
       dplyr::filter(dplyr::between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       select(sub_region_1, date, parks_percent_change_from_baseline) %>% 
       group_by(sub_region_1) %>% 
@@ -157,7 +151,7 @@ server <- function(input, output) {
     
     
     
-    google %>% 
+    googleandmetoffice_england %>% 
       dplyr::filter(dplyr::between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       dplyr::filter(sub_region_1==input$place)
   })
@@ -180,8 +174,14 @@ server <- function(input, output) {
     plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,54.1), add=TRUE, lwd=2, border='purple')
     
   })
- 
+
   #plot
+  
+  #example plot function - MATT YOU WILL NEED TO EDIT IT TO MAKE IT REACTIVE TO DISTRICTS AND WEEKDAY
+  #plot.parkvisits(googleandmetoffice = googleandmetoffice_england,
+                  #model = RF_model,
+                  #forecast = forecast_england)
+  
   output$plot1<-renderPlot({
     print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
 

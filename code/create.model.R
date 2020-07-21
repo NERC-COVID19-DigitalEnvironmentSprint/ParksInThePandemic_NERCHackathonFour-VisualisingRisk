@@ -1,7 +1,4 @@
-create.model<-function(googleandmetoffice){
-  
-  mene_england = read.csv("input_data/testdata/mene_england.csv")
-  garden_access = read.csv("input_data/testdata/garden_access.csv")
+create.model<-function(googleandmetoffice, mene_england, garden_access){
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
