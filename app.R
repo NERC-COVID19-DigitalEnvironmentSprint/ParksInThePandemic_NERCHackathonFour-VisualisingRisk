@@ -57,9 +57,9 @@ forecast_england<-read.csv('data/model/forecasts_england.csv')
 #UK_Mobility <- readRDS("data/UK_Mobility.RDS")
 
 shapeData <- readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
-shapeData$NAME <- gsub( " *\\(.*?\\) *", "", shapeData$NAME)
-shapeData$NAME <- gsub( "City of ", "", shapeData$NAME)
-shapeData$NAME <- gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
+#shapeData$NAME <- gsub( " *\\(.*?\\) *", "", shapeData$NAME)
+#shapeData$NAME <- gsub( "City of ", "", shapeData$NAME)
+#shapeData$NAME <- gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
 
 Rnumbers <- getRnumbers()
 
@@ -74,7 +74,7 @@ date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end=
 day.box<-selectInput("dayOfTheWeek", "Choose a day of the week", choices=c("Monday"='1',"Tuesday"='2', "Wednesday"='3', "Thursday"='4', "Friday"='5', "Saturday"='6', "Sunday"='0'),
                      selected=format(as.Date(Sys.Date()),"%w") , multiple = FALSE, selectize = TRUE, width=NULL, size=NULL)
 
-place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$NAME)
+place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblty_n)
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
 baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
@@ -145,7 +145,7 @@ server <- function(input, output) {
       select(sub_region_1, date, parks_percent_change_from_baseline) %>% 
       group_by(sub_region_1) %>% 
       dplyr::summarise(mn=mean(parks_percent_change_from_baseline, na.rm=TRUE)) %>% 
-      dplyr::mutate(NAME=sub_region_1)
+      dplyr::mutate(Mblty_n=sub_region_1)
   })
   google_react2<-reactive({
     
@@ -157,12 +157,12 @@ server <- function(input, output) {
   })
   
   shapeData2<-reactive({
-    shapeData2 <- shapeData[shapeData$NAME==input$place,]  
+    shapeData2 <- shapeData[shapeData$Mblty_n==input$place,]  
   })
   
   
   google_shp_merge<-reactive({merge(shapeData, google_react())})
-  
+  #map
   output$map1<-renderPlot({
     par(mar=c(3, 0, 3, 0))
     myscale<-grDevices::colorRampPalette(colors = c("darkgrey", "white", "darkgreen"))
@@ -174,15 +174,7 @@ server <- function(input, output) {
     plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,54.1), add=TRUE, lwd=2, border='purple')
     
   })
-  #map
-  #output$map1<-renderLeaflet({
-  # map <- leaflet()  %>% addTiles() %>% 
-  #  setView(lng = -0.46, lat=52.13,zoom=5) %>% 
-  # addPolygons(data=shapeData,weight=5,col = 'green')
-  #map
-  #})
-  
-  
+
   #plot
   
   #example plot function - MATT YOU WILL NEED TO EDIT IT TO MAKE IT REACTIVE TO DISTRICTS AND WEEKDAY
@@ -192,24 +184,7 @@ server <- function(input, output) {
   
   output$plot1<-renderPlot({
     print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
-  # ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
-  #   geom_col(position = position_dodge(width=0.2), size=0.25,colour = 'black', fill ='#D55E00') +
-  # #Limits the size of the graph.
-  # coord_cartesian(ylim=c(-100,160)) +
-  # #plots a horizontal line where no percentage change occurs.
-  # geom_hline(yintercept=0) + 
-  # #Ensure the background is white, the border is black and removes grid lines.
-  # theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
-  #       panel.grid.major = element_blank(), 
-  #       panel.grid.minor = element_blank(),
-  #       strip.text = element_blank())+
-  # #x-label
-  # xlab("Date") +
-  # #y-label using the previous clean code done outside the plot.
-  # ylab("Visit changes for parks(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")+
-  # #Add a title for the district data this graph represents.
-  # ggtitle(print(input$place))
-  #})
+
   
   
 }
