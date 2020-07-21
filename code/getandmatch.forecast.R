@@ -1,4 +1,4 @@
-getandmatch.forecast<-function(location = "Bedford", apikey=readRDS("./../../APIkey.RDS")){
+getandmatch.forecast<-function(location = "Bedford", apikey=readRDS("./../APIkey.RDS")){
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
 
@@ -90,9 +90,9 @@ forecast_2<-cbind.data.frame(
 forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA
 
 #Reads in menedata
-mene_england = read.csv("input_data/testdata/mene_england.csv")
+mene_england = read.csv("code/input_data/testdata/mene_england.csv")
 #Reads in garden_access data
-garden_access = read.csv("input_data/testdata/garden_access.csv")
+garden_access = read.csv("code/input_data/testdata/garden_access.csv")
 #Removes one column that is not required for modelling from garden_access.
 garden_access<-garden_access[-3]
 #Combines the appropriate location information from both datasets to the forecast datatset and removes another column from garden_access.

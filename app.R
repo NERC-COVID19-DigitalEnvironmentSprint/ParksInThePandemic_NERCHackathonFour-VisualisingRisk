@@ -27,22 +27,6 @@ source("code/read.googlemobility.R")
 source("code/getRnumbers.R")
 source("code/plot.parkvisits.R")
 
-# Download data from OSF
-# ----------------------
-
-# Authenticate with read-only token
-  osfr::osf_auth("itbkmYA8QXs23lkMnhTpSx1zM2HhQwAqWBauITehL2Xq8Xllh7KS6eLKL8HCX1loMQII3S")
-  
-  # Get tibble of data on the OSF store
-  data <- osfr::osf_ls_files(osf_retrieve_node("c7kg4"))
-  
-  # Download to ./data
-  dir.create("./data")
-  osf_download(data, path="./data", verbose=TRUE, progress=TRUE, recurse=TRUE, conflicts="skip")
-
-    
-# NOTE: To re-download all the data from OSF, just delete your local "data" directory and re-run app.R
-
 # Read data 
 # ----------
 
