@@ -170,7 +170,9 @@ server <- function(input, output) {
     print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
   
   output$plot2<-renderPlot({
-    print(plot.parkvisits(googleandmetoffice = googleandmetoffice_england, model=RF_model, forecast = forecast_england))
+    print(plot.parkvisits(googleandmetoffice = googleandmetoffice_england, model=RF_model, forecast = forecast_england, 
+                          district = input$place, dayofweek =input$dayOffTheWeek))
+    
   })
 
   #example plot function - MATT YOU WILL NEED TO EDIT IT TO MAKE IT REACTIVE TO DISTRICTS AND WEEKDAY
