@@ -46,7 +46,7 @@ source("code/plot.parkvisits.R")
 # Read data 
 # ----------
 
-google<-read.csv('data/temporal/google_england.csv')
+googleandmetoffice_england<-read.csv('data/temporal/googleandmetoffice_england.csv')
 RF_model<-readRDS('data/model/RF_model.RDS')  
 forecast_england<-read.csv('data/model/forecasts_england.csv')
   
@@ -140,7 +140,7 @@ body <- dashboardBody(
 
 server <- function(input, output) {
   google_react<-reactive({
-    google %>% 
+    googleandmetoffice_england %>% 
       dplyr::filter(dplyr::between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       select(sub_region_1, date, parks_percent_change_from_baseline) %>% 
       group_by(sub_region_1) %>% 
@@ -151,7 +151,7 @@ server <- function(input, output) {
     
     
     
-    google %>% 
+    googleandmetoffice_england %>% 
       dplyr::filter(dplyr::between(as.Date(date),min(as.Date(input$daterange1)), max(as.Date(input$daterange1)))) %>% 
       dplyr::filter(sub_region_1==input$place)
   })
@@ -181,7 +181,15 @@ server <- function(input, output) {
   # addPolygons(data=shapeData,weight=5,col = 'green')
   #map
   #})
+  
+  
   #plot
+  
+  #example plot function - MATT YOU WILL NEED TO EDIT IT TO MAKE IT REACTIVE TO DISTRICTS AND WEEKDAY
+  #plot.parkvisits(googleandmetoffice = googleandmetoffice_england,
+                  #model = RF_model,
+                  #forecast = forecast_england)
+  
   output$plot1<-renderPlot({
     print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
   # ggplot(data=google_react2(), aes(x=as.Date(date),y=parks_percent_change_from_baseline)) +
