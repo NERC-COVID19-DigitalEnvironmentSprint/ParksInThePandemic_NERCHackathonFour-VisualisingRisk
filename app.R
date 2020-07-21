@@ -17,6 +17,7 @@ library(remotes)
 library(osfr)
 library(here)
 library(conflicted)
+library(randomForest)
 conflict_prefer("box", "shinydashboard")
 
 # Import functions from repo
