@@ -1,8 +1,8 @@
-create.model<-function(){
+create.model<-function(google){
   
   #google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
-  #mene_england = read.csv("input_data/testdata/mene_england.csv")
-  #garden_access = read.csv("input_data/testdata/garden_access.csv")
+  mene_england = read.csv("input_data/testdata/mene_england.csv")
+  garden_access = read.csv("input_data/testdata/garden_access.csv")
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
@@ -67,5 +67,4 @@ create.model<-function(){
   #RF_model_old<-randomForest::randomForest(model_data_1[,-1],model_data_1$parks_percent_change_from_baseline)
   RF_model<-randomForest::randomForest(model_data[,-1],model_data$parks_percent_change_from_baseline)
  }
-
 #saveRDS(RF_model,"input_data/RF_model.RDS")
