@@ -1,5 +1,4 @@
 getandmatch.forecast<-function(location = "Bedford", apikey=readRDS("./../../APIkey.RDS")){
-  
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
 
@@ -90,7 +89,13 @@ rownames(forecast_2)<-weekdays(forecast_temp_mean$Group.1)
 #change NaNs to NAs in dataframe
 forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA
 
-forecast_2
-                  
+#Reads in menedata
+mene_england = read.csv("input_data/testdata/mene_england.csv")
+#Reads in garden_access data
+garden_access = read.csv("input_data/testdata/garden_access.csv")
+#Removes one column that is not required for modelling from garden_access.
+garden_access<-garden_access[-3]
+#Combines the appropriate location information from both datasets to the forecast datatset and removes another column from garden_access.
+forecast_2<-cbind.data.frame(forecast_2,subset(garden_access[-4],google_district == end_location)[,-1],"annual_visits_per_capita_per_km2_greenspace_1km_radius" = subset(mene_england,sub_region_1 == end_location)[,4])
 }
 

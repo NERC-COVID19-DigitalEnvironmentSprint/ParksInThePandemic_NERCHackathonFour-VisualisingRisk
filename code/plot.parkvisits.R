@@ -1,8 +1,12 @@
-plot.parkvisits<-function(google, district="Bedford", dayofweek=weekdays(Sys.Date())){
+plot.parkvisits<-function(google, model, district="Bedford", dayofweek=weekdays(Sys.Date())){
   
+  #model = create.model()
+  ##OR
+  #model = readRDS("input_data/RF_model.RDS")
   #google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
   #district = 'Bedford'
-  #dayofweek = 'Sunday'
+  #dayofweek = 'Wednesday'
+  
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
@@ -30,31 +34,22 @@ plot.parkvisits<-function(google, district="Bedford", dayofweek=weekdays(Sys.Dat
   
   #Ensures that infinite values are treated as 0.
   google_metoffice$rain_mean[is.infinite(google_metoffice$rain_mean)]<-0
-  #Removes all NA data for analysis. 
-  google_metoffice_na<-na.omit(google_metoffice)
-  #Remove district column
-  google_metoffice_na<-google_metoffice_na[,-2]
-  
-    # Using a model to predict values -----------------------------------------
-  #This extracts the sub_region to maintain the subregions
-  ##sub_region_1<-google_metoffice_na$sub_region_1
-  
-  #This code generates the model used to produce the predictor values. 
-  RF_model<-randomForest::randomForest(google_metoffice_na[,-1],google_metoffice_na$parks_percent_change_from_baseline)
   
   # Reading in the forecasting data and getting predictions based on it -----------------------------------------
   
   source('getandmatch.forecast.R')
   forecast<-getandmatch.forecast(district)
   
-  prediction_row<-cbind(parks_percent_change_from_baseline = predict(RF_model,forecast[rownames(forecast)==dayofweek,]),
+  prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[rownames(forecast)==dayofweek,]),
                         sub_region_1 = district,
                         forecast[rownames(forecast)==dayofweek,]
                         )
+  prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
   
   google_metoffice_current_district_and_weekday<-subset(google_metoffice,
                                         google_metoffice$sub_region_1 == district
-                                        & weekdays(google_metoffice$date) == dayofweek)
+                                        & weekdays(google_metoffice$date) == dayofweek,
+                                        select = c ("date", "parks_percent_change_from_baseline"))
   
   google_metoffice_current_district_and_weekday<-rbind(google_metoffice_current_district_and_weekday,prediction_row)
   
