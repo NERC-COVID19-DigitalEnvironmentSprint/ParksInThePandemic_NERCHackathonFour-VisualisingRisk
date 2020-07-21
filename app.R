@@ -25,37 +25,31 @@ conflict_prefer("box", "shinydashboard")
 source("code/plot.googlemobilitydistricts.R")
 source("code/read.googlemobility.R")
 source("code/getRnumbers.R")
+source("code/plot.parkvisits.R")
 
 # Download data from OSF
 # ----------------------
 
-# If the data folder does not exist or is empty
-if (length(list.files("data")) == 0) {
-  
-  # Authenticate with read-only token
-  osf_auth("itbkmYA8QXs23lkMnhTpSx1zM2HhQwAqWBauITehL2Xq8Xllh7KS6eLKL8HCX1loMQII3S")
+# Authenticate with read-only token
+  osfr::osf_auth("itbkmYA8QXs23lkMnhTpSx1zM2HhQwAqWBauITehL2Xq8Xllh7KS6eLKL8HCX1loMQII3S")
   
   # Get tibble of data on the OSF store
-  data <- osf_ls_files(osf_retrieve_node("c7kg4"))
+  data <- osfr::osf_ls_files(osf_retrieve_node("c7kg4"))
   
   # Download to ./data
   dir.create("./data")
   osf_download(data, path="./data", verbose=TRUE, progress=TRUE, recurse=TRUE, conflicts="skip")
-}
 
+    
 # NOTE: To re-download all the data from OSF, just delete your local "data" directory and re-run app.R
 
 # Read data 
 # ----------
 
-
-# Read google mobility data if possible, otherwised download it
-if (file.exists("data/temporal/googleandmetoffice_england")) {
-  google <- read.csv("data/temporal/googleandmetoffice_england.csv")
-} else {
-  google <- read.googlemobility()
-}
-
+google<-read.csv('data/temporal/google_england.csv')
+RF_model<-readRDS('data/model/RF_model.RDS')  
+forecast_england<-read.csv('data/model/forecasts_england.csv')
+  
 # make the map
 #bedford <- readOGR(dsn="data/spatial", layer="TL_GreenspaceSite")
 #shapeData <- spTransform(bedford, CRS("+init=epsg:4326"))
