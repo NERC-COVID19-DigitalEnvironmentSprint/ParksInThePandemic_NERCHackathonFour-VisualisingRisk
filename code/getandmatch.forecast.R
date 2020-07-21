@@ -96,6 +96,6 @@ garden_access = read.csv("input_data/testdata/garden_access.csv")
 #Removes one column that is not required for modelling from garden_access.
 garden_access<-garden_access[-3]
 #Combines the appropriate location information from both datasets to the forecast datatset and removes another column from garden_access.
-forecast_2<-cbind.data.frame(forecast_2,subset(garden_access[-4],google_district == end_location)[,-1],"annual_visits_per_capita_per_km2_greenspace_1km_radius" = subset(mene_england,sub_region_1 == end_location)[,4])
+forecast_2<-cbind.data.frame(forecast_2,subset(garden_access[-4],google_district == end_location)[,-1],"annual_visits_per_capita_per_km2_greenspace_1km_radius" = subset(mene_england,sub_region_1 == end_location)[,4], row.names = NULL)
 }
 
