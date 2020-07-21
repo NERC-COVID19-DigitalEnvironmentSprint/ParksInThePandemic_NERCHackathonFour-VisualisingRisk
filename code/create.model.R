@@ -1,6 +1,5 @@
-create.model<-function(google){
+create.model<-function(googleandmetoffice){
   
-  #google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
   mene_england = read.csv("input_data/testdata/mene_england.csv")
   garden_access = read.csv("input_data/testdata/garden_access.csv")
   
@@ -13,7 +12,7 @@ create.model<-function(google){
   
   
   #Subsets out the google_metoffice data to only have the relevant factors.
-  google_metoffice<-subset(google, select = c("parks_percent_change_from_baseline",
+  google_metoffice<-subset(googleandmetoffice, select = c("parks_percent_change_from_baseline",
                                               "sub_region_1",
                                               "date",
                                               "weekday",
@@ -64,7 +63,11 @@ create.model<-function(google){
   model_data<-subset(model_data, select = c(colnames(google_metoffice_na[-2]),garden_access_name[-3], "annual_visits_per_capita_per_km2_greenspace_1km_radius"))
   
   set.seed(1234)
-  #RF_model_old<-randomForest::randomForest(model_data_1[,-1],model_data_1$parks_percent_change_from_baseline)
-  RF_model<-randomForest::randomForest(model_data[,-1],model_data$parks_percent_change_from_baseline)
- }
+  randomForest::randomForest(model_data[,-1],model_data$parks_percent_change_from_baseline)
+  
+}
+
+#example implementation
+#data=read.csv('input_data/testdata/googleandmetoffice_england.csv')
+#RF_model<-create.model(googleandmetoffice = data)
 #saveRDS(RF_model,"input_data/RF_model.RDS")
