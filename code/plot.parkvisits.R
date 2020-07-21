@@ -1,11 +1,11 @@
-plot.parkvisits<-function(google, model, district="Bedford", dayofweek=weekdays(Sys.Date())){
+plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=weekdays(Sys.Date())){
   
-  #model = create.model()
-  ##OR
-  #model = readRDS("input_data/RF_model.RDS")
-  #google = read.csv("input_data/testdata/googleandmetoffice_england.csv")
+  #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
+  #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
+  #model<-readRDS('data/model/RF_model.RDS')  
+  #forecast<-read.csv('data/model/forecasts_england.csv')
   #district = 'Bedford'
-  #dayofweek = 'Wednesday'
+  #dayofweek = 'Tuesday'
   
   
   # Load packages ----------------------------------------------------------
@@ -16,9 +16,8 @@ plot.parkvisits<-function(google, model, district="Bedford", dayofweek=weekdays(
   
   # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
   
-  
   #Subsets out the google_metoffice data to only have the relevant factors.
-  google_metoffice<-subset(google, select = c("parks_percent_change_from_baseline",
+  google_metoffice<-subset(googleandmetoffice, select = c("parks_percent_change_from_baseline",
                                               "sub_region_1",
                                               "date",
                                               "temp_mean",
@@ -37,12 +36,12 @@ plot.parkvisits<-function(google, model, district="Bedford", dayofweek=weekdays(
   
   # Reading in the forecasting data and getting predictions based on it -----------------------------------------
   
-  source('getandmatch.forecast.R')
-  forecast<-getandmatch.forecast(district)
+  forecast<-forecast_england
+  forecast<-subset(forecast,sub_region_1==district)
   
-  prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[rownames(forecast)==dayofweek,]),
+  prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek,]),
                         sub_region_1 = district,
-                        forecast[rownames(forecast)==dayofweek,]
+                        forecast[forecast$weekday==dayofweek,]
                         )
   prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
   
@@ -86,7 +85,3 @@ District_graph
 
 }
 
-
-#example implementation
-#google = read.csv("input_data/testdata/google_england.csv")
-#plot.googlemobilitydistricts(google)
