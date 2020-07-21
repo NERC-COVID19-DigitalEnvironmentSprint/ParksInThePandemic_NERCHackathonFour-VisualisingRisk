@@ -16,6 +16,7 @@ create.model<-function(){
   google_metoffice<-subset(google, select = c("parks_percent_change_from_baseline",
                                               "sub_region_1",
                                               "date",
+                                              "weekday",
                                               "temp_mean",
                                               "temp_max",
                                               "temp_min",

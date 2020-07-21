@@ -27,7 +27,8 @@ location_1<-ifelse(location == "Greater Manchester", location <- c("Bolton","Bur
                                       ifelse(location == "South Yorkshire", location <- c("Barnsley","Doncaster","Rotherham","Sheffield"),
                                              ifelse(location == "West Midlands", location <- c("Birmingham","Coventry","Dudley","Sandwell","Solihull","Telford and Wrekin","Walsall","Wolverhampton"),
                                                     ifelse(location == "Windsor and Maidenhead", location <- c("Windsor","Maidenhead"),
-                   location)))))))
+                                                           ifelse(location == 'Bristol City', location <- c('Bristol'),
+                   location))))))))
 
 #Get's the forecast and creates a tibble for the first location in the location vector.
 forecast <-owmr::get_forecast(location[1], units = "metric")%>%
@@ -79,12 +80,11 @@ forecast_rain_mean<-aggregate(forecast_2$rain_3h, list (forecast_2$date), FUN = 
 #This combines the above vectors created and adds weekdays for each value, date, and creates a column for sub_region_1 based from the first definition.
 forecast_2<-cbind.data.frame(
                   "date" = forecast_temp_mean$Group.1,
+                  'weekday' = weekdays(forecast_temp_mean$Group.1),
                   "temp_mean" = forecast_temp_mean$x,
                   "temp_max" = forecast_temp_max$x,
                   "temp_min" =  forecast_temp_min$x,
                   "rain_mean" = forecast_rain_mean$x)
-
-rownames(forecast_2)<-weekdays(forecast_temp_mean$Group.1)  
 
 #change NaNs to NAs in dataframe
 forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA
