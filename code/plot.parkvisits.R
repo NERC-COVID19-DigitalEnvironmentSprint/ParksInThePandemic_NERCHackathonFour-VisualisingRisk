@@ -43,11 +43,22 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   forecast<-forecast
   forecast<-subset(forecast,sub_region_1==district)
   
-  prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek,]),
-                        sub_region_1 = district,
-                        forecast[forecast$weekday==dayofweek,]
-                        )
-  prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
+  
+  #if selected weekday exists in forecast, make a prediction row, else, make one with NAs
+  if(dayofweek%in%forecast$weekday==TRUE){
+    
+    prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek,]),
+                          sub_region_1 = district,
+                          forecast[forecast$weekday==dayofweek,])
+    prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
+    
+  }
+  else
+  {
+    prediction_row<-c(date=NA,parks_percent_change_from_baseline=NA)
+  }
+                    
+ 
   
   google_metoffice_current_district_and_weekday<-subset(google_metoffice,
                                         google_metoffice$sub_region_1 == district
