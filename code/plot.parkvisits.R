@@ -23,10 +23,10 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   #model<-readRDS('data/model/RF_model.RDS')  
   #forecast<-read.csv('data/model/forecasts_england.csv')
   #district = 'Bedford'
-  #dayofweek=as.numeric(format(as.Date(Sys.Date()),"%w"))
+  #dayofweek=2
   
   wkdays_eng=c("Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
-  dayofweek<-wkdays_eng[dayofweek]
+  dayofweek_eng<-wkdays_eng[dayofweek]
   
   # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
   
@@ -55,28 +55,33 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   
   
   #if selected weekday exists in forecast, make a prediction row, else, make one with NAs
-  if(dayofweek%in%forecast$weekday==TRUE){
+  if(dayofweek_eng%in%forecast$weekday==TRUE){
     
-    prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek,]),
+    prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek_eng,]),
                           sub_region_1 = district,
-                          forecast[forecast$weekday==dayofweek,])
+                          forecast[forecast$weekday==dayofweek_eng,])
     prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
     
   } else
   {
-    prediction_row<-c(date=nextweekday(Sys.Date(),),parks_percent_change_from_baseline=NA)
+    
+    n_wday<-as.Date(nextweekday(Sys.Date(),dayofweek))
+    prediction_row<-c(date=n_wday,parks_percent_change_from_baseline=NA)
   }
                     
  
-  
   google_metoffice_current_district_and_weekday<-subset(google_metoffice,
                                         google_metoffice$sub_region_1 == district
-                                        & weekdays(google_metoffice$date) == dayofweek,
+                                        & weekdays(google_metoffice$date) == dayofweek_eng,
                                         select = c ("date", "parks_percent_change_from_baseline"))
   
+  #coerce to character before binding to avoid really annoying date issues
+  google_metoffice_current_district_and_weekday$date<-as.character(google_metoffice_current_district_and_weekday$date)
+  #bind predictions to bottom
   google_metoffice_current_district_and_weekday<-rbind(google_metoffice_current_district_and_weekday,prediction_row)
-  
-  
+  #recoerce to date
+  google_metoffice_current_district_and_weekday$date<-as.Date(google_metoffice_current_district_and_weekday$date)
+
 #START OF THE PLOTTING FUNCTION
 
   #Cleans the type title to ensure that _ do not exist in the y axis and recreates the y-axis.
