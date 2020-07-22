@@ -17,6 +17,7 @@ library(remotes)
 library(osfr)
 library(here)
 library(conflicted)
+library(randomForest)
 conflict_prefer("box", "shinydashboard")
 
 # Import functions from repo
@@ -66,6 +67,7 @@ baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", cho
 #baseline.box<-dateInput("basedate", "Date:", value = "2020-02-29")
 
 graph <- plotOutput("plot1")
+graph2<-plotOutput("plot2")
 
 map <- plotOutput("map1", height=700*1.5, width=400*1.5)
 
@@ -112,7 +114,8 @@ body <- dashboardBody(
     column(
       6,
       text.box,
-      box(width=12, graph),
+      box(width=6, graph),
+      box(width=6, graph2),
       info.box
     ),
     column(6, box(width=12, map))
@@ -161,14 +164,21 @@ server <- function(input, output) {
 
   #plot
   
-  #example plot function - MATT YOU WILL NEED TO EDIT IT TO MAKE IT REACTIVE TO DISTRICTS AND WEEKDAY
-  #plot.parkvisits(googleandmetoffice = googleandmetoffice_england,
-                  #model = RF_model,
-                  #forecast = forecast_england)
+  
   
   output$plot1<-renderPlot({
     print(plot.googlemobilitydistricts(google_react2(), "parks", print(input$place)))})
+  
+  output$plot2<-renderPlot({
+    print(plot.parkvisits(googleandmetoffice = googleandmetoffice_england, model=RF_model, forecast = forecast_england, 
+                          district = input$place, dayofweek =input$dayOffTheWeek))
+    
+  })
 
+  #example plot function - MATT YOU WILL NEED TO EDIT IT TO MAKE IT REACTIVE TO DISTRICTS AND WEEKDAY
+  #plot.parkvisits(googleandmetoffice = googleandmetoffice_england,
+  #model = RF_model,
+  #forecast = forecast_england)
   
   
 }
