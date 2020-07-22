@@ -1,18 +1,20 @@
 plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=weekdays(Sys.Date())){
   
-  #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
-  #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
-  #model<-readRDS('data/model/RF_model.RDS')  
-  #forecast<-read.csv('data/model/forecasts_england.csv')
-  #district = 'Bedford'
-  #dayofweek = 'Tuesday'
-  
-  
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
   library(tibble)
   #install.packages('ggplot2')
   library(ggplot2)
+  #install.packages(randomForest)
+  library(randomForest) 
+  
+  #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
+  googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
+  model<-readRDS('data/model/RF_model.RDS')  
+  forecast<-read.csv('data/model/forecasts_england.csv')
+  district = 'Bedford'
+  dayofweek = 'Saturday'
+  
   
   # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
   
@@ -36,7 +38,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   
   # Reading in the forecasting data and getting predictions based on it -----------------------------------------
   
-  forecast<-forecast_england
+  forecast<-forecast
   forecast<-subset(forecast,sub_region_1==district)
   
   prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek,]),
