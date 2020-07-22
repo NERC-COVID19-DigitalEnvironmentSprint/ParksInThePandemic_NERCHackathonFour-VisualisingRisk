@@ -1,6 +1,6 @@
 # Download data from OSF
 # ----------------------
-install.packages('osfr')
+#install.packages('osfr')
 library(osfr)
 
 # Get tibble of data on the OSF store
