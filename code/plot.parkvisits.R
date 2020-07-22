@@ -9,10 +9,10 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   library(randomForest) 
   
   #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
-  googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
-  model<-readRDS('data/model/RF_model.RDS')  
-  forecast<-read.csv('data/model/forecasts_england.csv')
-  district = 'Bedford'
+  #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
+  #model<-readRDS('data/model/RF_model.RDS')  
+  #forecast<-read.csv('data/model/forecasts_england.csv')
+  #district = 'Bedford'
   dayofweek = 'Saturday'
   
   

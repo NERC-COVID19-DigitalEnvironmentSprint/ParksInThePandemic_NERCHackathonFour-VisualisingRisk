@@ -171,7 +171,7 @@ server <- function(input, output) {
   
   output$plot2<-renderPlot({
     print(plot.parkvisits(googleandmetoffice = googleandmetoffice_england, model=RF_model, forecast = forecast_england, 
-                          district = input$place, dayofweek =input$dayOffTheWeek))
+                          district = input$place, dayofweek =input$dayOfTheWeek))
     
   })
 
