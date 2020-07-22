@@ -17,6 +17,8 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   library(ggplot2)
   #install.packages(randomForest)
   library(randomForest) 
+  #install.packages('lubridate')
+  library(lubridate)
   
   #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
   #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
