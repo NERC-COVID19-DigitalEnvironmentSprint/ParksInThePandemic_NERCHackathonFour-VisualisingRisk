@@ -1,4 +1,14 @@
-plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=as.numeric(format(as.Date(Sys.Date()),"%w"))){
+plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=wday(as.Date(Sys.Date()))){
+  
+  #borrowed from Kirill (https://stackoverflow.com/questions/32434549/how-to-find-next-particular-day)
+  nextweekday <- function(date, wday) {
+    date <- as.Date(date)
+    diff <- wday - wday(date)
+    if( diff < 0 )
+      diff <- diff + 7
+    return(date + diff)
+  }
+  
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
@@ -15,7 +25,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   #district = 'Bedford'
   #dayofweek=as.numeric(format(as.Date(Sys.Date()),"%w"))
   
-  wkdays_eng=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  wkdays_eng=c("Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
   dayofweek<-wkdays_eng[dayofweek]
   
   # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
@@ -54,7 +64,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
     
   } else
   {
-    prediction_row<-c(date=NA,parks_percent_change_from_baseline=NA)
+    prediction_row<-c(date=nextweekday(Sys.Date(),),parks_percent_change_from_baseline=NA)
   }
                     
  
