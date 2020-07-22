@@ -1,7 +1,5 @@
 # Set the root directory as the working directory
 
-Sys.setlocale("LC_TIME","English_United Kingdom.1252")
-
 # Libraries
 # ---------
 library(rgdal)
@@ -175,6 +173,8 @@ server <- function(input, output) {
   output$plot2<-renderPlot({
     print(plot.parkvisits(googleandmetoffice = googleandmetoffice_england, model=RF_model, forecast = forecast_england, 
                           district = input$place, dayofweek =as.numeric(input$dayOfTheWeek)))
+    
+    #plot.parkvisits(googleandmetoffice = googleandmetoffice, model=model, forecast = forecast, district = district,dayofweek = dayofweek)
     
   })
 

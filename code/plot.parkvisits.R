@@ -1,5 +1,5 @@
 plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=data.table::wday(as.Date(Sys.Date()))){
-  
+  Sys.setlocale("LC_TIME","English_United Kingdom.1252")
   #borrowed from Kirill (https://stackoverflow.com/questions/32434549/how-to-find-next-particular-day)
   nextweekday <- function(date, wday) {
     date <- as.Date(date)
@@ -19,11 +19,11 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   library(randomForest) 
   
   #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
-  #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
-  #model<-readRDS('data/model/RF_model.RDS')  
-  #forecast<-read.csv('data/model/forecasts_england.csv')
-  #district = 'Bedford'
-  #dayofweek=2
+  # googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
+  # model<-readRDS('data/model/RF_model.RDS')
+  # forecast<-read.csv('data/model/forecasts_england.csv')
+  # district = 'Bedford'
+  # dayofweek=2
   
   wkdays_eng=c("Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
   dayofweek_eng<-wkdays_eng[dayofweek]
