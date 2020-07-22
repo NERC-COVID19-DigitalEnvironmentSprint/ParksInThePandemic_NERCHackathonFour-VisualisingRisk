@@ -1,5 +1,7 @@
 # Set the root directory as the working directory
 
+Sys.setlocale("LC_TIME","English_United Kingdom.1252")
+
 # Libraries
 # ---------
 library(rgdal)
