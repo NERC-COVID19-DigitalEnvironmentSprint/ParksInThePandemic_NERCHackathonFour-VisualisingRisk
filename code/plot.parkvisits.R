@@ -1,4 +1,4 @@
-plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=weekdays(Sys.Date())){
+plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=as.numeric(format(as.Date(Sys.Date()),"%w"))){
   
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
@@ -13,8 +13,10 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   #model<-readRDS('data/model/RF_model.RDS')  
   #forecast<-read.csv('data/model/forecasts_england.csv')
   #district = 'Bedford'
-  dayofweek = 'Saturday'
+  #dayofweek=as.numeric(format(as.Date(Sys.Date()),"%w"))
   
+  #wkdays_eng=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  dayofweek<-wkdays_eng[dayofweek]
   
   # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
   

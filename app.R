@@ -57,7 +57,7 @@ text.box <- box(title = "How busy are my local parks likely to be?", footer = "L
 date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2021-01-01")
 
 day.box<-selectInput("dayOfTheWeek", "Choose a day of the week", choices=c("Monday"='1',"Tuesday"='2', "Wednesday"='3', "Thursday"='4', "Friday"='5', "Saturday"='6', "Sunday"='0'),
-                     selected=format(as.Date(Sys.Date()),"%w") , multiple = FALSE, selectize = TRUE, width=NULL, size=NULL)
+                     selected=format(as.Date(Sys.Date()),"%w"), multiple = FALSE, selectize = TRUE, width=NULL, size=NULL)
 
 place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblty_n)
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
@@ -171,7 +171,7 @@ server <- function(input, output) {
   
   output$plot2<-renderPlot({
     print(plot.parkvisits(googleandmetoffice = googleandmetoffice_england, model=RF_model, forecast = forecast_england, 
-                          district = input$place, dayofweek =input$dayOfTheWeek))
+                          district = input$place, dayofweek =as.numeric(input$dayOfTheWeek)))
     
   })
 
