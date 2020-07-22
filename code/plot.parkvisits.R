@@ -15,7 +15,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   #district = 'Bedford'
   #dayofweek=as.numeric(format(as.Date(Sys.Date()),"%w"))
   
-  #wkdays_eng=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  wkdays_eng=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
   dayofweek<-wkdays_eng[dayofweek]
   
   # GET FORECAST FOR THE DAY UNDER CONSIDERATION AND PLOT PREDICTED VISITS BASED ON IT ----------------------------
@@ -52,8 +52,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
                           forecast[forecast$weekday==dayofweek,])
     prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
     
-  }
-  else
+  } else
   {
     prediction_row<-c(date=NA,parks_percent_change_from_baseline=NA)
   }
