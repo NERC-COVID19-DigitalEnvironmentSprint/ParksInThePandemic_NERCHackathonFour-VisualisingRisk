@@ -4,6 +4,7 @@
 # ---------
 library(rgdal)
 #library(leaflet)
+library(data.table)
 library(tidyverse)
 library(shinydashboard)
 library(shinythemes)
@@ -18,7 +19,6 @@ library(osfr)
 library(here)
 library(conflicted)
 library(randomForest)
-library(lubridate)
 conflict_prefer("box", "shinydashboard")
 
 # Import functions from repo
@@ -58,7 +58,7 @@ text.box <- box(title = "How busy are my local parks likely to be?", footer = "L
 date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2021-01-01")
 
 day.box<-selectInput("dayOfTheWeek", "Choose a day of the week", choices=c("Sunday"='1',"Monday"='2',"Tuesday"='3', "Wednesday"='4', "Thursday"='5', "Friday"='6', "Saturday"='7'),
-                     selected=wday(as.Date(Sys.Date())), multiple = FALSE, selectize = TRUE, width=NULL, size=NULL)
+                     selected=data.table::wday(as.Date(Sys.Date())), multiple = FALSE, selectize = TRUE, width=NULL, size=NULL)
 
 place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblty_n)
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)

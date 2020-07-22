@@ -1,9 +1,9 @@
-plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=wday(as.Date(Sys.Date()))){
+plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=data.table::wday(as.Date(Sys.Date()))){
   
   #borrowed from Kirill (https://stackoverflow.com/questions/32434549/how-to-find-next-particular-day)
   nextweekday <- function(date, wday) {
     date <- as.Date(date)
-    diff <- wday - wday(date)
+    diff <- wday - data.table::wday(date)
     if( diff < 0 )
       diff <- diff + 7
     return(date + diff)
@@ -17,8 +17,6 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   library(ggplot2)
   #install.packages(randomForest)
   library(randomForest) 
-  #install.packages('lubridate')
-  library(lubridate)
   
   #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
   #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
