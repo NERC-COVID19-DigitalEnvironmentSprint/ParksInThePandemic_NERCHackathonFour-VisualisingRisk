@@ -19,11 +19,11 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   library(randomForest) 
   
   #manually set options to test (assuming all data downloaded from OSF into 'data' folder)
-  # googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
-  # model<-readRDS('data/model/RF_model.RDS')
-  # forecast<-read.csv('data/model/forecasts_england.csv')
-  # district = 'Bedford'
-  # dayofweek=2
+   #googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
+   #model<-readRDS('data/model/RF_model.RDS')
+   #forecast<-read.csv('data/model/forecasts_england.csv')
+   #district = 'Bedford'
+   #dayofweek=2
   
   wkdays_eng=c("Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
   dayofweek_eng<-wkdays_eng[dayofweek]
@@ -57,7 +57,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   #if selected weekday exists in forecast, make a prediction row, else, make one with NAs
   if(dayofweek_eng%in%forecast$weekday==TRUE){
     
-    prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek_eng,]),
+    prediction_row<-cbind(parks_percent_change_from_baseline = predict(model,forecast[forecast$weekday==dayofweek_eng,-c(1:3)]),
                           sub_region_1 = district,
                           forecast[forecast$weekday==dayofweek_eng,])
     prediction_row<-subset(prediction_row, select = c("date", "parks_percent_change_from_baseline"))
