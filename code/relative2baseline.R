@@ -3,7 +3,7 @@
 #where 'metoffice_england.csv' is the output of the match.metoffice function (met office data matched to Google and with columns renamed in line with OpenWeather forecast format)
 relative2baseline<-function(data){
   
-  data = forecasts_england
+  #data = forecasts_england
   #Find the non-baseline values  -----------------------------------------
   
   nonbaselineperiod<-subset(data,data$date >= "2020-02-15")
