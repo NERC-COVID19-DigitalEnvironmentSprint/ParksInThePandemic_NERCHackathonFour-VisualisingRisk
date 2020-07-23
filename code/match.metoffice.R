@@ -52,7 +52,7 @@ metoffice_england<-aggregate(metoffice_england[,7:ncol(metoffice_england)],
 colnames(metoffice_england)[1:2]<-c('date','sub_region_1')
 
 #create vector of days of the week and add to dataframe
-metoffice_england<-metoffice_england %>% tibble::add_column(weekdays = weekdays(as.Date(metoffice_england$date)), 
+metoffice_england<-metoffice_england %>% tibble::add_column(weekday = weekdays(as.Date(metoffice_england$date)), 
                                                             .before = 1)
 metoffice_england<-metoffice_england%>%
   dplyr::mutate(
