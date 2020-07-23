@@ -1,4 +1,4 @@
-plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",rain = F, temp = F){
+plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",rain = T, temp = T){
   
   #google = read.csv("input_data/testdata/google_england.csv")
   #type = "parks"

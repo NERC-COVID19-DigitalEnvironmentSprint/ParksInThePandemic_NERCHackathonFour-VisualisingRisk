@@ -1,4 +1,4 @@
-plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=data.table::wday(as.Date(Sys.Date())), rain = F, temp = F ){
+plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford", dayofweek=data.table::wday(as.Date(Sys.Date())), rain = T, temp = T ){
   Sys.setlocale("LC_TIME","English_United Kingdom.1252")
   #borrowed from Kirill (https://stackoverflow.com/questions/32434549/how-to-find-next-particular-day)
   nextweekday <- function(date, wday) {
