@@ -1,5 +1,10 @@
 create.model<-function(googleandmetoffice, mene_england, garden_access){
   
+  googleandmetoffice<-read.csv('data/temporal/googleandmetoffice_england.csv')
+  mene_england<-read.csv('data/singlemeasure/mene_england.csv')
+  garden_access<-read.csv('data/singlemeasure/gardenaccess_england.csv')
+  
+  
   # Load packages ----------------------------------------------------------
   #install.packages('tibble')
   library(tibble)
@@ -60,11 +65,11 @@ create.model<-function(googleandmetoffice, mene_england, garden_access){
   model_data<-subset(model_data, select = c(colnames(google_metoffice_na[-2]),garden_access_name[-3], "annual_visits_per_capita_per_km2_greenspace_1km_radius"))
   
   set.seed(1234)
-  randomForest::randomForest(model_data[,-1],model_data$parks_percent_change_from_baseline)
+  randomForest::randomForest(model_data[,-c(1:2)],model_data$parks_percent_change_from_baseline)
   
 }
 
 #example implementation
 #data=read.csv('input_data/testdata/googleandmetoffice_england.csv')
 #RF_model<-create.model(googleandmetoffice = data)
-#saveRDS(RF_model,"input_data/RF_model.RDS")
+#saveRDS(RF_model,"data/model/RF_model.RDS")
