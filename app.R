@@ -33,7 +33,7 @@ source("code/plot.parkvisits.R")
 # ----------
 
 googleandmetoffice_england<-read.csv('data/temporal/googleandmetoffice_england.csv')
-#RF_model<-readRDS('data/model/RF_model.RDS')  
+RF_model<-readRDS('data/model/RF_model.RDS')  
 forecast_england<-read.csv('data/model/forecasts_england.csv')
   
 # make the map
@@ -47,7 +47,7 @@ shapeData <- readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
 #shapeData$NAME <- gsub( "City of ", "", shapeData$NAME)
 #shapeData$NAME <- gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
 
-Rnumbers <- getRnumbers()
+#Rnumbers <- getRnumbers()
 
 # Widgets
 # -------
@@ -64,7 +64,7 @@ place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblt
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
 #baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
-plot.week<-selectInput("plot_week", "What do you want to plot?", choices=c("Daily data", "All historical data"), selected = "All historical data")
+plot.week<-selectInput("plot_week", "What do you want to plot?", choices=c("Per day of the week with forecast", "All historical data"), selected = "Per day of the week with forecast")
 
 #baseline.box<-dateInput("basedate", "Date:", value = "2020-02-29")
 
@@ -122,9 +122,10 @@ body <- dashboardBody(
       text.box,
       conditionalPanel("input.plot_week=='All historical data'", 
       box(width=12, graph)),
-      conditionalPanel("input.plot_week=='Daily data'", 
-      box(width=12, graph2)),
-      info.box
+      conditionalPanel("input.plot_week=='Per day of the week with forecast'", 
+      box(width=12, graph2))
+      #,
+      #info.box
     ),
     column(6, box(width=12, map))
   )
