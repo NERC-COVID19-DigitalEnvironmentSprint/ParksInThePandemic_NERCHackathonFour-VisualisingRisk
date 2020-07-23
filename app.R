@@ -63,7 +63,7 @@ day.box<-selectInput("dayOfTheWeek", "Choose a day of the week", choices=c("Sund
 place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblty_n)
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
-baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
+#baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
 plot.week<-selectInput("plot_week", "Do you want to plot weekly or daily data?", choices=c("Daily", "Weekly"), selected = "Weekly")
 
 #baseline.box<-dateInput("basedate", "Date:", value = "2020-02-29")
@@ -85,10 +85,14 @@ info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$
 header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
 
 
-sidebar <- dashboardSidebar(date.box,place.box, day.box,baseline.check, plot.week,
-                            conditionalPanel("input.custom_base=='Yes'", 
-                                             dateInput("basedate", "Date:", value = "2020-02-29")),
-                            width = 250)
+sidebar <- dashboardSidebar(date.box,place.box, day.box,
+                            #baseline.check, 
+                            plot.week
+                            #,
+                            #conditionalPanel("input.custom_base=='Yes'", 
+                                       #      dateInput("basedate", "Date:", value = "2020-02-29")),
+                            #width = 250
+                            )
 
 body <- dashboardBody(
   
