@@ -47,7 +47,7 @@ shapeData <- readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
 #shapeData$NAME <- gsub( "City of ", "", shapeData$NAME)
 #shapeData$NAME <- gsub( "The Brighton and Hove", "Brighton and Hove", shapeData$NAME)
 
-Rnumbers <- getRnumbers()
+#Rnumbers <- getRnumbers()
 
 # Widgets
 # -------
@@ -63,7 +63,8 @@ day.box<-selectInput("dayOfTheWeek", "Choose a day of the week", choices=c("Sund
 place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblty_n)
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
-baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
+#baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
+plot.week<-selectInput("plot_week", "What do you want to plot?", choices=c("Per day of the week with forecast", "All historical data"), selected = "Per day of the week with forecast")
 
 #baseline.box<-dateInput("basedate", "Date:", value = "2020-02-29")
 
@@ -72,9 +73,9 @@ graph2<-plotOutput("plot2")
 
 map <- plotOutput("map1", height=700*1.5, width=400*1.5)
 
-info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$Rnumbers.R_med[1]), subtitle = NULL,
-        icon = shiny::icon("bar-chart"), color = "aqua", width = 4,
-        href = TRUE, fill = FALSE)
+#info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$Rnumbers.R_med[1]), subtitle = NULL,
+   #     icon = shiny::icon("bar-chart"), color = "aqua", width = 4,
+    #    href = TRUE, fill = FALSE)
 
 #map <- leafletOutput("map1", height = 600)
 
@@ -84,10 +85,14 @@ info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$
 header <- dashboardHeader(title="Parks in the Pandemic", titleWidth = 250)
 
 
-sidebar <- dashboardSidebar(date.box,place.box, day.box,baseline.check,
-                            conditionalPanel("input.custom_base=='Yes'", 
-                                             dateInput("basedate", "Date:", value = "2020-02-29")),
-                            width = 250)
+sidebar <- dashboardSidebar(date.box,place.box, day.box,
+                            #baseline.check, 
+                            plot.week
+                            #,
+                            #conditionalPanel("input.custom_base=='Yes'", 
+                                       #      dateInput("basedate", "Date:", value = "2020-02-29")),
+                            #width = 250
+                            )
 
 body <- dashboardBody(
   
@@ -115,9 +120,12 @@ body <- dashboardBody(
     column(
       6,
       text.box,
-      box(width=6, graph),
-      box(width=6, graph2),
-      info.box
+      conditionalPanel("input.plot_week=='All historical data'", 
+      box(width=12, graph)),
+      conditionalPanel("input.plot_week=='Per day of the week with forecast'", 
+      box(width=12, graph2))
+      #,
+      #info.box
     ),
     column(6, box(width=12, map))
   )
