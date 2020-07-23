@@ -33,7 +33,7 @@ source("code/plot.parkvisits.R")
 # ----------
 
 googleandmetoffice_england<-read.csv('data/temporal/googleandmetoffice_england.csv')
-RF_model<-readRDS('data/model/RF_model.RDS')  
+#RF_model<-readRDS('data/model/RF_model.RDS')  
 forecast_england<-read.csv('data/model/forecasts_england.csv')
   
 # make the map
@@ -64,7 +64,7 @@ place.box<-selectInput("place", "Choose a region", choices=unique(shapeData$Mblt
                        , selected = "Bedford", multiple = FALSE, selectize = TRUE, width = NULL, size = NULL)
 
 #baseline.check<-selectInput("custom_base", "Do you want a custom baseline?", choices=c("No", "Yes"), selected = "No")
-plot.week<-selectInput("plot_week", "Do you want to plot weekly or daily data?", choices=c("Daily", "Weekly"), selected = "Weekly")
+plot.week<-selectInput("plot_week", "What do you want to plot?", choices=c("Daily data", "All historical data"), selected = "All historical data")
 
 #baseline.box<-dateInput("basedate", "Date:", value = "2020-02-29")
 
@@ -73,9 +73,9 @@ graph2<-plotOutput("plot2")
 
 map <- plotOutput("map1", height=700*1.5, width=400*1.5)
 
-info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$Rnumbers.R_med[1]), subtitle = NULL,
-        icon = shiny::icon("bar-chart"), color = "aqua", width = 4,
-        href = TRUE, fill = FALSE)
+#info.box <-infoBox("R value", value = paste0("England's R number is ", Rnumbers$Rnumbers.R_med[1]), subtitle = NULL,
+   #     icon = shiny::icon("bar-chart"), color = "aqua", width = 4,
+    #    href = TRUE, fill = FALSE)
 
 #map <- leafletOutput("map1", height = 600)
 
@@ -120,10 +120,10 @@ body <- dashboardBody(
     column(
       6,
       text.box,
-      conditionalPanel("input.plot_week=='Weekly'", 
-      box(width=6, graph)),
-      conditionalPanel("input.plot_week=='Daily'", 
-      box(width=6, graph2)),
+      conditionalPanel("input.plot_week=='All historical data'", 
+      box(width=12, graph)),
+      conditionalPanel("input.plot_week=='Daily data'", 
+      box(width=12, graph2)),
       info.box
     ),
     column(6, box(width=12, map))
