@@ -43,7 +43,7 @@ if(length(location) > 1){
             forecast_1<-owmr::get_forecast(location[i], units = "metric")%>%
                         owmr_as_tibble()%>%
                         tibble::add_column(sub_region_1= location[i], .after = "dt_txt")
-           forecast<-rbind(forecast,forecast_1)
+           forecast<-merge(forecast,forecast_1, all=T)
   }
 }
 
@@ -58,6 +58,7 @@ forecast<-forecast%>%
   dplyr::mutate(
     rain_3h = rain_3h/3
   )
+#coerces NAs to zero
 forecast$rain_3h[is.na(forecast$rain_3h)] <-0
 
 #If location is not equal to the end location (i.e. it's a vector) then it will aggregate all the values

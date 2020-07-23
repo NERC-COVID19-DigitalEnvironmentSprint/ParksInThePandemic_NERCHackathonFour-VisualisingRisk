@@ -120,6 +120,9 @@ for (d in districts){
   Sys.sleep(1)
 }
 
+#Make forecasts_england relative to baseline.
+forecasts_england<-relative2baseline(forecasts_england)
+
 #write forecasts to local directory
 write.csv(forecasts_england,'data/model/forecasts_england.csv')
 
