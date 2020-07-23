@@ -34,7 +34,7 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",ra
   district_data<-subset(Data,Data$sub_region_1 == district,select = c("date","sub_region_1",Loc,"mean_colour","temp_mean","rain_mean"))
   
   #Cleans the type title to ensure that _ do not exist in the y axis and recreates the y-axis.
-  country_ylab<-paste("Number of \n visitors to parks \n (% change relative \n to start of pandemic)")
+  country_ylab<-paste("How many \n visitors to parks \n (relative to start \n of pandemic)")
   
   #Scaling
   district_data$scale_temp<-ifelse( district_data$temp_mean>0,Scalefactor_postemp,Scalefactor_negtemp)
@@ -79,6 +79,7 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",ra
     xlab("Date") +
     #y-label using the previous clean code done outside the plot.
     ylab(country_ylab)+
+    scale_y_continuous(labels = c('0.5×','Same','2×','3×','4×','5x'))+
     #Add a title for the district data this graph represents.
     ggtitle(district)
   District_graph

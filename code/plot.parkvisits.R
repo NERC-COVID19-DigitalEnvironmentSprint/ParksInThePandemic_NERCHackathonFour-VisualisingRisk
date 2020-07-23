@@ -111,7 +111,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
   #START OF THE PLOTTING FUNCTION
   
   #Cleans the type title to ensure that _ do not exist in the y axis and recreates the y-axis.
-  country_ylab<-paste("Number of \n visitors to parks \n (% change relative \n to start of pandemic)")
+  country_ylab<-paste("How many \n visitors to parks \n (relative to start \n of pandemic)")
   
   colours<-ifelse(google_metoffice_current_district_and_weekday$parks_percent_change_from_baseline>0,'darkgreen','grey')
   colours[length(colours)]<-'white'
@@ -140,6 +140,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
     xlab("Date") +
     #y-label using the previous clean code done outside the plot.
     ylab(country_ylab)+
+    scale_y_continuous(labels = c('0.5×','Same','2×','3×','4×','5x'))+
     #Add a title for the district data this graph represents.
     ggtitle(district)
   District_graph
