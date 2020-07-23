@@ -34,7 +34,7 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",ra
   district_data<-subset(Data,Data$sub_region_1 == district,select = c("date","sub_region_1",Loc,"mean_colour","temp_mean","rain_mean"))
   
   #Cleans the type title to ensure that _ do not exist in the y axis and recreates the y-axis.
-  country_ylab<-paste("Visit changes for",gsub("_"," ",type),"(%) relative to per-weekday winter baselines \n(Google Community Mobility data)")
+  country_ylab<-paste("Number of \n visitors to parks \n (% change relative \n to start of pandemic)")
   
   #Scaling
   district_data$scale_temp<-ifelse( district_data$temp_mean>0,Scalefactor_postemp,Scalefactor_negtemp)
@@ -65,7 +65,11 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",ra
     #plots a horizontal line where no percentage change occurs.
     geom_hline(yintercept=0) + 
     #Ensure the background is white, the border is black and removes grid lines.
-    theme(panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
+    theme(axis.title.x = element_text(size = 20, angle=0),
+          axis.title.y = element_text(size = 20, angle=0, vjust=0.5),
+          axis.text.x = element_text(size = 15),
+          axis.text.y = element_text(size = 15),
+          panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
           panel.grid.major = element_line(size = 0.5, linetype = 'solid',
                                           colour = "grey"), 
           panel.grid.minor = element_line(size = 0.25, linetype = 'solid',
