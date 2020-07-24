@@ -1,0 +1,14 @@
+R version 3.6.3 (2020-02-29)
+
+Attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+Other attached packages:
+ [1] randomForest_4.6-14   conflicted_1.0.4      here_0.1              osfr_0.2.8           
+ [5] remotes_2.1.1.9000    htmltools_0.5.0       htmlwidgets_1.5.1     dashboardthemes_1.1.1
+ [9] shinythemes_1.1.2     shinydashboard_0.7.1  forcats_0.5.0         stringr_1.4.0        
+[13] dplyr_1.0.0           purrr_0.3.4           readr_1.3.1           tidyr_1.1.0          
+[17] tibble_3.0.2          ggplot2_3.3.2         tidyverse_1.3.0       data.table_1.12.8    
+[21] rgdal_1.5-12          sp_1.4-2              shiny_1.5.0          
+
+
