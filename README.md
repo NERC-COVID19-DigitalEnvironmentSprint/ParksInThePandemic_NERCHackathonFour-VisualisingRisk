@@ -153,10 +153,10 @@ The map was a tricky one; after identifying how the Google regions were defined,
 
 ### Conclusions
 
-*It is feasible (but hard!) to bring together big data, environmental data and social science data for a combined visualisation and analysis of park visits
-*There are more intuitive, interactive ways to visualise the available data without showing all of the complexity
-*There is some indication that weather patterns are very important predictors of park usage compared to social factors, but this needs to be investigated further.
-*There is potential to develop a forecast of park visits based on the weather and social science data, but this needs a lot more work (e.g. refining random forest parameters and debugging/checking classes of inputs, incorporating data relating to lockdown conditions
+* It is feasible (but hard!) to bring together big data, environmental data and social science data for a combined visualisation and analysis of park visits
+* There are more intuitive, interactive ways to visualise the available data without showing all of the complexity
+* There is some indication that weather patterns are very important predictors of park usage compared to social factors, but this needs to be investigated further.
+* There is potential to develop a forecast of park visits based on the weather and social science data, but this needs a lot more work (e.g. refining random forest parameters and debugging/checking classes of inputs, incorporating data relating to lockdown conditions
 
 ### Further development
 
