@@ -53,11 +53,17 @@ shapeData <- readOGR(dsn="data/spatial", layer="googleboundaries_WGS84")
 # -------
 
 # this layout is very tidy 
-text.box <- box(title = "How busy are my local parks likely to be?", footer = 
-                  "Below you can see a graph of showing the relative busyness of parks on a day of the week (default current day of the week) in a particular district of England (default is Bedford) during the course of the pandemic. On the x axis is the date, on the y axis is the number of visitors to parks - Google data (https://www.google.com/covid19/mobility/) defined in terms of the number of visitors relative the the average (median) number of visitors on that day of the week in the winter period before the start of the pandemic (Jan 3 - Feb 6, 2020). For example, 2x as busy means parks are double as busy as the winter period, 0.5x means they are half as busy. Increases relative to the winter period are in green (e.g. 2x as busy), decreases relative to the winter period are in grey (e.g. 0.5x as busy). In white is the forecasted busyness for the next day of the week selected (by default, the forecasted busyness next today). The red line is the temperature change relative to the winter period, the blue line is the rainfall change relative to winter (Met Office data used to inform the forecast).
-                   On the right, we see the same historical data (minus the forecast) displayed on a map of all of the Google regions. Darker shades of green represent areas where parks are the most busy compared to the winter period, white regions represent areas where they are about as busy as winter, darker shades of grey represent areas where parks are the least busy compared to the winter period. This map allows you to compare the busyness of your region to others. 
-                  On the sidebar on the left, you can also select the time period to view on the right, and it will change both the map and the timeline. You can also select the region or day of the week to view on the graph (or all of the data for a region). Enjoy (parks safely)!"
-                  , width = 12)
+text.box <- tabBox(title = "How busy are my local parks likely to be?", id="tabset1", height="250px",
+                   tabPanel("Intro", "Since the start of the COVID-19 pandemic in the UK, visits to outdoor parks and spaces have become even more valuable to the public. Getting outdoors allows us to maintain good physical and mental health in otherwise isolated times. However, the lack of alternative recreational opportunities during the pandemic means that parks are becoming busier - potentially making them hotspots for COVID-19 transmission. 
+                            In order to help you manage the benefits and risks of visiting parks during the pandemic, we have created this app. It allows you to visualise how busy parks in your area have been over the course of the pandemic, and importantly, forecasts how busy parks will be over the coming days, using weather data (Met Office) and data on park visiting trends (Natural England) and access to greenspace (e.g. public parks, private gardens; Ordinance Survey)."
+                   ),
+                   tabPanel("Bar graph", 
+                   div("Below you can see a graph of showing the relative busyness of parks on a day of the week (default current day of the week) in a particular district of England (default is Bedford) during the course of the pandemic. On the x axis is the date, on the y axis is the number of visitors to parks - Google data (https://www.google.com/covid19/mobility/) defined in terms of the number of visitors relative the the average (median) number of visitors on that day of the week in the winter period before the start of the pandemic (Jan 3 – Feb 6, 2020). For example, 2x as busy means parks are double as busy as the winter period, 0.5x means they are half as busy."),
+                   div("Increases relative to the winter period are in green (e.g. 2x as busy)" , style = "color:green", 
+                   div("decreases relative to the winter period are in grey (e.g. 0.5x as busy)."), 
+                       div("In white is the forecasted busyness for the next day of the week selected (by default, the forecasted busyness next today)."),
+                   div("The red line is the temperature change relative to the winter period, the blue line is the rainfall change relative to winter (Met Office data used to inform the forecast). 
+"))))
 
 date.box <- dateRangeInput("daterange1", "Date range:", start="2020-01-01", end="2021-01-01")
 
