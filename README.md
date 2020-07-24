@@ -162,6 +162,10 @@ The map was a tricky one; after identifying how the Google regions were defined,
 
 For further development, we would like to re-check every stage of our back-end code to ensure it is performing as expected and improve the forecasting element by dedicating a lot more time to this. Nonetheless, it is exciting that there is potential for forecasting park visits to improve individual, institutional and business decision-making, when the right data becomes available (or Google provide more thorough data that can be used in this way).
 
+## Code documentation (work in progress)
+
+In the 'code' folder please see the Code documentation.docx.
+
 ### Data used
 
 All the data that goes into the app is available at our Open Science Framework data repository https://osf.io/c7kg4/. It is derived from the sources below.
