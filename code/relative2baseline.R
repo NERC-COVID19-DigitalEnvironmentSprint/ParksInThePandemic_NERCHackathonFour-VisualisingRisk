@@ -3,21 +3,20 @@
 #where 'metoffice_england.csv' is the output of the match.metoffice function (met office data matched to Google and with columns renamed in line with OpenWeather forecast format)
 relative2baseline<-function(data){
   
-  data = forecast
-  
+  #data = forecasts_england
   #Find the non-baseline values  -----------------------------------------
   
   nonbaselineperiod<-subset(data,data$date >= "2020-02-15")
   
   #Read in the metoffice baseline value database.
-  baselineweather<-readRDS("~/GitHub/parksinthepandemic/code/input_data/metofficebaseline_weekday.RDS")
+  baselineweather<-readRDS("code/input_data/metofficebaseline_weekday.RDS")
   
   # For loop PREPARATION ----------------------------------------------------
   #make a vector of weekdays
   wdays<-c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
   
   #make vector of districts
-  districts<-readRDS("~/GitHub/parksinthepandemic/code/input_data/google_englanddistricts.RDS")
+  districts<-readRDS("code/input_data/google_englanddistricts.RDS")
   
   #make a vector of the column names
   baseline_name<-c("temp_max","temp_mean","temp_min","rain_mean")
@@ -43,17 +42,17 @@ relative2baseline<-function(data){
       for (c in baseline_name){
         
         #for weekday w and district w, get non-baseline median values of meteorological measurement c for
-        nonbaseline<-nonbaselineperiod[nonbaselineperiod$weekdays==w & nonbaselineperiod$sub_region_1==d,c]
+        nonbaseline<-nonbaselineperiod[nonbaselineperiod$weekday==w & nonbaselineperiod$sub_region_1==d,c]
         
         #for weekday w and district w, get baseline median values of meteorological measurement c
-        baseline<-baselineweather[baselineweather$weekdays==w & baselineweather$sub_region_1==d,c]
+        baseline<-baselineweather[baselineweather$weekday==w & baselineweather$sub_region_1==d,c]
         
         #subtract the baseline values of meteorological measurement c for weekday w and district w
         diff_from_baseline<-nonbaseline-baseline
         
         #object is the 'nonbaseline rows in the new df (rel2baseline)
         #function is to divide the difference from baseline by the baseline to get relative difference the times by 100 to get in percent
-        rel2baseline[nonbaselineperiod$weekdays==w & nonbaselineperiod$sub_region_1==d,c]<-diff_from_baseline/baseline*100
+        rel2baseline[nonbaselineperiod$weekday==w & nonbaselineperiod$sub_region_1==d,c]<-diff_from_baseline/baseline*100
       
     }
   }

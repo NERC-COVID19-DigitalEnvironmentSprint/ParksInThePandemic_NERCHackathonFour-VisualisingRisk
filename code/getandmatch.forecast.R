@@ -1,5 +1,4 @@
-getandmatch.forecast<-function(location = "Bedford", apikey=readRDS("./../../APIkey.RDS")){
-  
+getandmatch.forecast<-function(location = "Bedford", apikey=readRDS("./../APIkey.RDS")){
 # Load packages ----------------------------------------------------------
 ##Calculate baseline
 
@@ -28,7 +27,8 @@ location_1<-ifelse(location == "Greater Manchester", location <- c("Bolton","Bur
                                       ifelse(location == "South Yorkshire", location <- c("Barnsley","Doncaster","Rotherham","Sheffield"),
                                              ifelse(location == "West Midlands", location <- c("Birmingham","Coventry","Dudley","Sandwell","Solihull","Telford and Wrekin","Walsall","Wolverhampton"),
                                                     ifelse(location == "Windsor and Maidenhead", location <- c("Windsor","Maidenhead"),
-                   location)))))))
+                                                           ifelse(location == 'Bristol City', location <- c('Bristol'),
+                   location))))))))
 
 #Get's the forecast and creates a tibble for the first location in the location vector.
 forecast <-owmr::get_forecast(location[1], units = "metric")%>%
@@ -43,7 +43,7 @@ if(length(location) > 1){
             forecast_1<-owmr::get_forecast(location[i], units = "metric")%>%
                         owmr_as_tibble()%>%
                         tibble::add_column(sub_region_1= location[i], .after = "dt_txt")
-           forecast<-rbind(forecast,forecast_1)
+           forecast<-merge(forecast,forecast_1, all=T)
   }
 }
 
@@ -58,6 +58,7 @@ forecast<-forecast%>%
   dplyr::mutate(
     rain_3h = rain_3h/3
   )
+#coerces NAs to zero
 forecast$rain_3h[is.na(forecast$rain_3h)] <-0
 
 #If location is not equal to the end location (i.e. it's a vector) then it will aggregate all the values
@@ -80,17 +81,22 @@ forecast_rain_mean<-aggregate(forecast_2$rain_3h, list (forecast_2$date), FUN = 
 #This combines the above vectors created and adds weekdays for each value, date, and creates a column for sub_region_1 based from the first definition.
 forecast_2<-cbind.data.frame(
                   "date" = forecast_temp_mean$Group.1,
+                  'weekday' = weekdays(forecast_temp_mean$Group.1),
                   "temp_mean" = forecast_temp_mean$x,
                   "temp_max" = forecast_temp_max$x,
                   "temp_min" =  forecast_temp_min$x,
                   "rain_mean" = forecast_rain_mean$x)
 
-rownames(forecast_2)<-weekdays(forecast_temp_mean$Group.1)  
-
 #change NaNs to NAs in dataframe
 forecast_2[do.call(cbind, lapply(forecast_2,is.nan))]<-NA
 
-forecast_2
-                  
+#Reads in menedata
+mene_england = read.csv("code/input_data/testdata/mene_england.csv")
+#Reads in garden_access data
+garden_access = read.csv("code/input_data/testdata/garden_access.csv")
+#Removes one column that is not required for modelling from garden_access.
+garden_access<-garden_access[-3]
+#Combines the appropriate location information from both datasets to the forecast datatset and removes another column from garden_access.
+forecast_2<-cbind.data.frame(forecast_2,subset(garden_access[-4],google_district == end_location)[,-1],"annual_visits_per_capita_per_km2_greenspace_1km_radius" = subset(mene_england,sub_region_1 == end_location)[,4])
 }
 
