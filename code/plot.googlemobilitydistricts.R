@@ -58,8 +58,8 @@ plot.googlemobilitydistricts<-function(google,type="parks",district="Bedford",ra
   District_graph<-ggplot2::ggplot() +
     #Plots the bar graphs, with a black outing and dark orange fill. 
     geom_col(district_data, mapping = aes(x = as.Date(date), y = parks_percent_change_from_baseline),position = position_dodge(width=0.2), size=0.25,colour = "black" , fill =district_data$mean_colour) +
-    geom_line(district_data, mapping = aes(x = as.Date(date), y = temp_mean),color = "red", linetype = "dashed")+
-    geom_line(district_data, mapping = aes(x = as.Date(date), y = rain_mean),color = "blue", linetype = "dashed")+
+    geom_line(district_data, mapping = aes(x = as.Date(date), y = temp_mean),color = "#D55E00", linetype = "dashed")+
+    geom_line(district_data, mapping = aes(x = as.Date(date), y = rain_mean),color = "#0072B2", linetype = "dashed")+
     #Limits the size of the graph.
     coord_cartesian(ylim=c(-100,400)) +
     #plots a horizontal line where no percentage change occurs.
