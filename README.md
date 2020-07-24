@@ -5,7 +5,7 @@
 <img src="https://drmattg.github.io/PiP_GH_pages/posts/01_Introduction/Hex_Logo_4th_mockup-01.png" width="40%">
 </p>
 
-*Logo by Thomas Gwynfor Sanford (@SandyGwyn on Twitter - follow him)! He's a talented graphic designer and film maker!*
+*Logo by Thomas Gwynfor Sanford (@SandyGwyn on Twitter - follow him!). He's a talented graphic designer and film maker!*
 
 ### Summary
 
@@ -17,7 +17,11 @@ We have created an interactive app (https://mattlloydjones.shinyapps.io/parksint
 * Build a random forest regression model to understand how weather, park usage and access to greenspace is related to park busyness (as defined by Google)
 * Use OpenWeather forecast data to forecast how busy parks will be in the future (next few days) - based on the weather and social science data, in an interactive app.
 
-Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on our Rationale, how we meet the SMART criteria, the team and the app.
+**Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on our Rationale, how we meet the SMART criteria, the team and the app.**
+
+**Please also our Youtube video (https://youtu.be/V4fkM7vKO0E) showing how the app works:** 
+
+[![Explainer](http://img.youtube.com/vi/V4fkM7vKO0E/0.jpg)](http://www.youtube.com/watch?v=V4fkM7vKO0E "Explainer")
 
 ### How to run the app
 
@@ -26,9 +30,10 @@ Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on ou
 2. Interact with the dropdowns to select the time period, district, whether you would like to view all of the historical data with no prediction or whether you would like to view each weekday with a prediction of the next weekday. **NOTE: It WILL crash the Shiny servers when you do this a few times - this will be fixed in due course - for now, just reload the page in the bottom left when it crashes, and it will load the data you want! Sorry!**
 
 #### Instructions for locally running the app (harder but more stable)
-1. Clone the repository - Clone this repository to your local computer.
-2. Run ‘downloadOSFdata.R’ in the cloned repo directory.
-3. Run ‘app.R’ (set working directory to source file location first)
+1. Download R & RStudio and install the R packages (see Dependencies below) needed to run the app using install.packages().
+2. Clone the repository - clone/download all the files in this repository to your local computer.
+3. Open RStudio, set working directory to source file location and run ‘downloadOSFdata.R’ in the cloned repo directory.
+4. Open RStudio, set working directory to source file location and run ‘app.R’ (set working directory to source file location first)
 
 **Dependencies**:
 
@@ -127,7 +132,7 @@ After building this model (**create.model.R**), we use it to predict how busy pa
 
 The variable importance plot of our random forest model (above) indicates that temperature was the most important predictor of Google park visit trends, followed closely by rain. Day of the week was also important - probably indicating that whether it’s a weekend effects park visits a lot! The social science data had a subtler effect on model estimates, but were nonetheless important
 
-***Our approach here is VERY preliminary, there will be bugs due to our time constraints and it needs a LOT of refinement - our main goal was to produce a very preliminary forecast that we could visualise in the app***
+***Our approach here is very preliminary, there will be bugs due to our time constraints and it needs a lot of refinement - our main goal was to produce a very preliminary forecast that we could visualise in the app***
 
 ### Our Approach: Front-end
 
@@ -154,7 +159,8 @@ The map was a tricky one; after identifying how the Google regions were defined,
 ### Conclusions
 
 * It is feasible (but hard!) to bring together big data, environmental data and social science data for a combined visualisation and analysis of park visits
-* There are more intuitive, interactive ways to visualise the available data without showing all of the complexity
+* Our app shows that there are more intuitive, interactive ways to visualise the available data without showing all of the complexity!
+* Bedford's parks seem to be a lot less busy in the pandemic relative to other regions, and forecasts are potentially more accurate for Bedford than other regions (https://youtu.be/V4fkM7vKO0E)
 * There is some indication that weather patterns are very important predictors of park usage compared to social factors, but this needs to be investigated further.
 * There is potential to develop a forecast of park visits based on the weather and social science data, but this needs a lot more work (e.g. refining random forest parameters and debugging/checking classes of inputs, incorporating data relating to lockdown conditions
 
