@@ -1,4 +1,4 @@
-## Parkcast: a web app for forecasting the busyness of parks during the pandemic
+## Parkcast [beta]: a web app for forecasting the busyness of parks during the pandemic
 ### COVID-19 Hackathon 4: Visualising risk (Team: parksinthepandemic)
 
 <p align="center">
@@ -29,6 +29,40 @@ Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on ou
 1. Clone the repository - Clone this repository to your local computer.
 2. Run ‘downloadOSFdata.R’ in the cloned repo directory.
 3. Run ‘app.R’ (set working directory to source file location first)
+
+**Dependencies**:
+
+stats     
+graphics  
+grDevices utils     
+datasets  
+methods   
+base     
+
+randomForest_4.6-14   
+conflicted_1.0.4      
+here_0.1              
+osfr_0.2.8           
+remotes_2.1.1.9000   
+htmltools_0.5.0       
+htmlwidgets_1.5.1     
+dashboardthemes_1.1.1
+shinythemes_1.1.2     
+shinydashboard_0.7.1  
+forcats_0.5.0         
+stringr_1.4.0        
+dplyr_1.0.0           
+purrr_0.3.4           
+readr_1.3.1           
+tidyr_1.1.0          
+tibble_3.0.2          
+ggplot2_3.3.2         
+tidyverse_1.3.0       
+data.table_1.12.8    
+rgdal_1.5-12          
+sp_1.4-2              
+shiny_1.5.0*         
+
 
 ### Our Approach: Back-end
 
