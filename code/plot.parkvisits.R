@@ -140,7 +140,7 @@ plot.parkvisits<-function(googleandmetoffice, model, forecast, district="Bedford
     xlab("Date") +
     #y-label using the previous clean code done outside the plot.
     ylab(country_ylab)+
-    scale_y_continuous(labels = c('0.5×','Same','2×','3×','4×','5x'))+
+    scale_y_continuous(labels = c('0','Same','2x','3x','4x','5x'))+
     #Add a title for the district data this graph represents.
     ggtitle(district)
   District_graph
