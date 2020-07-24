@@ -17,7 +17,11 @@ We have created an interactive app (https://mattlloydjones.shinyapps.io/parksint
 * Build a random forest regression model to understand how weather, park usage and access to greenspace is related to park busyness (as defined by Google)
 * Use OpenWeather forecast data to forecast how busy parks will be in the future (next few days) - based on the weather and social science data, in an interactive app.
 
-Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on our Rationale, how we meet the SMART criteria, the team and the app.
+**Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on our Rationale, how we meet the SMART criteria, the team and the app.**
+
+**Please also our Youtube video (https://youtu.be/V4fkM7vKO0E) showing how the app works:** 
+
+[![Explainer](http://img.youtube.com/vi/V4fkM7vKO0E/0.jpg)](http://www.youtube.com/watch?v=V4fkM7vKO0E "Explainer")
 
 ### How to run the app
 
@@ -26,9 +30,10 @@ Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on ou
 2. Interact with the dropdowns to select the time period, district, whether you would like to view all of the historical data with no prediction or whether you would like to view each weekday with a prediction of the next weekday. **NOTE: It WILL crash the Shiny servers when you do this a few times - this will be fixed in due course - for now, just reload the page in the bottom left when it crashes, and it will load the data you want! Sorry!**
 
 #### Instructions for locally running the app (harder but more stable)
-1. Clone the repository - Clone this repository to your local computer.
-2. Run ‘downloadOSFdata.R’ in the cloned repo directory.
-3. Run ‘app.R’ (set working directory to source file location first)
+1. Download R & RStudio and install the R packages (see Dependencies below) needed to run the app using install.packages().
+2. Clone the repository - clone/download all the files in this repository to your local computer.
+3. Open RStudio, set working directory to source file location and run ‘downloadOSFdata.R’ in the cloned repo directory.
+4. Open RStudio, set working directory to source file location and run ‘app.R’ (set working directory to source file location first)
 
 **Dependencies**:
 
