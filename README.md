@@ -28,7 +28,7 @@ Please see our website https://drmattg.github.io/PiP_GH_pages/ for details on ou
 2. Run ‘downloadOSFdata.R’ in the cloned repo directory.
 3. Run ‘app.R’ (set working directory to source file location first)
 
-### Our Approach
+### Our Approach: Back-end
 
 Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 1. Matching Met Office data to Google data
@@ -49,7 +49,8 @@ Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 #### 2. Matching Government (Natural England and OS Greenspace data) to Google data
 
 <p align="center">
-<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/step2.png">
+<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/
+          .png">
 </p>
 
 * In order to control for the the density of gardens and parks in each Google district, we read in Ordnance Survey (OS) data that had been pre-processed by the Office for National Statistics (ONS)  in match.OSgreenspace2google.R (lines 1-30).
@@ -63,7 +64,7 @@ Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 #### 3. Building a model and forecasting park busyness from it
 
 <p align="center">
-<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/varimpplot.png">
+<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/step3.png">
 </p>
 
 Finally, after matching all of the temporal (Met Office weather data) and single measure data (Natural England and OS Greenspace data) to the Google data, we used the combined dataset to model how the weather and social science data predicts the historical Google park busyness data (create.model.R). We deploy a random forest regression model for this, including the explanatory variables/predictors (name in the model given in brackets):
@@ -81,16 +82,40 @@ Finally, after matching all of the temporal (Met Office weather data) and single
 11. **The number of recreational visits to green spaces within the Google district taken by the adult population of England (aged 16+) annually (averaged across 10 years of data) divided by the 16+ population of the Google district and the total size of all publicly accessible greenspace within 1000m of a typical address within the Google district (annual_visits_per_capita_per_km2_greenspace_1km_radius)** This is important because it provides an estimate of the number of visits to greenspaces in a region relative to the population size and the amount of available greenspace. (Natural England Monitor of Engagement with the Natural Environment data)
 12. **The average number of public green spaces within 1km of a typical address within the Google district i.e. averaged across all addresses within the district (avg_count_public_green_1000m_radius_new)** This is important because it provides an estimate of the average number of accessible parks for any given household in a region; more choice could mean more visits, or conversely more indecision. (Office for National Statistics/Ordinance Survey data)
 
-#####Variable importance plot from random forest
+#### Variable Importance Plot of Random Forest Model
 
-
-
+<p align="center">
+<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/varimplot.png">
+</p>
 
 After building this model, we use it to predict how busy parks will be over the coming days, based on these variables. The Natural England and OS Greenspace data for each district remain constant for this prediction/forecast, whilst the weather data is brought in from 6-day OpenWeather forecasts. A prediction of park busyness (% change from winter baseline) is then made and displayed in our app as a white bar in the bar graph. The bar graph is shown per weekday because Google baselines are generated per-weekday, and so a plot per weekday represents a true time series.
-The variable importance plot of our random forest model indicates that temperature was the most important predictor of Google park visit trends, followed closely by rain. Day of the week was also important - probably indicating that whether it’s a weekend effects park visits a lot! The social science data had a subtler effect on model estimates, but were nonetheless important
 
+The variable importance plot of our random forest model (above) indicates that temperature was the most important predictor of Google park visit trends, followed closely by rain. Day of the week was also important - probably indicating that whether it’s a weekend effects park visits a lot! The social science data had a subtler effect on model estimates, but were nonetheless important
+
+### Our Approach: Front-end
+
+The front-end is an RShiny app (app.R)  to display the historical park visit data alongside the predictions of park usage for the coming days. This app has two main components:
+
+* A bar graph of park busyness over time, relative to the winter baseline period. Less busy than winter is displayed in grey, more busy than winter is displayed in green. Users can interact with the graphs in the following ways:
+
+1. View the whole historical dataset for every day where there is Google data available, with no forecast
+2. Select the time period to view the data on the whole historical dataset on the graph and on the map, using the calendar on the sidebar.
+3. View the historical datasets for each weekday (a true time series), with prediction for the next weekday displayed as a white bar.
+Add a scaled percentage change plot for temperature and rainfall to both the historical dataset for each weekday and the whole historical dataset.
+
+
+* A map with the boundaries of the Google districts and the busyness of parks (less busy than winter is displayed in darker shades of grey, more busy than winter is displayed in darker shades of green). Users can interact with this map by:
+
+1. Selecting the time period to view the mapped-out data on the whole historical dataset (forecasts are not yet displayed on map), using the calendar on the sidebar.
+2. Selecting a region on the sidebar, which is then highlighted with a purple border on the map.
+
+The bar graph was produced by re-visualising the Google data in the more appropriate format of a bar-graph with negative and positive colours to make visualising how busy it is relative to winter more intuitive. In addition, we changed percentage change into the form of ‘how many times as busy is it’, as this is more intuitive. The function plot.googlemobilitydistricts.R does this for the whole time series, the function plot.parkvisits.R does this on a per-weekday basis that can be interacted with in the app. 
+
+The map was a tricky one; after identifying how the Google regions were defined,  the challenge was to match these to shapefiles from Ordinance Survey open boundary line data (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) in the script match.OSopenBoundary2google.R. To our knowledge, this has not been done before and this is the first map of the Google regions, which we make freely available in the ‘spatial’ folder of our Open Science Framework data repository (https://osf.io/c7kg4/) - which includes all the other data that goes into the app.
 
 ### Data used
+
+All the data that goes into the app is available at our Open Science Framework data repository https://osf.io/c7kg4/. It is derived from the sources below.
 
 The primary data on park visits displayed in the app is Google data from the Google Community Mobility Reports - Google LLC Google COVID-19 Community Mobility Reports. https://www.google.com/covid19/mobility/
 
