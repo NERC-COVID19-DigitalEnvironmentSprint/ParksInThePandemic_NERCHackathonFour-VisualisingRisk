@@ -86,8 +86,13 @@ map <- plotOutput("map1", height=700*1.5, width=400*1.5)
 # UI.R code
 # ---------
 
-header <- dashboardHeader(title="Parkcast", titleWidth = 250)
-
+header <- dashboardHeader(title="Parkcast", titleWidth = 250,
+                          tags$li(a(href = 'https://drmattg.github.io/PiP_GH_pages/',
+                                    img(src = 'Hex_Logo_4th_mockup-01.png',
+                                        title = "PArkcast website", height = "60px"),
+                                    style = "padding-top:12px; padding-bottom:12px;"),
+                                  class = "dropdown"))
+                          
 
 sidebar <- dashboardSidebar(date.box,place.box, day.box,
                             #baseline.check, 
@@ -99,6 +104,8 @@ sidebar <- dashboardSidebar(date.box,place.box, day.box,
                             )
 
 body <- dashboardBody(
+  
+  #tags$img(src = "Hex_Logo_4th_mockup-01.png",height="10%", width="10%", align="right"),
   
   tags$head(tags$style(HTML('
                                 /* main sidebar */
