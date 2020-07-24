@@ -1,6 +1,10 @@
 ## Parkcast: a web app for forecasting the busyness of parks during the pandemic
 ### COVID-19 Hackathon 4: Visualising risk (Team: parksinthepandemic)
 
+<p align="center">
+<img src="https://drmattg.github.io/PiP_GH_pages/posts/01_Introduction/Hex_Logo_4th_mockup-01.png" width="40%">
+</p>
+
 ### Summary
 
 With the onset of COVID-19 in the UK, the importance of recreational park use was brought into sharp focus as one of very few recreational opportunities that was permissible during the initial lockdown period. On the one hand, this potentially presents opportunities for maintaining good health in otherwise isolated times. On the other, a lack of alternative recreational opportunities could mean that parks become busier hotspots for recreation and therefore present risks to the transmission of COVID-19. 
