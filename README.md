@@ -5,6 +5,8 @@
 <img src="https://drmattg.github.io/PiP_GH_pages/posts/01_Introduction/Hex_Logo_4th_mockup-01.png" width="40%">
 </p>
 
+*Logo by Thomas Gwynfor Sanford (@SandyGwyn on Twitter - follow him)! He's a talented graphic designer and film maker!*
+
 ### Summary
 
 With the onset of COVID-19 in the UK, the importance of recreational park use was brought into sharp focus as one of very few recreational opportunities that was permissible during the initial lockdown period. On the one hand, this potentially presents opportunities for maintaining good health in otherwise isolated times. On the other, a lack of alternative recreational opportunities could mean that parks become busier hotspots for recreation and therefore present risks to the transmission of COVID-19. 
@@ -91,6 +93,8 @@ After building this model, we use it to predict how busy parks will be over the 
 
 The variable importance plot of our random forest model (above) indicates that temperature was the most important predictor of Google park visit trends, followed closely by rain. Day of the week was also important - probably indicating that whether it’s a weekend effects park visits a lot! The social science data had a subtler effect on model estimates, but were nonetheless important
 
+***Our approach here is VERY preliminary, there will be bugs due to our time constraints and it needs a LOT of refinement - our main goal was to produce a very preliminary forecast that we could visualise in the app***
+
 ### Our Approach: Front-end
 
 The front-end is an RShiny app (app.R)  to display the historical park visit data alongside the predictions of park usage for the coming days. This app has two main components:
@@ -111,6 +115,18 @@ Add a scaled percentage change plot for temperature and rainfall to both the his
 The bar graph was produced by re-visualising the Google data in the more appropriate format of a bar-graph with negative and positive colours to make visualising how busy it is relative to winter more intuitive. In addition, we changed percentage change into the form of ‘how many times as busy is it’, as this is more intuitive. The function plot.googlemobilitydistricts.R does this for the whole time series, the function plot.parkvisits.R does this on a per-weekday basis that can be interacted with in the app. 
 
 The map was a tricky one; after identifying how the Google regions were defined,  the challenge was to match these to shapefiles from Ordinance Survey open boundary line data (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) in the script match.OSopenBoundary2google.R. To our knowledge, this has not been done before and this is the first map of the Google regions, which we make freely available in the ‘spatial’ folder of our Open Science Framework data repository (https://osf.io/c7kg4/) - which includes all the other data that goes into the app.
+
+
+### Conclusions
+
+*It is feasible (but hard!) to bring together big data, environmental data and social science data for a combined visualisation and analysis of park visits
+*There are more intuitive, interactive ways to visualise the available data without showing all of the complexity
+*There is some indication that weather patterns are very important predictors of park usage compared to social factors, but this needs to be investigated further.
+*There is potential to develop a forecast of park visits based on the weather and social science data, but this needs a lot more work (e.g. refining random forest parameters and debugging/checking classes of inputs, incorporating data relating to lockdown conditions
+
+### Further development
+
+For further development, we would like to re-check every stage of our back-end code to ensure it is performing as expected and improve the forecasting element by dedicating a lot more time to this. Nonetheless, it is exciting that there is potential for forecasting park visits to improve individual, institutional and business decision-making, when the right data becomes available (or Google provide more thorough data that can be used in this way).
 
 ### Data used
 
