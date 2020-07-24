@@ -172,7 +172,7 @@ server <- function(input, output) {
     mycolourscheme <- mycolours[findInterval(google_shp_merge()$mn, vec = mybreaks)]
     plot(google_shp_merge(), xlim=c(-5.5,1.5), ylim=c(50,54.1), col = mycolourscheme)
     plot(shapeData2(), xlim=c(-5.5,1.5), ylim=c(50,54.1), add=TRUE, lwd=2, border='purple')
-    
+    legend("bottomright", legend = levels(cut(google_shp_merge()$mn, mybreaks)), fill = mycolours)
   })
 
   #plot
