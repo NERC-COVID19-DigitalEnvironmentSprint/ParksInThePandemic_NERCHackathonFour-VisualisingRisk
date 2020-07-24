@@ -77,10 +77,10 @@ Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 <img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/step1.png">
 </p>
 
-* Our first challenge was to create R code for reading in the open datasets made available by Google and the Met Office as part of their COVID-19 response. The Google data for England is downloaded and extracted from the global CSV file available at https://www.google.com/covid19/mobility/ through the function read.googlemobility.R. The Met Office data for England is downloaded from the UK COVID reporting region weather data available at (https://metdatasa.blob.core.windows.net/covid19-response/index.html) through the function read.metofficecovid.R. 
-*  The Google and Met Office data are slightly different. The Met Office data on daily weather conditions are broken down by COVID reporting region, whilst Google uses its own definitions of a region/district. We had to figure out how Google defined it’s regions (and produce a map of each region) and aggregate the weather from each of the COVID reporting regions (typically smaller than the Google regions) to each of the Google regions (match.metoffice.R).
+* Our first challenge was to create R code for reading in the open datasets made available by Google and the Met Office as part of their COVID-19 response. The Google data for England is downloaded and extracted from the global CSV file available at https://www.google.com/covid19/mobility/ through the function read.googlemobility.R. The Met Office data for England is downloaded from the UK COVID reporting region weather data available at (https://metdatasa.blob.core.windows.net/covid19-response/index.html) through the function **read.metofficecovid.R**. 
+*  The Google and Met Office data are slightly different. The Met Office data on daily weather conditions are broken down by COVID reporting region, whilst Google uses its own definitions of a region/district. We had to figure out how Google defined it’s regions (and produce a map of each region) and aggregate the weather from each of the COVID reporting regions (typically smaller than the Google regions) to each of the Google regions (**match.metoffice.R**).
 *  Google’s data is in the form % busyness relative to how busy parks were on the same day of the week (Mon-Sunday) in the 5‑week winter period Jan 3 – Feb 6, 2020. Positive percentages mean that parks are more busy than the average (median value) during this period, negative percentages mean they are less busy (e.g. + 100% = 2 x as busy, 0% = as busy as winter, -100% 0 visitors). The Met Office data is in absolute values.
-* Thus, we had to write some code to make the Met Office data relative to the weather in the Google baseline period; so that, for example, the temperature on a particular day of the week is represented as % increase relative to the average temperature on that day of the week in the winter baseline period. Our function relative2baseline.R does this.
+* Thus, we had to write some code to make the Met Office data relative to the weather in the Google baseline period; so that, for example, the temperature on a particular day of the week is represented as % increase relative to the average temperature on that day of the week in the winter baseline period. Our function **relative2baseline.R** does this.
 
 #### 2. Matching Government (Natural England and OS Greenspace data) to Google data
 
@@ -88,11 +88,11 @@ Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 <img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/step2.png">
 </p>
 
-* In order to control for the the density of gardens and parks in each Google district, we read in Ordnance Survey (OS) data that had been pre-processed by the Office for National Statistics (ONS)  in match.OSgreenspace2google.R (lines 1-30).
+* In order to control for the the density of gardens and parks in each Google district, we read in Ordnance Survey (OS) data that had been pre-processed by the Office for National Statistics (ONS)  in **match.OSgreenspace2google.R** (lines 1-30).
 * We then tidied this data (lines 31-55) and merged data for parks and gardens together (lines 56-86). These data were only available at lower-tier local authority level so in order to aggregate them at the level of the Google district, we first read in an openly available lower-tier local authority to upper-tier local authority lookup table (lines 87-104), merged this with the OS data (lines 105-118), before manually matching the upper-tier local authorities to ogle districts (lines 119-154).
 * Lastly, the OS data was aggregated at the Google district level (lines 155-186) using sums for frequencies of gardens in a Google district and areal coverage by gardens in a Google district and weighted means (i.e. weighted by numbers of addresses in a Google district) for all other metrics (average size of gardens in a district; average distance to nearest public greenspace, average count of public greenspace within 1000m of a typical address; and average combined size of all public greenspace within 1000m of a typical address).
-* Our next task was to obtain ten years of survey data from Natural England’s Monitor of Engagement with the Natural Environment (MENE) survey. The first section of getandmatch.mene.R (lines 1-31) reads in MENE’s visit-based data file, where each row corresponds to a visit. Using the grossing-up weights provided by Natural England, we aggregated the data by upper-tier local authority and produced an estimated annual (i.e. divided by 10) number of visits to green spaces taken by the adult population of England (aged 16+) to each upper-tier local authority.
-* Again we manually matched upper-tier local authorities to Google districts in getandmatch.mene.R (lines 32-63).
+* Our next task was to obtain ten years of survey data from Natural England’s Monitor of Engagement with the Natural Environment (MENE) survey. The first section of **getandmatch.mene.R** (lines 1-31) reads in MENE’s visit-based data file, where each row corresponds to a visit. Using the grossing-up weights provided by Natural England, we aggregated the data by upper-tier local authority and produced an estimated annual (i.e. divided by 10) number of visits to green spaces taken by the adult population of England (aged 16+) to each upper-tier local authority.
+* Again we manually matched upper-tier local authorities to Google districts in **getandmatch.mene.R** (lines 32-63).
 * Of course, districts with higher populations confer higher numbers of visits, so we decided to normalise visit estimates by the population of each google district by reading in corresponding respondent-based MENE data from Natural England (lines 64-69), estimating the adult population of each upper-tier local authority (lines 70-78), and aggregating at the Google district (lines 79-116).
 * As well as these per capita estimates, we further made provision for the normalisation of visit estimates per km2 of greenspace area within the Google district by reading in the OS data again (lines 117-132; see 2.3), merging with the MENE data (lines 133-136), and finally creating variables which represent: (a) raw visit estimates, (b) visit estimates relative to the population of each Google district, (c) visit estimates per km2 greenspace in the 1km surrounding a typical address in the Google district, and (d) visit estimates relative to both population (c) and greenspace access (d) (lines 137-143).
 
@@ -102,7 +102,7 @@ Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 <img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/step3.png">
 </p>
 
-Finally, after matching all of the temporal (Met Office weather data) and single measure data (Natural England and OS Greenspace data) to the Google data, we used the combined dataset to model how the weather and social science data predicts the historical Google park busyness data (create.model.R). We deploy a random forest regression model for this, including the explanatory variables/predictors (name in the model given in brackets):
+Finally, after matching all of the temporal (Met Office weather data) and single measure data (Natural England and OS Greenspace data) to the Google data, we used the combined dataset to model how the weather and social science data predicts the historical Google park busyness data (**create.model.R**). We deploy a random forest regression model for this, including the explanatory variables/predictors (name in the model given in brackets):
 
 1. **Mean temperature on the day (temp_mean)**: This is important because people are more likely to visit parks when it’s hotter! (Met Office data)
 2. **Maximum temperature on the day (temp_max)**: This is important because people are more likely to visit parks when it’s hotter! (Met Office data)
@@ -123,7 +123,7 @@ Finally, after matching all of the temporal (Met Office weather data) and single
 <img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/varimplot.png">
 </p>
 
-After building this model, we use it to predict how busy parks will be over the coming days, based on these variables. The Natural England and OS Greenspace data for each district remain constant for this prediction/forecast, whilst the weather data is brought in from 6-day OpenWeather forecasts. A prediction of park busyness (% change from winter baseline) is then made and displayed in our app as a white bar in the bar graph. The bar graph is shown per weekday because Google baselines are generated per-weekday, and so a plot per weekday represents a true time series.
+After building this model (**create.model.R**), we use it to predict how busy parks will be over the coming days, based on these variables. The Natural England and OS Greenspace data for each district remain constant for this prediction/forecast, whilst the weather data is brought in from 6-day OpenWeather forecasts. A prediction of park busyness (% change from winter baseline) is then made and displayed in our app as a white bar in the bar graph. The bar graph is shown per weekday because Google baselines are generated per-weekday, and so a plot per weekday represents a true time series.
 
 The variable importance plot of our random forest model (above) indicates that temperature was the most important predictor of Google park visit trends, followed closely by rain. Day of the week was also important - probably indicating that whether it’s a weekend effects park visits a lot! The social science data had a subtler effect on model estimates, but were nonetheless important
 
@@ -131,7 +131,7 @@ The variable importance plot of our random forest model (above) indicates that t
 
 ### Our Approach: Front-end
 
-The front-end is an RShiny app (app.R)  to display the historical park visit data alongside the predictions of park usage for the coming days. This app has two main components:
+The front-end is an RShiny app (**app.R**)  to display the historical park visit data alongside the predictions of park usage for the coming days. This app has two main components:
 
 * A bar graph of park busyness over time, relative to the winter baseline period. Less busy than winter is displayed in grey, more busy than winter is displayed in green. Users can interact with the graphs in the following ways:
 
@@ -146,9 +146,9 @@ Add a scaled percentage change plot for temperature and rainfall to both the his
 1. Selecting the time period to view the mapped-out data on the whole historical dataset (forecasts are not yet displayed on map), using the calendar on the sidebar.
 2. Selecting a region on the sidebar, which is then highlighted with a purple border on the map.
 
-The bar graph was produced by re-visualising the Google data in the more appropriate format of a bar-graph with negative and positive colours to make visualising how busy it is relative to winter more intuitive. In addition, we changed percentage change into the form of ‘how many times as busy is it’, as this is more intuitive. The function plot.googlemobilitydistricts.R does this for the whole time series, the function plot.parkvisits.R does this on a per-weekday basis that can be interacted with in the app. 
+The bar graph was produced by re-visualising the Google data in the more appropriate format of a bar-graph with negative and positive colours to make visualising how busy it is relative to winter more intuitive. In addition, we changed percentage change into the form of ‘how many times as busy is it’, as this is more intuitive. The function plot.googlemobilitydistricts.R does this for the whole time series, the function **plot.parkvisits.R* does this on a per-weekday basis that can be interacted with in the app. 
 
-The map was a tricky one; after identifying how the Google regions were defined,  the challenge was to match these to shapefiles from Ordinance Survey open boundary line data (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) in the script match.OSopenBoundary2google.R. To our knowledge, this has not been done before and this is the first map of the Google regions, which we make freely available in the ‘spatial’ folder of our Open Science Framework data repository (https://osf.io/c7kg4/) - which includes all the other data that goes into the app.
+The map was a tricky one; after identifying how the Google regions were defined,  the challenge was to match these to shapefiles from Ordinance Survey open boundary line data (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline) in the script **match.OSopenBoundary2google.R**. To our knowledge, this has not been done before and this is the first map of the Google regions, which we make freely available in the ‘spatial’ folder of our Open Science Framework data repository (https://osf.io/c7kg4/) - which includes all the other data that goes into the app.
 
 
 ### Conclusions
@@ -164,7 +164,7 @@ For further development, we would like to re-check every stage of our back-end c
 
 ## Code documentation (work in progress)
 
-In the 'code' folder please see the Code documentation.docx.
+For detailed code documentation (work in progress), please see Code documentation.docx in the 'code' folder.
 
 ### Data used
 
@@ -181,3 +181,13 @@ Natural England data used to inform the forecast model is the ‘Visits’ data 
 Greenspace data used to inform the forecast model contains OS data © Crown copyright and database right 2020 Contains Royal Mail data © Royal Mail copyright and Database right 2020 Contains National Statistics data © Crown copyright and database right 2020. This data is released under the open government license version 3.0. Contains OS, Royal Mail and National Statistics data licensed under the Open Government Licence v3.0TM. For licence details details see: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/Available at https://www.ons.gov.uk/economy/environmentalaccounts/datasets/accesstogardensandpublicgreenspaceingreatbritain
 
 Weather forecast data is from the OpenWeather 5-day/3 hour forecast weather API (https://openweathermap.org/api) obtained under a ‘Free’ pricing plan.
+
+## Team
+
+* Scarlett Kynoch (University of Exeter/back-end R programming)
+* Dr. Matt Grainger (Norsk institutt for naturforsknin/front-end RShiny programming)
+* Anna Bush (University of Exeter/front-end RShiny programming & Github)
+* Dr. Lewis Elliot (University of Exeter/back-end R programming & OS greenspace/Natural England MENE data)
+* Dr. Matt Lloyd Jones (University of Exeter/Project Manager & back-end R programming).
+
+We also thank Katherine Burgess, Beth Brockett & Rose O'Neill from Natural England for their advice and support throughout.
