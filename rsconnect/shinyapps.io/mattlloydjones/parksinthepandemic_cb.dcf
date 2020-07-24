@@ -1,0 +1,12 @@
+name: parksinthepandemic_cb
+title: parksinthepandemic_cb
+username:
+account: mattlloydjones
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2608059
+bundleId: 3430716
+url: https://mattlloydjones.shinyapps.io/parksinthepandemic_cb/
+when: 1595594050.76996
+asMultiple: FALSE
+asStatic: FALSE

@@ -70,7 +70,7 @@ metoffice_england<-metoffice_england%>%
 colnames(metoffice_england)<-c('weekdays',
                                  'date',
                                  'sub_region_1',
-                                 'temp_max', # temp units = celsius
+                                 'temp_max',
                                  'temp_max_variance',
                                  'temp_mean',
                                  'temp_mean_variance',
