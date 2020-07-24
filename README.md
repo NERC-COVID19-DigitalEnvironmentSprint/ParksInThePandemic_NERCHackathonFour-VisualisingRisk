@@ -49,8 +49,7 @@ Our back-end workflow is complicated, but has 3 broad stages, with 3 sub-stages:
 #### 2. Matching Government (Natural England and OS Greenspace data) to Google data
 
 <p align="center">
-<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/
-          .png">
+<img src="https://github.com/befriendabacterium/parksinthepandemic/blob/develop/docs/figures/step2.png">
 </p>
 
 * In order to control for the the density of gardens and parks in each Google district, we read in Ordnance Survey (OS) data that had been pre-processed by the Office for National Statistics (ONS)  in match.OSgreenspace2google.R (lines 1-30).
